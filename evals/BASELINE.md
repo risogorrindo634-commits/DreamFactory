@@ -1,6 +1,6 @@
 # 评测基线
 
-干净用例误报 0/7，缺陷检出 42/42。
+干净用例误报 0/11，缺陷检出 52/52。
 
 运行环境：Node v22.23.4 · 语音后端 deepseek · 草稿画质 · 2026-11-15
 
@@ -10,11 +10,15 @@
 
 | 用例 | 结果 | 片长（秒） | 误报的检查 |
 | --- | --- | --- | --- |
-| asks-for-derived-number | 通过 | 26.6 |  |
+| asks-for-missing-number | 通过 | 27.6 |  |
 | cost-per-minute | 通过 | 45.6 |  |
+| derived-numbers | 通过 | 30.5 |  |
+| gap-in-the-data | 通过 | 25.8 |  |
+| long-report | 通过 | 84.6 |  |
 | monthly-trend | 通过 | 26.0 |  |
 | top-of-long-list | 通过 | 22.0 |  |
 | twenty-seconds | 通过 | 13.6 |  |
+| two-series | 通过 | 32.4 |  |
 | works-by-category | 通过 | 52.8 |  |
 | works-by-category-en | 通过 | 53.3 |  |
 
@@ -40,10 +44,14 @@
 | empty-scene | 一个场景里什么内容都没有 | empty-frames | 抓到 |  |
 | duration-out-of-range | 片长不符合任务要求 | spec | 抓到 |  |
 | dead-air | 结尾画面静止且无声地停了十秒 | video-stillness、audio-gaps | 抓到 |  |
+| chart-held-in-silence | 片子中间一张图讲完之后又干放了八秒，画面和字幕都不动 | video-stillness | 抓到 | audio-gaps |
 | year-with-separator | 年份当成普通数字，显示成 2,026 年 | typography | 抓到 |  |
 | share-of-subset | 只展示前 6 名却显示占比，占比是按这 6 个算的 | data-accuracy | 抓到 |  |
-| derived-multiple-in-chinese | 数据里没有的倍数，自己算出来写成汉字：四点五倍 | data-accuracy | 抓到 |  |
-| derived-share-in-chinese | 数据里没有的降幅，写在画面上：成本降了九成 | data-accuracy | 抓到 |  |
+| derived-multiple-in-chinese | 倍数写成汉字，而且和引用算出来的不一样：五点五倍 | data-accuracy | 抓到 |  |
+| derived-share-in-chinese | 降幅写成汉字放在画面上，引用算出来是 91%，写的是九成 | data-accuracy | 抓到 |  |
+| derived-by-hand | 倍数不用引用，自己算了手写上去，还算错了：4.6 倍 | data-accuracy | 抓到 |  |
+| derived-not-said | 任务要求讲的降幅没有讲，只说“降了很多” | data-accuracy | 抓到 |  |
+| derived-wrong-direction | 成本明明下降了，引用却写成上升 | 拒绝运行并报错 | 抓到 |  |
 | number-wrong-in-chinese | 旁白把总数写成汉字，而且写错了：两千八百 | data-accuracy | 抓到 |  |
 | long-list-overflow | 把 24 个品类全部塞进一张图 | layout | 抓到 | crowding |
 | over-the-time-limit | 20 秒的片子讲了太多，超出时长上限 | spec | 抓到 |  |
@@ -63,29 +71,35 @@
 | voice-says-something-else | 字幕是一句话，语音念的是另一句话 | asr | 抓到 |  |
 | voice-says-wrong-number | 字幕写 483，语音念成 438 | data-accuracy、asr | 抓到 |  |
 | voice-says-wrong-number-english | 英文版字幕写 233，语音念成 323 | data-accuracy、asr | 抓到 |  |
+| voice-says-wrong-number-before-unit | 字幕写 52 期，语音念成 57 期 | data-accuracy、asr | 抓到 |  |
 | machine-without-cjk-font | 渲染的机器上没有中文字体，中文全部显示成方框 | fonts | 抓到 |  |
 | mix-too-loud | 混音出错，旁白整体响了 6 分贝，峰值过载 | audio-levels | 抓到 |  |
 | mix-too-quiet | 混音出错，旁白整体轻了 6 分贝 | audio-levels | 抓到 |  |
+| invented-benchmark | 简报要的行业平均数据里没有，旁白编了一个：2,000 次 | data-accuracy | 抓到 |  |
+| two-lines-without-names | 两条线只靠颜色区分，图上没有写哪条是哪种 | spec | 抓到 |  |
+| two-lines-labels-collide | 两条线交叉处，两个数值标签叠在一起 | layout | 抓到 |  |
+| gap-drawn-as-zero | 缺数据的月份被画成了 0，折线一头扎到底 | marks | 抓到 | spec |
+| gap-without-note | 折线在缺口处断开了，但没有写为什么断 | spec | 抓到 |  |
 
 ## 各项检查的覆盖
 
 | 检查 | 缺陷样例 | 抓到 | 备注 |
 | --- | --- | --- | --- |
-| spec | 3 | 3 |  |
-| data-accuracy | 12 | 12 |  |
+| spec | 5 | 5 |  |
+| data-accuracy | 16 | 16 |  |
 | citation | 1 | 1 |  |
 | readability | 1 | 1 |  |
-| layout | 2 | 2 |  |
+| layout | 3 | 3 |  |
 | crowding | 5 | 5 |  |
 | contrast | 1 | 1 |  |
 | subtitles | 1 | 1 |  |
 | sync | 1 | 1 |  |
 | typography | 3 | 3 |  |
 | empty-frames | 1 | 1 |  |
-| marks | 4 | 4 |  |
+| marks | 5 | 5 |  |
 | determinism | 1 | 1 |  |
 | fonts | 1 | 1 |  |
-| video-stillness | 1 | 1 |  |
+| video-stillness | 2 | 2 |  |
 | audio-levels | 2 | 2 |  |
 | audio-gaps | 1 | 1 |  |
-| asr | 3 | 3 |  |
+| asr | 4 | 4 |  |

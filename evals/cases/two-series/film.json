@@ -1,0 +1,62 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "两种做法，哪一种在什么时候反超",
+  "source": "数据来源：{{source.name}}",
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "数据故事",
+      "headline": "两种做法，谁在什么时候反超？",
+      "sub": "每月新增作品，示例数据",
+      "narration": [
+        "做视频的两种做法，谁更受欢迎？",
+        "先说明，这是一组虚构的示例数据。"
+      ]
+    },
+    {
+      "id": "lines",
+      "type": "twolines",
+      "title": "每月新增作品数",
+      "sub": "单位：{{units.works}}",
+      "series": [
+        {
+          "name": "{{names.code}}",
+          "key": "code",
+          "items": {
+            "$": "series.code"
+          }
+        },
+        {
+          "name": "{{names.model}}",
+          "key": "model",
+          "items": {
+            "$": "series.model"
+          }
+        }
+      ],
+      "labels": [
+        "8月",
+        "12月"
+      ],
+      "narration": [
+        "年初，视频模型的作品远多于代码生成。",
+        "到8月，代码生成是{{series.code[8月]}}件，",
+        "第一次超过了视频模型的{{series.model[8月]}}件。",
+        "到12月，代码生成达到{{series.code[12月]}}件，",
+        "视频模型是{{series.model[12月]}}件。"
+      ]
+    },
+    {
+      "id": "end",
+      "type": "outro",
+      "headline": "8 月之后，差距越拉越大",
+      "sub": "示例数据，仅用于演示",
+      "narration": [
+        "反超之后，差距越拉越大。",
+        "不过这只是一组示例数据。"
+      ]
+    }
+  ]
+}

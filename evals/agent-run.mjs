@@ -28,6 +28,7 @@ if (args.includes('--help')) {
   需要 Claude Code 命令行（claude）。默认用它已登录的账号和模型。
 
   --only <a,b>      只跑指定的用例
+  --repeat <n>      每个用例跑几遍，默认 1；多于 1 遍时汇总里有每个用例的通过次数
   --provider <名称> 换一家模型供应商：deepseek（需要 DEEPSEEK_API_KEY）
   --model <名称>    指定模型，默认用命令行当前配置的模型；换供应商时默认用它的 deepseek-flash
   --jobs <n>        同时跑几个，默认 3
@@ -74,6 +75,7 @@ if (provider && !value('--summarize') && !provider.key()) {
 }
 const model = value('--model') ?? provider?.model;
 const jobs = Number(value('--jobs') ?? 3);
+const repeat = Math.max(1, Number(value('--repeat') ?? 1));
 const budget = Number(value('--budget') ?? 8);
 const timeoutMin = Number(value('--timeout') ?? 30);
 const workRoot = value('--summarize') ? null : path.resolve(value('--work') ?? fs.mkdtempSync(path.join(os.tmpdir(), 'dreamfactory-agent-')));
@@ -217,9 +219,11 @@ function outcomeOf(r) {
   return r.roundLog.some((x) => x.passed && x.rendered) ? 'passed' : 'unchecked';
 }
 
-async function runCase(id) {
+async function runCase(id, attempt) {
+  // With several runs of a case, each gets its own workspace and its own record: <case>-r2 is the second.
+  const name = repeat > 1 ? `${id}-r${attempt}` : id;
   const src = path.join(casesDir, id);
-  const ws = path.join(workRoot, id);
+  const ws = path.join(workRoot, name);
   const task = path.join(ws, 'task');
   fs.rmSync(ws, { recursive: true, force: true });
   fs.mkdirSync(task, { recursive: true });
@@ -230,9 +234,9 @@ async function runCase(id) {
   if (fs.existsSync(path.join(repo, 'node_modules'))) fs.symlinkSync(path.join(repo, 'node_modules'), path.join(ws, 'node_modules'), 'dir');
   const before = { rules: treeHash(ws, ['task', 'node_modules', '.cache']), inputs: fileHash(inputs.map((f) => path.join(task, f))) };
 
-  console.log(`开始   ${id}`);
+  console.log(`开始   ${name}`);
   const startedAt = new Date();
-  const transcript = path.join(workRoot, `${id}.transcript.jsonl`);
+  const transcript = path.join(workRoot, `${name}.transcript.jsonl`);
   const cli = await runCli(ws, transcript);
   const { result, toolUses, readsOutsideWorkspace } = readTranscript(transcript, ws);
 
@@ -250,7 +254,7 @@ async function runCase(id) {
   let verified = { passed: false, failed: ['(没有交付 film.json)'], durationSec: null };
   if (delivered) {
     try {
-      const r = await runFilm(src, { film: JSON.parse(fs.readFileSync(filmFile, 'utf8')), scenes, draft: true, log: false, outDir: path.join(workRoot, `${id}.verify`) });
+      const r = await runFilm(src, { film: JSON.parse(fs.readFileSync(filmFile, 'utf8')), scenes, draft: true, log: false, outDir: path.join(workRoot, `${name}.verify`) });
       verified = { passed: r.passed, failed: r.failed, durationSec: r.durationSec };
     } catch (e) {
       verified = { passed: false, failed: [`(运行出错：${e.message.split('\n')[0]})`], durationSec: null };
@@ -276,6 +280,7 @@ async function runCase(id) {
   const usd = (x) => (x == null ? null : Math.round(x * 1e4) / 1e4);
   const record = {
     case: id,
+    run: name,
     model: mainModel,
     provider: provider?.name ?? null,
     delivered,
@@ -314,19 +319,21 @@ async function runCase(id) {
     files: { film: delivered ? filmFile : null, scenes: scenes ? scenesFile : null, runs: fs.existsSync(logFile) ? logFile : null },
   };
   record.outcome = outcomeOf(record);
-  console.log(`${{ passed: '通过  ', failed: '未通过', interrupted: '中断  ', unchecked: '未自检' }[record.outcome]} ${id}  管线 ${record.pipelineRuns} 次，${record.costUsd ?? '?'} 美元`);
+  console.log(`${{ passed: '通过  ', failed: '未通过', interrupted: '中断  ', unchecked: '未自检' }[record.outcome]} ${name}  管线 ${record.pipelineRuns} 次，${record.costUsd ?? '?'} 美元`);
   return record;
 }
 
 const summarizeOnly = value('--summarize');
 const ids = summarizeOnly ? [] : fs.readdirSync(casesDir).filter((d) => fs.existsSync(path.join(casesDir, d, 'brief.md'))).sort().filter((d) => !only || only.includes(d));
-const records = new Array(ids.length);
+// Run by run across the cases, so a second run of a case starts only after every case has had its first.
+const todo = Array.from({ length: repeat }, (_, k) => ids.map((id) => [id, k + 1])).flat();
+const records = new Array(todo.length);
 let next = 0;
 await Promise.all(
-  Array.from({ length: Math.min(jobs, ids.length) }, async () => {
-    while (next < ids.length) {
+  Array.from({ length: Math.min(jobs, todo.length) }, async () => {
+    while (next < todo.length) {
       const i = next++;
-      records[i] = await runCase(ids[i]);
+      records[i] = await runCase(...todo[i]);
     }
   }),
 );
@@ -341,7 +348,7 @@ if (!summarizeOnly && !value('--label')) {
 }
 const outDir = path.join(here, 'agent-runs', label);
 for (const r of records) {
-  const dir = path.join(outDir, r.case);
+  const dir = path.join(outDir, r.run);
   fs.mkdirSync(dir, { recursive: true });
   if (r.files.film) fs.copyFileSync(r.files.film, path.join(dir, 'film.json'));
   if (r.files.scenes) fs.copyFileSync(r.files.scenes, path.join(dir, 'scenes.js'));
@@ -353,6 +360,12 @@ for (const r of records) {
 // The summary covers every case recorded under this label, so an interrupted case can be re-run alone.
 const all = fs.readdirSync(outDir).filter((d) => fs.existsSync(path.join(outDir, d, 'result.json'))).sort()
   .map((d) => JSON.parse(fs.readFileSync(path.join(outDir, d, 'result.json'), 'utf8')));
+const caseIds = [...new Set(all.map((r) => r.case))];
+const repeated = all.length > caseIds.length;
+const unit = repeated ? '次运行' : '个用例';
+// Did the first thing the model handed to the pipeline already pass? The sharpest single number here.
+const firstTry = (r) => r.roundLog[0]?.passed === true;
+const mean = (list, get) => (list.length ? list.reduce((a, r) => a + (get(r) ?? 0), 0) / list.length : 0);
 const outcome = outcomeOf;
 // Records from before narration was priced carry the model's cost only.
 const cost = (r) => r.costUsd ?? r.agent.costUsd;
@@ -369,14 +382,16 @@ const verdict = (r) =>
 const md = [
   `# 无人值守运行：${label}`,
   '',
-  `${count('passed')}/${all.length} 个用例由模型自己跑通自检，并通过复验${count('unchecked') ? `；${count('unchecked')} 个交付的影片能通过复验，但模型自己没有跑通自检` : ''}${count('failed') ? `；${count('failed')} 个未通过复验` : ''}${count('interrupted') ? `；${count('interrupted')} 个中途被打断，不计入结果` : ''}。模型只拿到简报、数据、要求和导演规范，看不到参考影片，全程没有人介入。`,
+  `${count('passed')}/${all.length} ${unit}由模型自己跑通自检，并通过复验${count('unchecked') ? `；${count('unchecked')} 个交付的影片能通过复验，但模型自己没有跑通自检` : ''}${count('failed') ? `；${count('failed')} 个未通过复验` : ''}${count('interrupted') ? `；${count('interrupted')} 个中途被打断，不计入结果` : ''}。模型只拿到简报、数据、要求和导演规范，看不到参考影片，全程没有人介入。`,
+  '',
+  `第一次交给管线就通过自检的有 ${all.filter(firstTry).length}/${all.length}；平均每${repeated ? '次' : '个用例'}跑管线 ${mean(all, (r) => r.pipelineRuns).toFixed(1)} 次，费用 ${money(mean(all.filter((r) => cost(r) != null), cost))} 美元。`,
   '',
   `模型 ${all[0]?.model}${all[0]?.provider ? `（${all[0].provider}）` : ''} · ${date} · 每个用例${limits.budgetUsd != null ? `费用上限 ${limits.budgetUsd} 美元` : `时间上限 ${limits.timeoutMin} 分钟`}${all[0]?.speech?.backend ? ` · 旁白语音 ${all[0].speech.backend}` : ''}`,
   '',
   `| 用例 | 结果 | 管线运行 | 其中未通过 | 分镜版本 | 写了场景代码 | 模型轮数 | 用时（秒） | 费用（美元） |${paidVoice ? ' 其中语音 |' : ''} 片长（秒） | 每分钟成片（美元） | 守规 |`,
   `| --- | --- | --- | --- | --- | --- | --- | --- | --- |${paidVoice ? ' --- |' : ''} --- | --- | --- |`,
   ...all.map((r) =>
-    `| ${r.case} | ${verdict(r)} | ${r.pipelineRuns} | ${r.failedRuns} | ${r.filmVersions ?? ''} | ${r.customScene ? '是' : ''} | ${r.agent.turns ?? ''} | ${r.agent.wallSec ?? ''} | ${money(cost(r))} |${paidVoice ? ` ${money(r.speech?.costUsd)} |` : ''} ${r.verified.durationSec?.toFixed(1) ?? ''} | ${perMinute(r)} | ${clean(r) ? '是' : '否'} |`),
+    `| ${r.run ?? r.case} | ${verdict(r)} | ${r.pipelineRuns} | ${r.failedRuns} | ${r.filmVersions ?? ''} | ${r.customScene ? '是' : ''} | ${r.agent.turns ?? ''} | ${r.agent.wallSec ?? ''} | ${money(cost(r))} |${paidVoice ? ` ${money(r.speech?.costUsd)} |` : ''} ${r.verified.durationSec?.toFixed(1) ?? ''} | ${perMinute(r)} | ${clean(r) ? '是' : '否'} |`),
   '',
   '- **结果**：模型交付后，用用例原本的数据和要求重新跑一遍草稿渲染和全部自检，这叫复验。“通过”要求模型自己也跑通过草稿自检；片子能过复验但模型自己没跑通的记为“未自检”。模型没有正常结束的运行（用量限额、费用上限、超时）记为“中断”。',
   '- **管线运行**：模型自己调用管线的次数，含只查文字层的快速运行。',
@@ -388,10 +403,23 @@ const md = [
   ...(paidVoice
     ? ['- **其中语音**：模型自己跑管线时新合成的旁白，已计入费用。按原价每万计费字符 0.45 美元计，一个汉字算 2 个字符；目前限时五折，实际扣费更低。听写核对每小时音频约 0.1 美元，没有计入。']
     : []),
+  ...(repeated
+    ? [
+        '',
+        '## 每个用例的稳定性',
+        '',
+        '| 用例 | 运行 | 通过 | 第一次就通过自检 | 平均管线运行 | 平均费用（美元） |',
+        '| --- | --- | --- | --- | --- | --- |',
+        ...caseIds.map((id) => {
+          const runs = all.filter((r) => r.case === id);
+          return `| ${id} | ${runs.length} | ${runs.filter((r) => outcome(r) === 'passed').length} | ${runs.filter(firstTry).length} | ${mean(runs, (r) => r.pipelineRuns).toFixed(1)} | ${money(mean(runs.filter((r) => cost(r) != null), cost))} |`;
+        }),
+      ]
+    : []),
   '',
   '## 模型自己的汇报',
   '',
-  ...all.flatMap((r) => [`### ${r.case}`, '', ...String(r.report).trim().split('\n').map((l) => `> ${l}`), '']),
+  ...all.flatMap((r) => [`### ${r.run ?? r.case}`, '', ...String(r.report).trim().split('\n').map((l) => `> ${l}`), '']),
 ].join('\n');
 fs.writeFileSync(path.join(outDir, 'SUMMARY.md'), md);
 console.log(`\n${count('passed')}/${all.length} 通过${count('unchecked') ? `，${count('unchecked')} 个未自检` : ''}${count('interrupted') ? `，${count('interrupted')} 个被中断` : ''}。结果：${path.join(outDir, 'SUMMARY.md')}`);

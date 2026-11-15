@@ -1,0 +1,20 @@
+{
+  "duration": [
+    20,
+    60
+  ],
+  "mustShow": [
+    "series.films[2025 年]",
+    "series.films[2026 年]",
+    "series.costPerFilm[2025 年]",
+    "series.costPerFilm[2026 年]",
+    "times series.films[2025 年] series.films[2026 年]",
+    "down series.costPerFilm[2025 年] series.costPerFilm[2026 年]"
+  ],
+  "mustSay": [
+    "series.films[2026 年]",
+    "series.costPerFilm[2026 年]",
+    "times series.films[2025 年] series.films[2026 年]",
+    "down series.costPerFilm[2025 年] series.costPerFilm[2026 年]"
+  ]
+}

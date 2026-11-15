@@ -1,0 +1,115 @@
+{
+  "source": {
+    "name": "示例数据（虚构，仅用于评测）",
+    "asOf": "2026-12-31"
+  },
+  "units": {
+    "works": "件"
+  },
+  "names": {
+    "code": "代码生成",
+    "model": "视频模型"
+  },
+  "series": {
+    "code": [
+      {
+        "label": "1月",
+        "value": 12
+      },
+      {
+        "label": "2月",
+        "value": 16
+      },
+      {
+        "label": "3月",
+        "value": 22
+      },
+      {
+        "label": "4月",
+        "value": 31
+      },
+      {
+        "label": "5月",
+        "value": 45
+      },
+      {
+        "label": "6月",
+        "value": 62
+      },
+      {
+        "label": "7月",
+        "value": 86
+      },
+      {
+        "label": "8月",
+        "value": 118
+      },
+      {
+        "label": "9月",
+        "value": 149
+      },
+      {
+        "label": "10月",
+        "value": 178
+      },
+      {
+        "label": "11月",
+        "value": 207
+      },
+      {
+        "label": "12月",
+        "value": 236
+      }
+    ],
+    "model": [
+      {
+        "label": "1月",
+        "value": 88
+      },
+      {
+        "label": "2月",
+        "value": 93
+      },
+      {
+        "label": "3月",
+        "value": 97
+      },
+      {
+        "label": "4月",
+        "value": 102
+      },
+      {
+        "label": "5月",
+        "value": 105
+      },
+      {
+        "label": "6月",
+        "value": 108
+      },
+      {
+        "label": "7月",
+        "value": 110
+      },
+      {
+        "label": "8月",
+        "value": 111
+      },
+      {
+        "label": "9月",
+        "value": 113
+      },
+      {
+        "label": "10月",
+        "value": 114
+      },
+      {
+        "label": "11月",
+        "value": 116
+      },
+      {
+        "label": "12月",
+        "value": 117
+      }
+    ]
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "代码生成作品的 2026 年度盘点",
+  "source": "数据来源：{{source.name}}",
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "年度盘点 · 2026",
+      "headline": "代码生成作品的这一年",
+      "sub": "某视频社区，示例数据",
+      "narration": [
+        "用代码生成的视频作品，这一年怎么样？",
+        "先说明，下面是一组虚构的示例数据。",
+        "我们依次看四件事。"
+      ]
+    },
+    {
+      "id": "total",
+      "type": "bignumber",
+      "label": "2026 年全年新增作品",
+      "value": {
+        "$": "facts.total"
+      },
+      "unit": "件",
+      "note": "是 2025 年的 {{times series.yearly[2025 年] series.yearly[2026 年]}} 倍",
+      "narration": [
+        "全年新增作品{{facts.total}}件。",
+        "2025年是{{series.yearly[2025 年]}}件。",
+        "也就是说，今年是去年的{{times series.yearly[2025 年] series.yearly[2026 年]}}倍。"
+      ]
+    },
+    {
+      "id": "categories",
+      "type": "bars",
+      "title": "作品都是什么类型",
+      "sub": "单位：件，右侧为占比",
+      "series": {
+        "$": "series.categories"
+      },
+      "highlight": "模型对比",
+      "showShare": true,
+      "narration": [
+        "按类型分，一共六类。",
+        "最多的是模型对比，{{series.categories[模型对比]}}件，",
+        "占全部作品的{{share series.categories[模型对比]}}。",
+        "游戏排第二，{{series.categories[游戏]}}件。",
+        "3D 场景第三，{{series.categories[3D 场景]}}件。",
+        "讲解类最少，只有{{series.categories[讲解]}}件。"
+      ]
+    },
+    {
+      "id": "trend",
+      "type": "line",
+      "title": "每月新增作品数",
+      "sub": "单位：件",
+      "series": {
+        "$": "series.monthly"
+      },
+      "labels": [
+        "12月"
+      ],
+      "highlight": "12月",
+      "narration": [
+        "再看逐月的走势。",
+        "1月新增{{series.monthly[1月]}}件，起点很低。",
+        "到了秋天，增长明显加快。",
+        "10月是{{series.monthly[10月]}}件，11月就到了{{series.monthly[11月]}}件。",
+        "全年最高是12月，{{series.monthly[12月]}}件。"
+      ]
+    },
+    {
+      "id": "cost",
+      "type": "ranges",
+      "title": "每分钟成片要花多少钱",
+      "sub": "{{units.cost}}，对数刻度",
+      "series": {
+        "$": "series.cost"
+      },
+      "highlight": "代码生成",
+      "narration": [
+        "最后看成本。",
+        "三种做法的成本，差别很大。",
+        "用代码生成，每分钟{{series.cost[代码生成].low}}到{{series.cost[代码生成].high}}美元。",
+        "调用视频模型，每分钟{{series.cost[视频模型].low}}到{{series.cost[视频模型].high}}美元。",
+        "外包制作，每分钟{{series.cost[外包制作].low}}到{{series.cost[外包制作].high}}美元。",
+        "和外包相比，便宜了两到三个数量级。"
+      ]
+    },
+    {
+      "id": "end",
+      "type": "outro",
+      "headline": "量在涨，成本在降",
+      "sub": "以上均为虚构的示例数据",
+      "narration": [
+        "一年下来，作品多了，做起来也便宜了。",
+        "再提醒一次，以上都是虚构的示例数据。"
+      ]
+    }
+  ]
+}

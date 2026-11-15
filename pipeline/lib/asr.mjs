@@ -120,13 +120,22 @@ function editDistance(a, b) {
   return prev[b.length];
 }
 
+// Words that sound like a digit. Right after a number a recognizer can write them as one more digit:
+// "52期" (qī) comes back as "527".
+const SOUNDS_LIKE = { 期: 7, 起: 7, 其: 7, 气: 7, 就: 9, 久: 9, 酒: 9, 是: 4, 事: 4, 式: 4, 市: 4, 无: 5, 物: 5, 务: 5, 流: 6, 留: 6, 把: 8, 吧: 8, 以: 1, 已: 1, 亿: 1, 意: 1, 而: 2, 儿: 2, 散: 3, 伞: 3, 领: 0, 另: 0 };
+
 /**
  * Compare one subtitle with what was heard.
  * missing: numbers in the subtitle that were not heard. distance: 0 = same wording, 1 = nothing in common.
  */
 export function compareSpeech(subtitle, heard) {
   const said = heardNumbers(heard);
-  const missing = extractNumbers(subtitle).filter((n) => !said.some((v) => Math.abs(v - n.value) < 1e-9)).map((n) => n.raw);
+  const heardAs = (n) => {
+    const also = SOUNDS_LIKE[subtitle.slice(n.end).trimStart()[0]];
+    const forms = also !== undefined && Number.isInteger(n.value) ? [n.value, Number(`${n.value}${also}`)] : [n.value];
+    return forms.some((f) => said.some((v) => Math.abs(v - f) < 1e-9));
+  };
+  const missing = extractNumbers(subtitle).filter((n) => !heardAs(n)).map((n) => n.raw);
   const a = [...wording(subtitle)];
   const b = [...wording(heard)];
   const distance = Math.max(a.length, b.length) ? editDistance(a, b) / Math.max(a.length, b.length) : 0;

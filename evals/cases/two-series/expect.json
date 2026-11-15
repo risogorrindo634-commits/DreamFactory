@@ -1,0 +1,21 @@
+{
+  "duration": [
+    25,
+    60
+  ],
+  "requireCustomScene": true,
+  "mustShow": [
+    "series.code[8月]",
+    "series.model[8月]",
+    "series.code[12月]",
+    "series.model[12月]"
+  ],
+  "mustSay": [
+    "series.code[12月]",
+    "series.model[12月]"
+  ],
+  "mustShowText": [
+    "names.code",
+    "names.model"
+  ]
+}

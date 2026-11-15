@@ -1,0 +1,62 @@
+{
+  "source": {
+    "name": "示例数据（虚构，仅用于评测）",
+    "asOf": "2026-12-31"
+  },
+  "units": {
+    "learners": "人"
+  },
+  "series": {
+    "monthly": [
+      {
+        "label": "1月",
+        "value": 320
+      },
+      {
+        "label": "2月",
+        "value": 345
+      },
+      {
+        "label": "3月",
+        "value": 372
+      },
+      {
+        "label": "4月",
+        "value": 410
+      },
+      {
+        "label": "5月",
+        "value": 455
+      },
+      {
+        "label": "6月",
+        "value": null,
+        "note": "数据缺失"
+      },
+      {
+        "label": "7月",
+        "value": 520
+      },
+      {
+        "label": "8月",
+        "value": 548
+      },
+      {
+        "label": "9月",
+        "value": 590
+      },
+      {
+        "label": "10月",
+        "value": 640
+      },
+      {
+        "label": "11月",
+        "value": 702
+      },
+      {
+        "label": "12月",
+        "value": 760
+      }
+    ]
+  }
+}

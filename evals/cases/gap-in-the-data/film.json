@@ -1,0 +1,49 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "一年的走势，中间缺了一个月",
+  "source": "数据来源：{{source.name}}",
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "数据故事",
+      "headline": "一年里，新增学员涨了多少？",
+      "sub": "某课程平台，示例数据",
+      "narration": [
+        "一年里，每个月新来多少学员？",
+        "先说明，这是一组虚构的示例数据。"
+      ]
+    },
+    {
+      "id": "trend",
+      "type": "gapline",
+      "title": "每月新增学员",
+      "sub": "单位：{{units.learners}}",
+      "series": {
+        "$": "series.monthly"
+      },
+      "labels": [
+        "1月",
+        "12月"
+      ],
+      "highlight": "12月",
+      "narration": [
+        "1月新增{{series.monthly[1月]}}人。",
+        "之后一路上涨。",
+        "6月系统迁移，没有留下数据，图上是断开的。",
+        "到12月，新增{{series.monthly[12月]}}人。"
+      ]
+    },
+    {
+      "id": "end",
+      "type": "outro",
+      "headline": "一年里稳步上涨",
+      "sub": "示例数据，仅用于演示",
+      "narration": [
+        "除了缺掉的那个月，走势一直向上。",
+        "不过这只是一组示例数据。"
+      ]
+    }
+  ]
+}

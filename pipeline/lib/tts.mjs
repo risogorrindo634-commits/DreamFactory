@@ -77,7 +77,9 @@ const backends = {
     if (rate) args.push(`--rate=${rate}`);
     const proxy = process.env.HTTPS_PROXY ?? process.env.https_proxy;
     if (proxy) args.push('--proxy', proxy);
-    await retry(() => run('edge-tts', args), 3);
+    // The service has no terms and at times drops most requests ("No audio was received"), more so
+    // when asked quickly. Patient retries get through: up to about a minute for one line.
+    await retry(() => run('edge-tts', args), 8, 2000);
     await toWav(tmp, outFile);
     fs.rmSync(tmp, { force: true });
     trimSilence(outFile);
@@ -94,6 +96,8 @@ const backends = {
 
 /** What a supplier charges a line as, in its own unit. Suppliers not listed are free. */
 const BILLED = { deepseek: deepseekBilledChars };
+
+let calls = 0;
 
 /**
  * Synthesize one line, or reuse the cached clip. Returns the file, its length in seconds, and what the
@@ -112,7 +116,8 @@ export async function synth({ backend, lang, voice, rate, text }) {
   const fresh = !fs.existsSync(outFile);
   if (fresh) {
     fs.mkdirSync(dir, { recursive: true });
-    const tmp = `${outFile}.${process.pid}.tmp.wav`;
+    // Two films in one process can ask for the same line at once; each call works in files of its own.
+    const tmp = `${outFile}.${process.pid}.${++calls}.tmp.wav`;
     await fn({ text, voice: v, lang, rate, outFile: tmp });
     fs.renameSync(tmp, outFile); // a clip appears in the cache only once it is complete
   }

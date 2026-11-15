@@ -1,0 +1,18 @@
+{
+  "duration": [
+    20,
+    60
+  ],
+  "requireCustomScene": true,
+  "mustShow": [
+    "series.monthly[1月]",
+    "series.monthly[12月]"
+  ],
+  "mustSay": [
+    "series.monthly[12月]"
+  ],
+  "mustShowText": [
+    "series.monthly[6月].note"
+  ],
+  "markCount": 11
+}

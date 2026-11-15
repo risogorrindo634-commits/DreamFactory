@@ -8,7 +8,7 @@
 node pipeline/cli.mjs run <影片目录> --no-video   # 只做文字层检查，十几秒
 node pipeline/cli.mjs run <影片目录> --draft      # 草稿画质，带视频和声音检查
 node pipeline/cli.mjs run <影片目录>              # 成片
-node evals/run.mjs                                # 跑评测集，约五分钟
+node evals/run.mjs                                # 跑评测集，约七分钟
 node evals/run.mjs --only <用例或缺陷的 id>
 node evals/agent-run.mjs                          # 让模型无人值守做完每个用例，要花模型费用
 node evals/agent-run.mjs --provider deepseek      # 同上，模型换成 DeepSeek，需要 DEEPSEEK_API_KEY
@@ -28,10 +28,25 @@ node evals/agent-run.mjs --provider deepseek      # 同上，模型换成 DeepSe
 - `evals/agent-run.mjs`：无人值守评测。模型只拿到简报、数据、要求和 `DIRECTOR.md`，看不到参考影片。
 - `evals/agent-runs/`：每次无人值守运行交付的分镜、运行记录和汇总。
 
+## expect.json 的字段
+
+| 字段 | 含义 | 哪项检查在查 |
+| --- | --- | --- |
+| `duration` | `[最短, 最长]`，秒 | `spec` |
+| `requireCustomScene` | 内置场景做不出来，必须自己写场景代码 | `spec` |
+| `mustShowText` | 必须写在画面上的文字；每一项是 `data.json` 里一个字符串的路径，或者文字本身 | `spec` |
+| `mustShow` | 必须在画面上停留满 1 秒的数字 | `data-accuracy` |
+| `mustSay` | 旁白必须念到的数字 | `data-accuracy` |
+| `markCount` | 自定义图表里标了数值的图形必须正好这么多个 | `marks` |
+| `maxFrozenSec`、`maxSilenceSec` | 画面静止和无声的上限，默认 6 秒和 3.5 秒 | `video-stillness`、`audio-gaps` |
+
+`mustShow` 和 `mustSay` 的每一项是 `data.json` 里的路径，也可以是派生的数：`share 路径`、`times 甲 乙`、`up 甲 乙`、`down 甲 乙`，写法和 `film.json` 里的引用相同。
+
 ## 约定
 
 - 画面必须只由时间决定。`seek(t)` 里不能用时钟、随机数、CSS 动画，也不能依赖上一帧。
 - 新增或修改一项检查，必须同时在 `evals/defects.json` 里加一条它应该抓到的缺陷，然后跑评测。没有缺陷样例的检查等于没有验证过。
+- 新增用例要带参考影片，并至少带一条缺陷，说明这个用例里最容易错的是什么。参考影片写完先自己看一遍抽帧图：检查通过不等于画面没问题。
 - 改了管线或画面之后跑 `node evals/run.mjs`。干净用例出现失败是误报，要修检查或修参考影片，不能放宽到看不见为止。
 - 页面上的文字靠 `data-df-role` 标注角色：`subtitle`、`source`、`tick`（刻度）、`animating`（跳动中的数字）。新场景里的刻度和跳动数字必须标注，否则会被当成事实去核对。
 - 文字必须留在最近的 `data-df-box` 容器内，新场景要给会溢出的文字加上这个标记。

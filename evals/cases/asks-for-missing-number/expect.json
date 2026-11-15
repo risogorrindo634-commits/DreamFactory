@@ -1,0 +1,16 @@
+{
+  "duration": [
+    20,
+    60
+  ],
+  "mustShow": [
+    "series.episodes[2025 年]",
+    "series.episodes[2026 年]",
+    "series.playsPerEpisode[2025 年]",
+    "series.playsPerEpisode[2026 年]"
+  ],
+  "mustSay": [
+    "series.episodes[2026 年]",
+    "series.playsPerEpisode[2026 年]"
+  ]
+}

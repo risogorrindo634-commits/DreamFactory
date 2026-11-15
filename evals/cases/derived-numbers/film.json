@@ -26,7 +26,8 @@
       "highlight": "2026 年",
       "narration": [
         "2025年做了{{series.films[2025 年]}}支。",
-        "2026年做了{{series.films[2026 年]}}支。"
+        "2026年做了{{series.films[2026 年]}}支，",
+        "是原来的{{times series.films[2025 年] series.films[2026 年]}}倍。"
       ]
     },
     {
@@ -40,17 +41,18 @@
       "highlight": "2026 年",
       "narration": [
         "单片成本从{{series.costPerFilm[2025 年]}}元，",
-        "降到了{{series.costPerFilm[2026 年]}}元。"
+        "降到了{{series.costPerFilm[2026 年]}}元，",
+        "下降了{{down series.costPerFilm[2025 年] series.costPerFilm[2026 年]}}。"
       ]
     },
     {
       "id": "end",
       "type": "outro",
-      "headline": "产量上去了，成本下来了",
+      "headline": "产量 {{times series.films[2025 年] series.films[2026 年]}} 倍，成本降 {{down series.costPerFilm[2025 年] series.costPerFilm[2026 年]}}",
       "sub": "示例数据，仅用于演示",
       "narration": [
         "产量上去了，成本下来了。",
-        "具体的倍数和降幅，数据里没有给出。"
+        "不过这只是一家工作室的示例数据。"
       ]
     }
   ]

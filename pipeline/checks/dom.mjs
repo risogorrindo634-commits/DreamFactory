@@ -1,5 +1,5 @@
 // Checks that read the film through its live page: what text is on screen, where, for how long.
-import { allowedNumbers, extractChineseNumbers, extractNumbers, getScalar, hasNumber } from '../lib/data.mjs';
+import { allowedNumbers, expectedNumber, extractChineseNumbers, extractNumbers, getPath, hasNumber } from '../lib/data.mjs';
 import { SAMPLE_STEP } from '../lib/stage.mjs';
 
 const SHOWN = 0.6; // opacity from which text counts as on screen
@@ -29,6 +29,14 @@ export const spec = {
     if (ctx.expect.requireCustomScene && !ctx.resolved.scenes.some((sc) => !builtin.has(sc.type))) {
       problems.push('任务要求的画面内置场景做不出来，需要自定义场景，但影片里只有内置场景');
     }
+    // Words the task wants written in the picture, such as the names of the lines in a chart.
+    // An entry is a path to a string in data.json, or the words themselves.
+    for (const p of ctx.expect.mustShowText ?? []) {
+      const fromData = getPath(ctx.data, p);
+      const want = typeof fromData === 'string' ? fromData : p;
+      const hits = ctx.sampling.samples.filter((s) => s.grid && s.texts.some((x) => shown(x) && x.role !== 'subtitle' && x.text.includes(want))).length;
+      if (hits * SAMPLE_STEP < 1) problems.push(`任务要求写在画面上的「${want}」没有在画面上停留满 1 秒`);
+    }
     const m = ctx.media;
     if (m) {
       const v = m.video;
@@ -57,7 +65,8 @@ export const dataAccuracy = {
   title: '数据准确：画面和旁白里的数字都能追溯到 data.json',
   tier: 'dom',
   run(ctx) {
-    const allowed = allowedNumbers(ctx.data);
+    // What is in the data, plus what the film had worked out from it by reference.
+    const allowed = new Set([...allowedNumbers(ctx.data), ...(ctx.resolved.derived ?? [])]);
     const problems = [];
     const seen = new Set();
     // One line per number and place: a text that stays on screen is reported once, at its first moment.
@@ -83,7 +92,7 @@ export const dataAccuracy = {
 
     // Required facts must be readable in the picture itself, not only in subtitles.
     for (const p of ctx.expect.mustShow ?? []) {
-      const v = getScalar(ctx.data, p);
+      const v = expectedNumber(ctx.data, p);
       if (typeof v !== 'number') {
         problems.push(`expect.mustShow 的 ${p} 不是 data.json 里的数字`);
         continue;
@@ -97,7 +106,7 @@ export const dataAccuracy = {
       if (hits * SAMPLE_STEP < 1) problems.push(`必须出现的数据 ${p} = ${v} 没有在画面上停留满 1 秒`);
     }
     for (const p of ctx.expect.mustSay ?? []) {
-      const v = getScalar(ctx.data, p);
+      const v = expectedNumber(ctx.data, p);
       const said = lines.some((l) => extractNumbers(l.display).some((n) => Math.abs(n.value - v) < 1e-9));
       if (!said) problems.push(`旁白必须提到的数据 ${p} = ${v} 没有出现`);
     }
@@ -420,6 +429,13 @@ export const marks = {
       if (builtin.has(sc.type) || !sc.usesData) continue;
       if (![...groups.keys()].some((k) => k.startsWith(`${sc.id}/`))) {
         problems.push(`自定义场景 ${sc.id} 用了数据，但没有给图形标 data-df-value`);
+      }
+    }
+    // A task can say how many shapes a chart must have: one per row that has a value, no more.
+    if (ctx.expect.markCount != null) {
+      for (const [key, list] of groups) {
+        if (builtin.has(ctx.resolved.scenes.find((sc) => key.startsWith(`${sc.id}/`))?.type)) continue;
+        if (list.length !== ctx.expect.markCount) problems.push(`图上标了数值的图形有 ${list.length} 个，任务要求正好 ${ctx.expect.markCount} 个（${key}）`);
       }
     }
     let compared = 0;

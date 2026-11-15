@@ -41,21 +41,62 @@ function sharePercent(data, p) {
   return Math.round((100 * item.value) / total);
 }
 
+// A path may hold spaces inside its brackets: series.films[2025 年].
+const PATHS = /[^\s[\]]+(?:\[[^\]]*\][^\s[\]]*)*/g;
+const DERIVED = ['times', 'up', 'down'];
+
 /**
- * Fill {{path}} and {{share path}} in a string.
- * mode "screen": numbers get thousands separators. mode "speech": plain digits, spoken percent.
+ * A number worked out from two values in the data. All three read "from a to b":
+ *   times a b  - b divided by a, to one decimal ("4.5")
+ *   up a b     - the rise from a to b in whole percent
+ *   down a b   - the fall from a to b in whole percent
+ * up and down refuse to run when the change goes the other way, so a film cannot call a fall a rise.
  */
-export function renderTemplate(str, data, mode, lang = 'zh') {
-  return str.replace(/\{\{\s*(share\s+)?([^}]+?)\s*\}\}/g, (_, share, p) => {
-    if (share) {
-      const pct = sharePercent(data, p);
-      if (mode === 'screen') return `${pct}%`;
-      return lang === 'zh' ? `百分之${pct}` : `${pct} percent`;
+export function derive(data, fn, args) {
+  const paths = args.match(PATHS) ?? [];
+  if (paths.length !== 2) throw new Error(`"${fn}" takes two values from data.json, got ${paths.length}: "${fn} ${args}"`);
+  const [a, b] = paths.map((p) => {
+    const v = getScalar(data, p);
+    if (typeof v !== 'number') throw new Error(`"${fn}" needs two numbers, and "${p}" is not a number in data.json`);
+    return v;
+  });
+  if (a <= 0) throw new Error(`"${fn} ${args}": the first value must be above zero, and it is ${a}`);
+  if (fn === 'times') return Math.round((10 * b) / a) / 10;
+  const rise = b - a;
+  if (rise === 0) throw new Error(`"${fn} ${args}": both values are ${a}, nothing rose or fell`);
+  if ((fn === 'up') !== rise > 0) throw new Error(`"${fn} ${args}": ${a} to ${b} goes ${rise > 0 ? 'up' : 'down'}, use "${rise > 0 ? 'up' : 'down'}"`);
+  return Math.round((100 * Math.abs(rise)) / a);
+}
+
+/** The number an expect.json entry stands for: a path, or "share path", "times a b", "up a b", "down a b". */
+export function expectedNumber(data, spec) {
+  const [, fn, rest] = String(spec).match(/^(share|times|up|down)\s+(.+)$/) ?? [];
+  if (fn === 'share') return sharePercent(data, rest.trim());
+  if (fn) return derive(data, fn, rest);
+  return getScalar(data, spec);
+}
+
+/**
+ * Fill {{path}}, {{share path}} and {{times a b}}, {{up a b}}, {{down a b}} in a string.
+ * mode "screen": numbers get thousands separators. mode "speech": plain digits, spoken percent.
+ * Numbers worked out by times, up and down are added to `derived`, when one is given.
+ */
+export function renderTemplate(str, data, mode, lang = 'zh', derived = null) {
+  const percent = (pct) => (mode === 'screen' ? `${pct}%` : lang === 'zh' ? `百分之${pct}` : `${pct} percent`);
+  return str.replace(/\{\{\s*([^}]+?)\s*\}\}/g, (_, inner) => {
+    const [, fn, rest] = inner.match(/^(share|times|up|down)\s+(.+)$/) ?? [];
+    if (fn === 'share') return percent(sharePercent(data, rest.trim()));
+    if (fn) {
+      const value = derive(data, fn, rest);
+      derived?.add(value);
+      return fn === 'times' ? (mode === 'screen' ? formatNumber(value) : String(value)) : percent(value);
     }
+    const p = inner;
     const v = getScalar(data, p);
     if (v === undefined || (typeof v === 'object' && v !== null)) {
       throw new Error(`film.json points at "${p}", which is not a value in data.json`);
     }
+    if (v === null) throw new Error(`film.json points at "${p}", which is empty in data.json: there is no number to show`);
     if (typeof v !== 'number') return String(v);
     return mode === 'screen' ? formatNumber(v) : String(v);
   });
@@ -65,10 +106,11 @@ export function renderTemplate(str, data, mode, lang = 'zh') {
 export function resolveFilm(film, data) {
   const lang = film.lang ?? 'zh';
   let touched = false;
+  const derived = new Set(); // numbers the film had worked out by reference; the checks accept these too
   const walk = (v) => {
     if (typeof v === 'string') {
       if (v.includes('{{')) touched = true;
-      return renderTemplate(v, data, 'screen', lang);
+      return renderTemplate(v, data, 'screen', lang, derived);
     }
     if (Array.isArray(v)) return v.map(walk);
     if (v && typeof v === 'object') {
@@ -84,7 +126,7 @@ export function resolveFilm(film, data) {
     return v;
   };
   const out = { ...film, lang };
-  if (film.source != null) out.source = renderTemplate(film.source, data, 'screen', lang);
+  if (film.source != null) out.source = renderTemplate(film.source, data, 'screen', lang, derived);
   if (film.title != null) out.title = renderTemplate(film.title, data, 'screen', lang);
   out.scenes = (film.scenes ?? []).map((scene, i) => {
     touched = false;
@@ -97,13 +139,14 @@ export function resolveFilm(film, data) {
       const say = typeof line === 'string' ? line : line.say ?? line.text;
       if (text.includes('{{') || say.includes('{{')) touched = true;
       return {
-        display: renderTemplate(text, data, 'screen', lang),
-        speech: renderTemplate(say, data, 'speech', lang),
+        display: renderTemplate(text, data, 'screen', lang, derived),
+        speech: renderTemplate(say, data, 'speech', lang, derived),
       };
     });
     resolved.usesData = touched;
     return resolved;
   });
+  out.derived = [...derived];
   return out;
 }
 
@@ -143,7 +186,7 @@ export function extractNumbers(text) {
     const prev = text[m.index - 1] ?? '';
     const next = text[m.index + m[0].length] ?? '';
     if (/[A-Za-z]/.test(prev) || /[A-Za-z]/.test(next)) continue;
-    out.push({ raw: m[0], value: Number(m[0].replace(/,/g, '')) });
+    out.push({ raw: m[0], value: Number(m[0].replace(/,/g, '')), end: m.index + m[0].length });
   }
   return out;
 }

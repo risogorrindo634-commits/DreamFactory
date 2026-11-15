@@ -19,15 +19,23 @@ export const videoStillness = {
     }
     const starts = [...stderr.matchAll(/freeze_start: ([\d.]+)/g)].map((m) => Number(m[1]));
     const lengths = [...stderr.matchAll(/freeze_duration: ([\d.]+)/g)].map((m) => Number(m[1]));
+    // The subtitle is part of the picture, so a freeze ends where the subtitle changes. A short line
+    // changes so few pixels that the detector sees some of these changes and misses others; the
+    // timeline knows exactly when each line comes and goes (it stays 0.12 s past its last word).
+    const changes = ctx.timeline.scenes.flatMap((sc) => sc.lines.flatMap((l) => [l.start, l.end + 0.12]));
     let longest = 0;
     starts.forEach((start, i) => {
-      const len = lengths[i] ?? ctx.timeline.duration - start; // a freeze that runs to the end has no length logged
-      longest = Math.max(longest, len);
-      if (len >= limit) problems.push(`${fmtT(start)} 起画面静止 ${len.toFixed(1)} 秒，上限 ${limit} 秒`);
+      const end = start + (lengths[i] ?? ctx.timeline.duration - start); // a freeze that runs to the end has no length logged
+      const edges = [start, ...changes.filter((t) => t > start && t < end).sort((a, b) => a - b), end];
+      for (let k = 1; k < edges.length; k++) {
+        const len = edges[k] - edges[k - 1];
+        longest = Math.max(longest, len);
+        if (len >= limit) problems.push(`${fmtT(edges[k - 1])} 起画面和字幕都不动，持续 ${len.toFixed(1)} 秒，上限 ${limit} 秒`);
+      }
     });
     return {
       status: problems.length ? 'fail' : 'pass',
-      summary: problems.length ? `${problems.length} 处问题` : `没有黑屏，最长静止 ${longest.toFixed(1)} 秒`,
+      summary: problems.length ? `${problems.length} 处问题` : `没有黑屏，画面和字幕最长 ${longest.toFixed(1)} 秒不动`,
       details: problems,
     };
   },

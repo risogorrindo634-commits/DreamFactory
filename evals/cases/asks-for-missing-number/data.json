@@ -1,0 +1,32 @@
+{
+  "source": {
+    "name": "示例数据（虚构，仅用于评测）",
+    "asOf": "2026-12-31"
+  },
+  "units": {
+    "episodes": "期",
+    "playsPerEpisode": "次"
+  },
+  "series": {
+    "episodes": [
+      {
+        "label": "2025 年",
+        "value": 24
+      },
+      {
+        "label": "2026 年",
+        "value": 52
+      }
+    ],
+    "playsPerEpisode": [
+      {
+        "label": "2025 年",
+        "value": 1800
+      },
+      {
+        "label": "2026 年",
+        "value": 4300
+      }
+    ]
+  }
+}

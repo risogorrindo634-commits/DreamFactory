@@ -1,0 +1,118 @@
+{
+  "source": {
+    "name": "示例数据（虚构，仅用于评测）",
+    "asOf": "2026-12-31"
+  },
+  "units": {
+    "works": "件",
+    "cost": "美元"
+  },
+  "facts": {
+    "total": 3128
+  },
+  "series": {
+    "yearly": [
+      {
+        "label": "2025 年",
+        "value": 695
+      },
+      {
+        "label": "2026 年",
+        "value": 3128
+      }
+    ],
+    "categories": [
+      {
+        "label": "模型对比",
+        "value": 742
+      },
+      {
+        "label": "游戏",
+        "value": 655
+      },
+      {
+        "label": "3D 场景",
+        "value": 548
+      },
+      {
+        "label": "动效",
+        "value": 471
+      },
+      {
+        "label": "产品片",
+        "value": 389
+      },
+      {
+        "label": "讲解",
+        "value": 323
+      }
+    ],
+    "monthly": [
+      {
+        "label": "1月",
+        "value": 96
+      },
+      {
+        "label": "2月",
+        "value": 104
+      },
+      {
+        "label": "3月",
+        "value": 118
+      },
+      {
+        "label": "4月",
+        "value": 131
+      },
+      {
+        "label": "5月",
+        "value": 150
+      },
+      {
+        "label": "6月",
+        "value": 172
+      },
+      {
+        "label": "7月",
+        "value": 201
+      },
+      {
+        "label": "8月",
+        "value": 239
+      },
+      {
+        "label": "9月",
+        "value": 286
+      },
+      {
+        "label": "10月",
+        "value": 398
+      },
+      {
+        "label": "11月",
+        "value": 596
+      },
+      {
+        "label": "12月",
+        "value": 637
+      }
+    ],
+    "cost": [
+      {
+        "label": "代码生成",
+        "low": 2,
+        "high": 20
+      },
+      {
+        "label": "视频模型",
+        "low": 2,
+        "high": 45
+      },
+      {
+        "label": "外包制作",
+        "low": 1000,
+        "high": 4000
+      }
+    ]
+  }
+}

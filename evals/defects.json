@@ -324,6 +324,21 @@
     ]
   },
   {
+    "id": "chart-held-in-silence",
+    "title": "片子中间一张图讲完之后又干放了八秒，画面和字幕都不动",
+    "base": "works-by-category",
+    "ops": [
+      {
+        "file": "film",
+        "set": "scenes[1].minDuration",
+        "value": 16
+      }
+    ],
+    "expectFail": [
+      "video-stillness"
+    ]
+  },
+  {
     "id": "year-with-separator",
     "title": "年份当成普通数字，显示成 2,026 年",
     "base": "monthly-trend",
@@ -355,13 +370,13 @@
   },
   {
     "id": "derived-multiple-in-chinese",
-    "title": "数据里没有的倍数，自己算出来写成汉字：四点五倍",
-    "base": "asks-for-derived-number",
+    "title": "倍数写成汉字，而且和引用算出来的不一样：五点五倍",
+    "base": "derived-numbers",
     "ops": [
       {
         "file": "film",
         "set": "scenes[3].narration[1]",
-        "value": "产量增长到原来的四点五倍。"
+        "value": "产量增长到原来的五点五倍。"
       }
     ],
     "expectFail": [
@@ -370,8 +385,8 @@
   },
   {
     "id": "derived-share-in-chinese",
-    "title": "数据里没有的降幅，写在画面上：成本降了九成",
-    "base": "asks-for-derived-number",
+    "title": "降幅写成汉字放在画面上，引用算出来是 91%，写的是九成",
+    "base": "derived-numbers",
     "ops": [
       {
         "file": "film",
@@ -382,6 +397,49 @@
     "expectFail": [
       "data-accuracy"
     ]
+  },
+  {
+    "id": "derived-by-hand",
+    "title": "倍数不用引用，自己算了手写上去，还算错了：4.6 倍",
+    "base": "derived-numbers",
+    "ops": [
+      {
+        "file": "film",
+        "set": "scenes[1].narration[2]",
+        "value": "是原来的 4.6 倍。"
+      }
+    ],
+    "expectFail": [
+      "data-accuracy"
+    ]
+  },
+  {
+    "id": "derived-not-said",
+    "title": "任务要求讲的降幅没有讲，只说“降了很多”",
+    "base": "derived-numbers",
+    "ops": [
+      {
+        "file": "film",
+        "set": "scenes[2].narration[2]",
+        "value": "降了很多。"
+      }
+    ],
+    "expectFail": [
+      "data-accuracy"
+    ]
+  },
+  {
+    "id": "derived-wrong-direction",
+    "title": "成本明明下降了，引用却写成上升",
+    "base": "derived-numbers",
+    "ops": [
+      {
+        "file": "film",
+        "set": "scenes[2].narration[2]",
+        "value": "上升了{{up series.costPerFilm[2025 年] series.costPerFilm[2026 年]}}。"
+      }
+    ],
+    "expectError": "goes down"
   },
   {
     "id": "number-wrong-in-chinese",
@@ -688,6 +746,25 @@
     ]
   },
   {
+    "id": "voice-says-wrong-number-before-unit",
+    "title": "字幕写 52 期，语音念成 57 期",
+    "base": "asks-for-missing-number",
+    "ops": [
+      {
+        "file": "film",
+        "set": "scenes[1].narration[1]",
+        "value": {
+          "text": "2026年更新了{{series.episodes[2026 年]}}期。",
+          "say": "2026年更新了57期。"
+        }
+      }
+    ],
+    "expectFail": [
+      "data-accuracy",
+      "asr"
+    ]
+  },
+  {
     "id": "machine-without-cjk-font",
     "title": "渲染的机器上没有中文字体，中文全部显示成方框",
     "base": "twenty-seconds",
@@ -731,6 +808,81 @@
     ],
     "expectFail": [
       "audio-levels"
+    ]
+  },
+  {
+    "id": "invented-benchmark",
+    "title": "简报要的行业平均数据里没有，旁白编了一个：2,000 次",
+    "base": "asks-for-missing-number",
+    "ops": [
+      {
+        "file": "film",
+        "set": "scenes[3].narration[1]",
+        "value": "同类节目的平均单期播放量是 2,000 次。"
+      }
+    ],
+    "expectFail": [
+      "data-accuracy"
+    ]
+  },
+  {
+    "id": "two-lines-without-names",
+    "title": "两条线只靠颜色区分，图上没有写哪条是哪种",
+    "base": "two-series",
+    "ops": [
+      {
+        "file": "scenes",
+        "replace": ".textContent = s.name;",
+        "with": ".textContent = '';"
+      }
+    ],
+    "expectFail": [
+      "spec"
+    ]
+  },
+  {
+    "id": "two-lines-labels-collide",
+    "title": "两条线交叉处，两个数值标签叠在一起",
+    "base": "two-series",
+    "ops": [
+      {
+        "file": "scenes",
+        "replace": "const above = it.value >= other.items[i].value;",
+        "with": "const above = true;"
+      }
+    ],
+    "expectFail": [
+      "layout"
+    ]
+  },
+  {
+    "id": "gap-drawn-as-zero",
+    "title": "缺数据的月份被画成了 0，折线一头扎到底",
+    "base": "gap-in-the-data",
+    "ops": [
+      {
+        "file": "scenes",
+        "replace": "const known = items.filter((it) => it.value != null);",
+        "with": "for (const it of items) it.value ??= 0;\n    const known = items;"
+      }
+    ],
+    "expectFail": [
+      "marks"
+    ]
+  },
+  {
+    "id": "gap-without-note",
+    "title": "折线在缺口处断开了，但没有写为什么断",
+    "base": "gap-in-the-data",
+    "ops": [
+      {
+        "file": "scenes",
+        "replace": "note.textContent = it.note || '';",
+        "with": "note.textContent = '';"
+      }
+    ],
+    "expectFail": [
+      "spec"
     ]
   }
 ]

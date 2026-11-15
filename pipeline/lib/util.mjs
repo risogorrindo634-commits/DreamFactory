@@ -22,14 +22,14 @@ export function hasCommand(cmd) {
   }
 }
 
-/** Try again after a short, growing pause. For calls to online services. */
-export async function retry(fn, times) {
+/** Try again after a growing pause: `pause` ms after the first failure, twice that after the second, and so on. */
+export async function retry(fn, times, pause = 800) {
   for (let attempt = 1; ; attempt++) {
     try {
       return await fn();
     } catch (e) {
       if (attempt >= times) throw e;
-      await new Promise((r) => setTimeout(r, 800 * attempt));
+      await new Promise((r) => setTimeout(r, pause * attempt));
     }
   }
 }

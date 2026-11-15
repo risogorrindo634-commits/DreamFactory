@@ -1,0 +1,26 @@
+{
+  "duration": [
+    75,
+    100
+  ],
+  "requireCustomScene": true,
+  "mustShow": [
+    "facts.total",
+    "times series.yearly[2025 年] series.yearly[2026 年]",
+    "series.categories[模型对比]",
+    "share series.categories[模型对比]",
+    "series.monthly[12月]",
+    "series.cost[代码生成].high",
+    "series.cost[外包制作].low",
+    "series.cost[外包制作].high"
+  ],
+  "mustSay": [
+    "facts.total",
+    "times series.yearly[2025 年] series.yearly[2026 年]",
+    "series.categories[模型对比]",
+    "share series.categories[模型对比]",
+    "series.monthly[12月]",
+    "series.cost[代码生成].high",
+    "series.cost[外包制作].high"
+  ]
+}

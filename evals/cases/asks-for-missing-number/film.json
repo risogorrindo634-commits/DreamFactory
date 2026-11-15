@@ -1,0 +1,57 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "一档播客的两年",
+  "source": "数据来源：{{source.name}}",
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "数据故事",
+      "headline": "一档播客的两年",
+      "sub": "更新期数和单期播放量，示例数据",
+      "narration": [
+        "一档播客，两年里变了多少？",
+        "先说明，这是一组虚构的示例数据。"
+      ]
+    },
+    {
+      "id": "episodes",
+      "type": "bars",
+      "title": "一年更新多少期",
+      "sub": "单位：{{units.episodes}}",
+      "series": {
+        "$": "series.episodes"
+      },
+      "highlight": "2026 年",
+      "narration": [
+        "2025年更新了{{series.episodes[2025 年]}}期。",
+        "2026年更新了{{series.episodes[2026 年]}}期。"
+      ]
+    },
+    {
+      "id": "plays",
+      "type": "bars",
+      "title": "每期有多少次播放",
+      "sub": "单位：{{units.playsPerEpisode}}",
+      "series": {
+        "$": "series.playsPerEpisode"
+      },
+      "highlight": "2026 年",
+      "narration": [
+        "单期播放量从{{series.playsPerEpisode[2025 年]}}次，",
+        "涨到了{{series.playsPerEpisode[2026 年]}}次。"
+      ]
+    },
+    {
+      "id": "end",
+      "type": "outro",
+      "headline": "更新更勤，听的人也更多",
+      "sub": "同类节目的平均水平，这份数据里没有",
+      "narration": [
+        "更新更勤，听的人也更多。",
+        "至于同类节目的平均水平，这份数据里没有。"
+      ]
+    }
+  ]
+}
