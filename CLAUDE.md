@@ -54,7 +54,8 @@ node evals/agent-run.mjs --provider deepseek      # 同上，模型换成 DeepSe
 - 文字必须留在最近的 `data-df-box` 容器内，新场景要给会溢出的文字加上这个标记。
 - 代表数据的图形要带 `data-df-value`，`marks` 检查靠它核对图形与数值是否一致。
 - 缺陷可以改场景代码：`{"file": "scenes", "replace": "原文", "with": "改成"}`。改参考的 `scenes.js` 时要确认缺陷里引用的原文还在。
-- 有的检查守的是管线的一个环节，影片内容怎么改都触发不了（字体、响度）。这类缺陷直接弄坏那个环节：`{"file": "faults", "set": "mixGainDb", "value": 6}`。可用的故障见 `pipeline/film.mjs` 里 `faults` 的说明；只能在某个系统上注入的缺陷要写 `"platform"`。
+- 有的检查守的是管线的一个环节，影片内容怎么改都触发不了（字体、响度、配乐的音量）。这类缺陷直接弄坏那个环节：`{"file": "faults", "set": "mixGainDb", "value": 6}`。可用的故障见 `pipeline/film.mjs` 里 `faults` 的说明；只能在某个系统上注入的缺陷要写 `"platform"`。
+- 说“听得到、听不到”的音量，要按手机和笔记本扬声器放得出来的部分量（`pipeline/lib/audio.mjs` 的 `asHeardOnSmallSpeakers`，400 赫兹以上）。全频段的读数会把这些扬声器放不出的低音算进去：第一版配乐按全频段比人声低 12 分贝，人却听不到。
 - 检查里的阈值要有出处。`crowding` 的三个阈值是在全部参考影片和 `evals/agent-runs/` 里历次交付的片子上量出来的，改之前先重量一遍。
 - 不引入 npm 依赖，除了 Playwright。在已经预装 Playwright 的云端环境里不要运行 `npm install`。
 - 语音供应商都在 `pipeline/lib/tts.mjs`，一个后端一个函数。新增后端后跑一遍评测，参考影片的片长会随语速变化，贴着时长上下限的要调整参考影片，不要放宽要求。

@@ -936,5 +936,20 @@
     "expectFail": [
       "music"
     ]
+  },
+  {
+    "id": "music-too-quiet",
+    "title": "配乐的音量调得太低，低了 10 分贝，片子里有配乐但听不到",
+    "base": "long-report",
+    "ops": [
+      {
+        "file": "faults",
+        "set": "musicGainDb",
+        "value": -10
+      }
+    ],
+    "expectFail": [
+      "music"
+    ]
   }
 ]

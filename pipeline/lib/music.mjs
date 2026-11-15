@@ -1,6 +1,10 @@
 // A score made by code: an underscore for the narration, synthesized from the timeline.
 // Nothing is sampled or downloaded, so there is nothing to license, and the same film always gets
 // the same music. The arrangement follows each scene's "energy" (0 quiet .. 3 full).
+//
+// Most people hear a film through a phone or a laptop, which plays next to nothing under 300 Hz.
+// Every part here is voiced so that it also sounds above that: the bass and pad carry overtones,
+// the arpeggio sits in the middle, the drums have a click and a clap.
 import { RATE } from './wav.mjs';
 
 const TAU = 2 * Math.PI;
@@ -65,15 +69,16 @@ export function renderMusic(timeline, { bpm = 112, energy = {}, hits = [] } = {}
     const chord = CHORDS[Math.floor(bar / 2) % CHORDS.length];
     const t0 = bar * 4 * beat;
 
-    // Pad: the chord held under everything, soft attack, overlapping the next bar.
+    // Pad: the chord held under everything, soft attack, overlapping the next bar. The top note is
+    // doubled an octave up and every voice has a row of overtones, so the harmony reads on small speakers.
     const padLen = 4 * beat + 0.9;
-    chord.forEach((note, v) => {
-      const f = hz(note) * (1 + (v - 1.5) * 0.0012);
-      const gain = 0.11 * (0.6 + 0.4 * at(t0 + beat));
+    [...chord, chord[3] + 12].forEach((note, v) => {
+      const f = hz(note) * (1 + (v - 2) * 0.0012);
+      const gain = 0.06 * (0.6 + 0.4 * at(t0 + beat));
       add(t0, padLen, (t) => {
         const env = Math.min(1, t / 0.7) * Math.min(1, (padLen - t) / 0.9);
         let s = 0;
-        for (let k = 1; k <= 4; k++) s += Math.sin(TAU * f * k * t + v) / k ** 1.9;
+        for (let k = 1; k <= 6; k++) s += Math.sin(TAU * f * k * t + v) / k ** 1.3;
         return gain * env * s;
       });
     });
@@ -81,32 +86,48 @@ export function renderMusic(timeline, { bpm = 112, energy = {}, hits = [] } = {}
     for (let step = 0; step < 16; step++) {
       const ts = t0 + step * (beat / 4);
       const e = at(ts);
-      // Bass: the root on every eighth note once the scene has some energy.
+      // Bass: the root on every eighth note once the scene has some energy, with overtones to be heard by.
       if (step % 2 === 0 && e > 0.35) {
         const f = hz(chord[0] - 24);
-        const gain = 0.3 * e * (step % 8 === 0 ? 1 : 0.7);
-        add(ts, 0.3, (t) => gain * Math.exp(-t / 0.16) * (Math.sin(TAU * f * t) + 0.35 * Math.sin(TAU * 2 * f * t)));
+        const gain = 0.2 * e * (step % 8 === 0 ? 1 : 0.7);
+        add(ts, 0.3, (t) => {
+          let s = 0;
+          for (let k = 1; k <= 5; k++) s += Math.sin(TAU * f * k * t) / k;
+          return gain * Math.exp(-t / 0.16) * s;
+        });
       }
-      // A plucked arpeggio through the chord, up and back, for motion.
-      if (e > 0.3) {
+      // A plucked arpeggio through the chord, up and back, an octave above it: the part that carries the motion.
+      if (e > 0.15) {
         const order = [0, 1, 2, 3, 2, 1, 2, 3];
-        const f = hz(chord[order[step % 8]]);
-        const gain = 0.03 * (e - 0.15) * (step % 4 === 0 ? 1.2 : 0.8);
-        add(ts, 0.4, (t) => gain * Math.exp(-t / 0.11) * (Math.sin(TAU * f * t) + 0.25 * Math.sin(TAU * 2 * f * t)));
+        const f = hz(chord[order[step % 8]] + 12);
+        const gain = 0.1 * (0.25 + 0.75 * e) * (step % 4 === 0 ? 1.2 : 0.8);
+        add(ts, 0.45, (t) => gain * Math.exp(-t / 0.13) * (Math.sin(TAU * f * t) + 0.5 * Math.sin(TAU * 2 * f * t) + 0.25 * Math.sin(TAU * 3 * f * t)));
       }
-      // Kick on the beat, hat between beats, when the arrangement is full.
+      // Kick on the beat, with a short click on top so it is heard and not only felt.
       if (step % 4 === 0 && e > 0.6) {
         const gain = 0.5 * e;
-        add(ts, 0.3, (t) => gain * Math.exp(-t / 0.11) * Math.sin(TAU * (48 * t + 3.2 * (1 - Math.exp(-t / 0.028)))));
+        add(ts, 0.3, (t) => gain * (Math.exp(-t / 0.11) * Math.sin(TAU * (48 * t + 3.2 * (1 - Math.exp(-t / 0.028)))) + 0.35 * Math.exp(-t / 0.006) * Math.sin(TAU * 1800 * t)));
       }
-      if (step % 4 === 2 && e > 0.75) {
+      // A clap on beats two and four, and a hat on the off-beats, when the arrangement is full.
+      if (step % 8 === 4 && e > 0.7) {
+        const hiss = noise(bar * 32 + step + 7);
+        let slow = 0;
+        let fast = 0;
+        add(ts, 0.16, (t) => {
+          const n = hiss();
+          fast += (n - fast) * 0.45;
+          slow += (n - slow) * 0.12;
+          return 0.3 * e * Math.exp(-t / 0.055) * (fast - slow); // a band around a few kilohertz
+        });
+      }
+      if (step % 4 === 2 && e > 0.55) {
         const hiss = noise(bar * 16 + step + 1);
         let prev = 0;
         add(ts, 0.07, (t) => {
           const n = hiss();
           const hp = n - prev; // a crude high-pass: keeps the hiss, drops the thump
           prev = n;
-          return 0.05 * e * Math.exp(-t / 0.022) * hp;
+          return 0.07 * e * Math.exp(-t / 0.022) * hp;
         });
       }
     }
@@ -137,7 +158,7 @@ export function renderMusic(timeline, { bpm = 112, energy = {}, hits = [] } = {}
   const fadeIn = Math.round(0.4 * RATE);
   const fadeOut = Math.round(1.6 * RATE);
   for (let i = 0; i < total; i++) {
-    lp += (out[i] - lp) * 0.35;
+    lp += (out[i] - lp) * 0.7;
     const fade = Math.min(1, i / fadeIn) * Math.min(1, (total - i) / fadeOut);
     out[i] = Math.tanh(1.4 * lp) * fade;
     peak = Math.max(peak, Math.abs(out[i]));

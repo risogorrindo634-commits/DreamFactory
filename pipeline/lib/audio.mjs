@@ -56,8 +56,40 @@ export function levelOver(samples, windows) {
   return n && sum > 0 ? 10 * Math.log10(sum / n) : -Infinity;
 }
 
-// How far under the voice the music sits while someone is speaking, in dB, unless the film says otherwise.
-export const MUSIC_UNDER_VOICE = 14;
+/**
+ * A track as a phone or laptop speaker gives it back: with what lies under about 400 Hz taken away
+ * (a steep high-pass, two stages). Levels meant to describe what a listener hears are measured on this.
+ */
+export function asHeardOnSmallSpeakers(samples) {
+  const w = (2 * Math.PI * 400) / RATE;
+  const alpha = Math.sin(w) / (2 * Math.SQRT1_2);
+  const cos = Math.cos(w);
+  const [b0, b1, b2, a1, a2] = [(1 + cos) / 2, -(1 + cos), (1 + cos) / 2, -2 * cos, 1 - alpha].map((v) => v / (1 + alpha));
+  let data = Float64Array.from(samples);
+  for (let stage = 0; stage < 2; stage++) {
+    const out = new Float64Array(data.length);
+    let x1 = 0;
+    let x2 = 0;
+    let y1 = 0;
+    let y2 = 0;
+    for (let i = 0; i < data.length; i++) {
+      const x = data[i];
+      const y = b0 * x + b1 * x1 + b2 * x2 - a1 * y1 - a2 * y2;
+      x2 = x1;
+      x1 = x;
+      y2 = y1;
+      y1 = y;
+      out[i] = y;
+    }
+    data = out;
+  }
+  return Int16Array.from(data, (v) => Math.max(-32768, Math.min(32767, Math.round(v))));
+}
+
+// How far under the voice the music sits while someone is speaking, in dB, unless the film says
+// otherwise. Measured as small speakers play both: a score that is all bass reads as loud on a
+// meter and cannot be heard on a phone.
+export const MUSIC_UNDER_VOICE = 12;
 
 /**
  * @param {object} music  null for none, or { bpm, under, energy: {sceneId: 0..3}, hits: [sceneId] }
@@ -118,14 +150,16 @@ export async function mixNarration({ timeline, outDir, music = null, faultGainDb
     for (const [from, to] of lines) speaking.fill(1, Math.max(0, Math.round((from - 0.05) * RATE)), Math.min(total, Math.round((to + 0.05) * RATE)));
     let duck = 1;
     for (let i = 0; i < total; i++) {
-      const target = speaking[i] ? 0.5 : 1;
-      duck += (target - duck) / ((target < duck ? 0.08 : 0.35) * RATE);
+      const target = speaking[i] ? 0.6 : 1;
+      duck += (target - duck) / ((target < duck ? 0.08 : 0.25) * RATE);
       score[i] *= duck;
     }
-    // Set its level from the voice: so many dB under it, measured over the spoken stretches.
+    // Set its level from the voice: so many dB under it over the spoken stretches, as small speakers play both.
     const asInt = Int16Array.from(score, (v) => Math.round(v * 32767));
     const under = music.under ?? MUSIC_UNDER_VOICE;
-    const gain = 10 ** ((levelOver(voice, lines) - under - levelOver(asInt, lines) + (faultMusicGainDb ?? 0)) / 20);
+    const heardVoice = levelOver(asHeardOnSmallSpeakers(voice), lines);
+    const heardScore = levelOver(asHeardOnSmallSpeakers(asInt), lines);
+    const gain = 10 ** ((heardVoice - under - heardScore + (faultMusicGainDb ?? 0)) / 20);
     for (let i = 0; i < total; i++) score[i] *= gain;
     save(musicFile, score);
     const both = new Float32Array(total);

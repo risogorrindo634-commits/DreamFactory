@@ -1,7 +1,7 @@
 // Checks that read the encoded film and its audio mix.
 import fs from 'node:fs';
 import path from 'node:path';
-import { LOUDNESS_TARGET, levelOver, measureLevels } from '../lib/audio.mjs';
+import { LOUDNESS_TARGET, asHeardOnSmallSpeakers, levelOver, measureLevels } from '../lib/audio.mjs';
 import { compareSpeech, heardNumbers, pickRecognizer, transcribe } from '../lib/asr.mjs';
 import { extractNumbers } from '../lib/data.mjs';
 import { hash, run } from '../lib/util.mjs';
@@ -90,27 +90,36 @@ export const audioGaps = {
   },
 };
 
-// While a line is spoken the voice must stand this far above the score, in dB.
+// While a line is spoken the voice must stand this far above the score, in dB, and no further than
+// the second number: past that the score is on the track but nobody hears it. Both are measured as
+// phone and laptop speakers play the film, without the lows. The first film with a score sat 20.5 dB
+// under its voice by that measure (17.9 on its best line), and the person who watched it heard no
+// music at all: the second number is set inside that. It rests on that one listener so far.
 const VOICE_OVER_MUSIC = 8;
+const MUSIC_STILL_HEARD = 16;
 
 export const music = {
   id: 'music',
-  title: '配乐：不盖住旁白，配上音乐后数字还听得清',
+  title: '配乐：听得到，不盖住旁白，配上音乐后数字还听得清',
   tier: 'media',
   async run(ctx) {
     if (!ctx.audio.musicFile) return { status: 'skip', summary: '这支片子没有配乐', details: [] };
-    const voice = readWav(ctx.audio.voiceFile).samples;
-    const score = readWav(ctx.audio.musicFile).samples;
+    const voice = asHeardOnSmallSpeakers(readWav(ctx.audio.voiceFile).samples);
+    const score = asHeardOnSmallSpeakers(readWav(ctx.audio.musicFile).samples);
     const problems = [];
     let closest = Infinity;
+    const spoken = [];
     for (const sc of ctx.timeline.scenes) {
       for (const line of sc.lines) {
         const window = [[line.start, line.end]];
+        spoken.push(window[0]);
         const margin = levelOver(voice, window) - levelOver(score, window);
         closest = Math.min(closest, margin);
         if (margin < VOICE_OVER_MUSIC) problems.push(`配乐盖住了旁白：「${line.display.slice(0, 20)}」这一句人声只比配乐高 ${margin.toFixed(1)} 分贝，至少要 ${VOICE_OVER_MUSIC}`);
       }
     }
+    const overall = levelOver(voice, spoken) - levelOver(score, spoken);
+    if (overall > MUSIC_STILL_HEARD) problems.push(`配乐太轻，在手机和笔记本上听不到：旁白时它比人声低 ${overall.toFixed(1)} 分贝，最多 ${MUSIC_STILL_HEARD}`);
     // Then listen to the finished sound scene by scene: every number in the subtitles has to come through the music.
     const who = await pickRecognizer();
     let listened = 0;
@@ -137,7 +146,7 @@ export const music = {
     }
     return {
       status: problems.length ? 'fail' : 'pass',
-      summary: problems.length ? `${problems.length} 处问题` : `旁白时人声至少比配乐高 ${closest.toFixed(1)} 分贝${listened ? `；带着配乐听了 ${listened} 个场景，数字都听得到` : ''}`,
+      summary: problems.length ? `${problems.length} 处问题` : `旁白时配乐比人声低 ${overall.toFixed(1)} 分贝，最吃紧的一句低 ${closest.toFixed(1)}${listened ? `；带着配乐听了 ${listened} 个场景，数字都听得到` : ''}`,
       details: problems.slice(0, 12),
     };
   },
