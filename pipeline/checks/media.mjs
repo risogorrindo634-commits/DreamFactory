@@ -1,7 +1,11 @@
 // Checks that read the encoded film and its audio mix.
-import { LOUDNESS_TARGET, measureLevels } from '../lib/audio.mjs';
-import { compareSpeech, pickRecognizer, transcribe } from '../lib/asr.mjs';
-import { run } from '../lib/util.mjs';
+import fs from 'node:fs';
+import path from 'node:path';
+import { LOUDNESS_TARGET, levelOver, measureLevels } from '../lib/audio.mjs';
+import { compareSpeech, heardNumbers, pickRecognizer, transcribe } from '../lib/asr.mjs';
+import { extractNumbers } from '../lib/data.mjs';
+import { hash, run } from '../lib/util.mjs';
+import { readWav } from '../lib/wav.mjs';
 
 const fmtT = (t) => `${t.toFixed(1)}s`;
 
@@ -66,7 +70,8 @@ export const audioGaps = {
   async run(ctx) {
     if (!ctx.audio.voiced) return { status: 'skip', summary: '没有人声（静音语音后端）', details: [] };
     const limit = ctx.expect.maxSilenceSec ?? 3.5;
-    const { stderr } = await run('ffmpeg', ['-hide_banner', '-nostats', '-i', ctx.audio.file,
+    // Listen to the voice alone: with a score under it the finished mix is never silent.
+    const { stderr } = await run('ffmpeg', ['-hide_banner', '-nostats', '-i', ctx.audio.voiceFile ?? ctx.audio.file,
       '-af', 'silencedetect=noise=-45dB:d=2', '-f', 'null', '-']);
     const starts = [...stderr.matchAll(/silence_start: (-?[\d.]+)/g)].map((m) => Math.max(0, Number(m[1])));
     const lengths = [...stderr.matchAll(/silence_duration: ([\d.]+)/g)].map((m) => Number(m[1]));
@@ -81,6 +86,59 @@ export const audioGaps = {
       status: problems.length ? 'fail' : 'pass',
       summary: problems.length ? `${problems.length} 处问题` : `最长无声 ${longest.toFixed(1)} 秒`,
       details: problems,
+    };
+  },
+};
+
+// While a line is spoken the voice must stand this far above the score, in dB.
+const VOICE_OVER_MUSIC = 8;
+
+export const music = {
+  id: 'music',
+  title: '配乐：不盖住旁白，配上音乐后数字还听得清',
+  tier: 'media',
+  async run(ctx) {
+    if (!ctx.audio.musicFile) return { status: 'skip', summary: '这支片子没有配乐', details: [] };
+    const voice = readWav(ctx.audio.voiceFile).samples;
+    const score = readWav(ctx.audio.musicFile).samples;
+    const problems = [];
+    let closest = Infinity;
+    for (const sc of ctx.timeline.scenes) {
+      for (const line of sc.lines) {
+        const window = [[line.start, line.end]];
+        const margin = levelOver(voice, window) - levelOver(score, window);
+        closest = Math.min(closest, margin);
+        if (margin < VOICE_OVER_MUSIC) problems.push(`配乐盖住了旁白：「${line.display.slice(0, 20)}」这一句人声只比配乐高 ${margin.toFixed(1)} 分贝，至少要 ${VOICE_OVER_MUSIC}`);
+      }
+    }
+    // Then listen to the finished sound scene by scene: every number in the subtitles has to come through the music.
+    const who = await pickRecognizer();
+    let listened = 0;
+    if (who && ctx.timeline.backend !== 'espeak') {
+      const dir = path.join(path.dirname(ctx.audio.file), 'listen');
+      fs.mkdirSync(dir, { recursive: true });
+      const spoken = ctx.timeline.scenes.filter((sc) => sc.lines.length && sc.end - sc.start < 115);
+      const clips = [];
+      for (const sc of spoken) {
+        const tmp = path.join(dir, `${sc.id}.wav`);
+        await run('ffmpeg', ['-y', '-loglevel', 'error', '-ss', String(sc.start), '-t', String(sc.end - sc.start), '-i', ctx.audio.file, '-ar', '16000', '-ac', '1', '-c:a', 'pcm_s16le', tmp]);
+        // Named by its content, so a transcript kept from an earlier mix is never read for this one.
+        const named = path.join(dir, `${hash(fs.readFileSync(tmp).toString('base64'))}.wav`);
+        fs.renameSync(tmp, named);
+        clips.push(named);
+      }
+      const heard = await transcribe(clips, ctx.resolved.lang);
+      spoken.forEach((sc, i) => {
+        const said = heardNumbers(heard[i]);
+        const lost = sc.lines.flatMap((l) => extractNumbers(l.display)).filter((n) => !said.some((v) => Math.abs(v - n.value) < 1e-9));
+        if (lost.length) problems.push(`配上音乐后听不清：场景 ${sc.id} 里的 ${[...new Set(lost.map((n) => n.raw))].join('、')} 没有听到，整段听到「${heard[i].slice(0, 30)}…」`);
+      });
+      listened = spoken.length;
+    }
+    return {
+      status: problems.length ? 'fail' : 'pass',
+      summary: problems.length ? `${problems.length} 处问题` : `旁白时人声至少比配乐高 ${closest.toFixed(1)} 分贝${listened ? `；带着配乐听了 ${listened} 个场景，数字都听得到` : ''}`,
+      details: problems.slice(0, 12),
     };
   },
 };

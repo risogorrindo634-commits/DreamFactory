@@ -60,16 +60,20 @@ async function pool(items, worker) {
 
 const mediaIds = new Set(CHECKS.filter((c) => c.tier === 'media').map((c) => c.id));
 const caseIds = fs.readdirSync(casesDir).filter((d) => fs.existsSync(path.join(casesDir, d, 'film.json'))).sort();
+// Films made with real data are kept passing too: a check that changes must not turn on a film already delivered.
+const filmsDir = path.join(here, '..', 'films');
+const filmIds = fs.existsSync(filmsDir) ? fs.readdirSync(filmsDir).filter((d) => fs.existsSync(path.join(filmsDir, d, 'film.json'))).sort() : [];
+const dirOf = (id) => (caseIds.includes(id) ? path.join(casesDir, id) : path.join(filmsDir, id));
 const defects = readJson(path.join(here, 'defects.json'));
 
-const cleanRuns = caseIds.filter((id) => !only || only === id);
+const cleanRuns = [...caseIds, ...filmIds].filter((id) => !only || only === id);
 const defectRuns = defects.filter((d) => !only || only === d.id);
 fs.rmSync(tmpDir, { recursive: true, force: true });
 const started = Date.now();
 
 const clean = await pool(cleanRuns, async (id) => {
   try {
-    const r = await runFilm(path.join(casesDir, id), { draft: true, tts, log: false, outDir: path.join(tmpDir, `clean-${id}`) });
+    const r = await runFilm(dirOf(id), { draft: true, tts, log: false, outDir: path.join(tmpDir, `clean-${id}`) });
     console.log(`${r.passed ? '通过  ' : '误报  '} ${id}${r.passed ? '' : `  ← ${r.failed.join(', ')}`}`);
     return { id, ok: r.passed, failed: r.failed, durationSec: r.durationSec, backend: r.backend, checks: r.checks };
   } catch (e) {
@@ -79,7 +83,7 @@ const clean = await pool(cleanRuns, async (id) => {
 });
 
 const planted = await pool(defectRuns, async (d) => {
-  const dir = path.join(casesDir, d.base);
+  const dir = dirOf(d.base);
   const scenesFile = path.join(dir, 'scenes.js');
   const files = {
     film: readJson(path.join(dir, 'film.json')),

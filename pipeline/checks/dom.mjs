@@ -413,7 +413,7 @@ export const marks = {
   title: '图形：标了数值的图形，长短高低与数值一致',
   tier: 'dom',
   run(ctx) {
-    const allowed = allowedNumbers(ctx.data);
+    const allowed = new Set([...allowedNumbers(ctx.data), ...(ctx.resolved.derived ?? [])]);
     const problems = [];
     const groups = new Map();
     for (const s of ctx.sampling.samples) {
@@ -423,10 +423,26 @@ export const marks = {
         groups.get(key).push(m);
       }
     }
-    // Scene code written for one film has to say which shape stands for which number.
+    // Scene code written for one film has to say which shape stands for which number. That holds for a
+    // scene that was handed numbers to draw: a series of values, or two or more numbers of its own.
+    // A scene of words and dates, such as a quotation card, has no such shapes.
     const builtin = new Set(ctx.vertical.builtinScenes);
+    const drawsNumbers = (sc) => {
+      let scalars = 0;
+      let series = false;
+      const walk = (v, depth) => {
+        if (typeof v === 'number' && depth === 1) scalars++;
+        else if (Array.isArray(v)) {
+          if (v.filter((it) => it && typeof it === 'object' && ['value', 'low', 'high'].some((k) => typeof it[k] === 'number')).length >= 2) series = true;
+          v.forEach((it) => walk(it, depth + 1));
+        } else if (v && typeof v === 'object') Object.values(v).forEach((it) => walk(it, depth + 1));
+      };
+      const { lines, minDuration, duration, energy, ...fields } = sc;
+      walk(fields, 0);
+      return series || scalars >= 2;
+    };
     for (const sc of ctx.resolved.scenes) {
-      if (builtin.has(sc.type) || !sc.usesData) continue;
+      if (builtin.has(sc.type) || !sc.usesData || !drawsNumbers(sc)) continue;
       if (![...groups.keys()].some((k) => k.startsWith(`${sc.id}/`))) {
         problems.push(`自定义场景 ${sc.id} 用了数据，但没有给图形标 data-df-value`);
       }

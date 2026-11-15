@@ -43,13 +43,13 @@ function sharePercent(data, p) {
 
 // A path may hold spaces inside its brackets: series.films[2025 年].
 const PATHS = /[^\s[\]]+(?:\[[^\]]*\][^\s[\]]*)*/g;
-const DERIVED = ['times', 'up', 'down'];
 
 /**
  * A number worked out from two values in the data. All three read "from a to b":
  *   times a b  - b divided by a, to one decimal ("4.5")
  *   up a b     - the rise from a to b in whole percent
  *   down a b   - the fall from a to b in whole percent
+ *   of a b     - a as a share of b in whole percent ("12 of 83" is 14)
  * up and down refuse to run when the change goes the other way, so a film cannot call a fall a rise.
  */
 export function derive(data, fn, args) {
@@ -60,6 +60,10 @@ export function derive(data, fn, args) {
     if (typeof v !== 'number') throw new Error(`"${fn}" needs two numbers, and "${p}" is not a number in data.json`);
     return v;
   });
+  if (fn === 'of') {
+    if (b <= 0 || a < 0 || a > b) throw new Error(`"${fn} ${args}": the first value must be a part of the second, and they are ${a} and ${b}`);
+    return Math.round((100 * a) / b);
+  }
   if (a <= 0) throw new Error(`"${fn} ${args}": the first value must be above zero, and it is ${a}`);
   if (fn === 'times') return Math.round((10 * b) / a) / 10;
   const rise = b - a;
@@ -68,9 +72,9 @@ export function derive(data, fn, args) {
   return Math.round((100 * Math.abs(rise)) / a);
 }
 
-/** The number an expect.json entry stands for: a path, or "share path", "times a b", "up a b", "down a b". */
+/** The number an expect.json entry stands for: a path, or "share path", "times a b", "up a b", "down a b", "of a b". */
 export function expectedNumber(data, spec) {
-  const [, fn, rest] = String(spec).match(/^(share|times|up|down)\s+(.+)$/) ?? [];
+  const [, fn, rest] = String(spec).match(/^(share|times|up|down|of)\s+(.+)$/) ?? [];
   if (fn === 'share') return sharePercent(data, rest.trim());
   if (fn) return derive(data, fn, rest);
   return getScalar(data, spec);
@@ -84,7 +88,7 @@ export function expectedNumber(data, spec) {
 export function renderTemplate(str, data, mode, lang = 'zh', derived = null) {
   const percent = (pct) => (mode === 'screen' ? `${pct}%` : lang === 'zh' ? `百分之${pct}` : `${pct} percent`);
   return str.replace(/\{\{\s*([^}]+?)\s*\}\}/g, (_, inner) => {
-    const [, fn, rest] = inner.match(/^(share|times|up|down)\s+(.+)$/) ?? [];
+    const [, fn, rest] = inner.match(/^(share|times|up|down|of)\s+(.+)$/) ?? [];
     if (fn === 'share') return percent(sharePercent(data, rest.trim()));
     if (fn) {
       const value = derive(data, fn, rest);

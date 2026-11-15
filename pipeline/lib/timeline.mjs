@@ -4,12 +4,17 @@ import path from 'node:path';
 import { round3 } from './util.mjs';
 import { synth } from './tts.mjs';
 
-const LEAD = 0.5; // scene start to first word
-const GAP = 0.3; // between narration lines
-const TAIL = 0.8; // last word to scene end
+// Pauses in seconds: scene start to first word, between narration lines, last word to scene end.
+// A film can tighten or loosen them with "pace": { "lead": ..., "gap": ..., "tail": ... }.
+const PACE = { lead: 0.5, gap: 0.3, tail: 0.8 };
 
 export async function buildTimeline({ resolved, outDir, backend, vertical, fps = 30 }) {
   const audioDir = path.join(outDir, 'audio');
+  const pace = { ...PACE, ...(resolved.pace ?? {}) };
+  for (const [k, v] of Object.entries(pace)) {
+    if (!(k in PACE) || typeof v !== 'number' || v < 0 || v > 5) throw new Error(`pace.${k} must be a number of seconds from 0 to 5; pace takes lead, gap and tail`);
+  }
+  const { lead: LEAD, gap: GAP, tail: TAIL } = pace;
   const scenes = [];
   let t = 0;
   let billed = 0; // what the speech supplier charged for lines synthesized in this run, in its own unit

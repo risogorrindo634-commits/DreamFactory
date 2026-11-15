@@ -21,7 +21,7 @@ const VERTICALS = {
  *                          scenes (source of custom scene code; null = none; default: scenes.js in filmDir),
  *                          faults (evals only: break one stage on purpose, to show that the check guarding it
  *                          notices; noCjkFonts = start the browser without Chinese fonts, mixGainDb = shift
- *                          the finished narration mix by that many dB)
+ *                          the finished mix by that many dB, musicGainDb = shift the score by that many dB)
  */
 export async function runFilm(filmDir, opts = {}) {
   const started = Date.now();
@@ -49,7 +49,15 @@ export async function runFilm(filmDir, opts = {}) {
   const builtScenes = path.join(outDir, 'build', 'scenes.js');
   if (scenesSource) fs.writeFileSync(builtScenes, scenesSource);
   else fs.rmSync(builtScenes, { force: true });
-  const audio = await mixNarration({ timeline, outDir, faultGainDb: opts.faults?.mixGainDb });
+  // A film asks for a score with "music": {}; scenes steer it with "energy" (0 quiet .. 3 full) and "hit".
+  const music = film.music
+    ? {
+        ...film.music,
+        energy: Object.fromEntries(resolved.scenes.filter((sc) => sc.energy != null).map((sc) => [sc.id, sc.energy])),
+        hits: resolved.scenes.filter((sc) => sc.hit).map((sc) => sc.id),
+      }
+    : null;
+  const audio = await mixNarration({ timeline, outDir, music, faultGainDb: opts.faults?.mixGainDb, faultMusicGainDb: opts.faults?.musicGainDb });
 
   // Picture: read the text back from the live page, then render if asked.
   const contactFile = path.join(outDir, 'contact.jpg');

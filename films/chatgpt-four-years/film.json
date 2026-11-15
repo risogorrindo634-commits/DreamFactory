@@ -6,132 +6,154 @@
   "theme": {
     "accent": "#34d399"
   },
+  "pace": {
+    "lead": 0.25,
+    "gap": 0.12,
+    "tail": 0.35
+  },
+  "voice": {
+    "rate": "+10%"
+  },
+  "music": {
+    "bpm": 116,
+    "under": 12
+  },
   "scenes": [
     {
-      "id": "open",
-      "type": "title",
-      "kicker": "{{facts.launchDate}} 上线",
-      "headline": "ChatGPT 四年",
-      "sub": "用几组数字回看",
-      "narration": [
-        "2022年11月30日，ChatGPT 上线。",
-        "到这个月底，正好四年。"
-      ]
-    },
-    {
-      "id": "million",
-      "type": "bignumber",
-      "label": "用户突破 {{facts.firstMilestoneWan}} 万，只用了",
-      "value": {
+      "id": "tweet",
+      "type": "tweet",
+      "energy": 0,
+      "date": "{{facts.launchDate}}",
+      "headline": "一个聊天框上线了",
+      "tweet": "{{facts.millionTweet}}",
+      "by": "{{facts.millionTweetBy}}",
+      "handle": "{{facts.millionTweetHandle}}",
+      "tweetDate": "{{facts.millionUsersDate}}",
+      "day": {
         "$": "facts.daysToMillionUsers"
       },
-      "unit": "天",
-      "note": "据奥尔特曼 {{facts.millionUsersDate}} 的推文",
+      "users": "{{facts.firstMilestoneWan}} 万用户",
       "narration": [
-        "上线第{{facts.daysToMillionUsers}}天，用户就过了{{facts.firstMilestoneWan}}万。"
+        "四年前，一个聊天框上线了。",
+        "第{{facts.daysToMillionUsers}}天，奥尔特曼发了一条推文：",
+        "用户，过了{{facts.firstMilestoneWan}}万。"
       ]
     },
     {
-      "id": "wau",
-      "type": "milestones",
+      "id": "race",
+      "type": "race",
+      "energy": 2,
+      "hit": true,
+      "title": "到 {{facts.monthlyUsersJan2023Yi}} 亿用户，用了多久",
+      "unit": "个月",
+      "series": {
+        "$": "series.monthsTo100M"
+      },
+      "note": "ChatGPT：瑞银估算的月活跃用户　TikTok、Instagram：Sensor Tower 数据，经路透社报道",
+      "narration": [
+        "两个月，月活用户估计破{{facts.monthlyUsersJan2023Yi}}亿。",
+        "同样到{{facts.monthlyUsersJan2023Yi}}亿用户，TikTok 用了{{series.monthsTo100M[TikTok]}}个月，",
+        "Instagram 用了{{series.monthsTo100M[Instagram]}}个月。",
+        "ChatGPT 的速度，是它的{{times series.monthsTo100M[ChatGPT] series.monthsTo100M[Instagram]}}倍。"
+      ],
+      "badge": "快 {{times series.monthsTo100M[ChatGPT] series.monthsTo100M[Instagram]}} 倍"
+    },
+    {
+      "id": "shock",
+      "type": "shock",
+      "energy": 2,
+      "date": "{{facts.codeRedDate}}",
+      "headline": "谷歌管理层：红色警报",
+      "note": "据《纽约时报》报道",
+      "rivals": {
+        "$": "series.rivals"
+      },
+      "narration": [
+        "上线才三周，据报道，谷歌内部拉响了红色警报。",
+        "不到四个月，微软、Anthropic、谷歌先后推出对手。"
+      ]
+    },
+    {
+      "id": "rise",
+      "type": "rise",
+      "energy": 3,
+      "hit": true,
       "title": "每周活跃用户",
-      "sub": "单位：{{units.wau}}",
+      "unit": "{{units.wau}}",
       "series": {
         "$": "series.wau"
       },
       "from": "{{facts.launchDate}}",
       "to": "{{facts.anniversaryDate}}",
-      "unit": "{{units.wau}}",
-      "labels": [
-        "2023 年 11 月",
-        "2025 年 2 月",
-        "2025 年 10 月",
-        "2026 年 2 月",
-        "2026 年 9 月"
-      ],
+      "note": "空心点：媒体报道，未见官方原文",
       "narration": [
-        "再看每周有多少人在用。",
-        "2023年11月，突破{{series.wau[2023 年 11 月]}}亿。",
-        "2025年2月，达到{{series.wau[2025 年 2 月]}}亿。",
-        "2025年10月，达到{{series.wau[2025 年 10 月]}}亿。",
-        "今年2月，达到{{series.wau[2026 年 2 月]}}亿。",
-        "到今年9月底，超过{{series.wau[2026 年 9 月]}}亿。",
-        "不到三年，涨到了{{times series.wau[2023 年 11 月] series.wau[2026 年 9 月]}}倍。"
+        "它自己的周活跃用户，从{{series.wau[2023 年 11 月]}}亿人起步，",
+        "一路涨到今年的{{series.wau[2026 年 9 月]}}亿以上。"
       ]
     },
     {
-      "id": "paying",
-      "type": "bignumber",
-      "label": "付费订阅用户 · {{series.wau[2026 年 2 月].label}}",
-      "value": {
-        "$": "facts.payingFeb2026Wan"
+      "id": "people",
+      "type": "people",
+      "energy": 3,
+      "share": "{{of series.wau[2026 年 9 月] facts.worldPopulationYi}}",
+      "caption": "全世界每周在用的人",
+      "note": "按全球约 {{facts.worldPopulationYi}} 亿人估算，联合国 2026 年年中数字",
+      "narration": [
+        "相当于全世界{{of series.wau[2026 年 9 月] facts.worldPopulationYi}}的人，每周都在用。"
+      ]
+    },
+    {
+      "id": "usa",
+      "type": "towers",
+      "energy": 3,
+      "title": "美国成年人里，用过 ChatGPT 的",
+      "suffix": "%",
+      "series": {
+        "$": "series.usAdults"
       },
-      "unit": "万",
-      "note": "同时公布的周活跃用户：{{series.wau[2026 年 2 月]}} 亿",
+      "strong": [
+        "2023 年",
+        "2026 年"
+      ],
+      "note": "皮尤研究中心调查；2026 年的问法与往年略有不同",
       "narration": [
-        "今年2月公布的数字：付费订阅{{facts.payingFeb2026Wan}}万，",
-        "当时每周有{{series.wau[2026 年 2 月]}}亿人在用。",
-        "据 CNBC 报道，三季度末付费用户接近{{facts.payingQ3ApproxYi}}亿。"
+        "在美国，用过它的成年人，从{{series.usAdults[2023 年]}}%涨到了{{series.usAdults[2026 年]}}%。"
       ]
     },
     {
-      "id": "arr",
-      "type": "bars",
-      "title": "年化收入：不到三年，{{times series.arr[2023 年] series.arr[2026 年 9 月底]}} 倍",
-      "sub": "单位：{{units.arr}} · 按近期收入推算全年",
+      "id": "money",
+      "type": "towers",
+      "energy": 3,
+      "hit": true,
+      "title": "年化收入",
+      "sub": "单位：{{units.arr}}",
+      "suffix": "",
       "series": {
         "$": "series.arr"
       },
-      "highlight": "2026 年 9 月底",
-      "narration": [
-        "再看收入，用的是年化口径。",
-        "2023年，{{series.arr[2023 年]}}亿美元。",
-        "2024年，{{series.arr[2024 年]}}亿美元。",
-        "2025年，超过{{series.arr[2025 年]}}亿美元。",
-        "到今年9月底，约{{series.arr[2026 年 9 月底]}}亿美元，",
-        "相当于2023年的{{times series.arr[2023 年] series.arr[2026 年 9 月底]}}倍。"
-      ]
-    },
-    {
-      "id": "models",
-      "type": "bullets",
-      "title": "差不多每年一代新模型",
-      "items": [
-        "{{series.models[GPT-4].when}}　{{series.models[GPT-4].label}}",
-        "{{series.models[GPT-4o].when}}　{{series.models[GPT-4o].label}}",
-        "{{series.models[GPT-5].when}}　{{series.models[GPT-5].label}}",
-        "{{series.models[GPT-6].when}}　{{series.models[GPT-6].label}}"
+      "strong": [
+        "2026 年 9 月底"
       ],
+      "badge": "{{times series.arr[2023 年] series.arr[2026 年 9 月底]}} 倍",
+      "note": "年化口径；2025 年为“超过”，2026 年 9 月底为“约”",
       "narration": [
-        "2023年3月，GPT-4 发布。",
-        "2024年5月，推出 GPT-4o。",
-        "2025年8月，GPT-5。",
-        "今年9月，GPT-6。"
+        "年化收入从{{series.arr[2023 年]}}亿美元，涨到约{{series.arr[2026 年 9 月底]}}亿。",
+        "不到三年，{{times series.arr[2023 年] series.arr[2026 年 9 月底]}}倍。"
       ]
     },
     {
-      "id": "caveats",
-      "type": "bullets",
-      "title": "这些数字怎么读",
-      "items": [
-        "周活跃用户是 OpenAI 自己的口径",
-        "{{series.wau[2026 年 8 月]}} 亿和 {{series.wau[2026 年 9 月]}} 亿来自媒体报道，未见官方原文",
-        "收入是年化推算，不是全年实收"
-      ],
+      "id": "close",
+      "type": "close",
+      "energy": 1,
+      "models": {
+        "$": "series.models"
+      },
+      "headline": "ChatGPT 四年",
+      "placeholder": "问点什么……",
+      "note": "{{series.wau[2026 年 8 月]}} 亿、{{series.wau[2026 年 9 月]}} 亿为媒体报道；月活 {{series.wau[2023 年 11 月]}} 亿为瑞银估算；收入为年化口径",
       "narration": [
-        "先说明：周活跃用户是 OpenAI 自己的口径。",
-        "{{series.wau[2026 年 8 月]}}亿和{{series.wau[2026 年 9 月]}}亿这两个数，来自媒体报道。",
-        "收入是年化推算，不是全年实收。"
-      ]
-    },
-    {
-      "id": "end",
-      "type": "outro",
-      "headline": "四年，每周 {{series.wau[2026 年 9 月]}} 亿人在用",
-      "sub": "数据截至 {{source.asOf}}",
-      "narration": [
-        "四年前的一个聊天框，如今每周有{{series.wau[2026 年 9 月]}}亿人在用。",
-        "下一个四年，接着看。"
+        "模型从 GPT-4 换到了 GPT-6。",
+        "而这一切的起点，只是一个聊天框。"
       ]
     }
   ]

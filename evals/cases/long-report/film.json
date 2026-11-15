@@ -3,6 +3,9 @@
   "lang": "zh",
   "title": "代码生成作品的 2026 年度盘点",
   "source": "数据来源：{{source.name}}",
+  "music": {
+    "bpm": 108
+  },
   "scenes": [
     {
       "id": "open",

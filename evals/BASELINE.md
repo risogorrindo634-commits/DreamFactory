@@ -1,6 +1,6 @@
 # 评测基线
 
-干净用例误报 0/11，缺陷检出 54/54。
+干净用例误报 0/12，缺陷检出 55/55。
 
 运行环境：Node v22.23.4 · 语音后端 deepseek · 草稿画质 · 2026-11-15
 
@@ -21,6 +21,7 @@
 | two-series | 通过 | 32.4 |  |
 | works-by-category | 通过 | 52.8 |  |
 | works-by-category-en | 通过 | 54.0 |  |
+| chatgpt-four-years | 通过 | 54.1 |  |
 
 ## 缺陷注入
 
@@ -82,6 +83,7 @@
 | two-lines-labels-collide | 两条线交叉处，两个数值标签叠在一起 | layout | 抓到 |  |
 | gap-drawn-as-zero | 缺数据的月份被画成了 0，折线一头扎到底 | marks | 抓到 | spec |
 | gap-without-note | 折线在缺口处断开了，但没有写为什么断 | spec | 抓到 |  |
+| music-over-voice | 配乐的音量调错了，高了 12 分贝，盖过旁白 | music | 抓到 |  |
 
 ## 各项检查的覆盖
 
@@ -104,4 +106,5 @@
 | video-stillness | 2 | 2 |  |
 | audio-levels | 2 | 2 |  |
 | audio-gaps | 1 | 1 |  |
+| music | 1 | 1 | 本次运行跳过 |
 | asr | 6 | 6 |  |

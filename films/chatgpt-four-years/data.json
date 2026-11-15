@@ -1,6 +1,6 @@
 {
   "source": {
-    "name": "OpenAI 公告与 TechCrunch、CNBC 等媒体报道",
+    "name": "OpenAI 公告、瑞银、皮尤、联合国与媒体报道",
     "asOf": "2026-11-15"
   },
   "units": {
@@ -15,7 +15,13 @@
     "daysToMillionUsers": 5,
     "firstMilestoneWan": 100,
     "payingFeb2026Wan": 5000,
-    "payingQ3ApproxYi": 1
+    "payingQ3ApproxYi": 1,
+    "millionTweet": "ChatGPT launched on wednesday. today it crossed 1 million users!",
+    "millionTweetBy": "Sam Altman",
+    "millionTweetHandle": "@sama",
+    "codeRedDate": "2022-12-21",
+    "worldPopulationYi": 83,
+    "monthlyUsersJan2023Yi": 1
   },
   "series": {
     "wau": [
@@ -118,6 +124,55 @@
         "label": "GPT-6",
         "date": "2026-09-03",
         "when": "2026 年 9 月"
+      }
+    ],
+    "monthsTo100M": [
+      {
+        "label": "ChatGPT",
+        "value": 2
+      },
+      {
+        "label": "TikTok",
+        "value": 9
+      },
+      {
+        "label": "Instagram",
+        "value": 30
+      }
+    ],
+    "rivals": [
+      {
+        "label": "必应聊天",
+        "by": "微软",
+        "date": "2023-02-07"
+      },
+      {
+        "label": "Claude",
+        "by": "Anthropic",
+        "date": "2023-03-14"
+      },
+      {
+        "label": "Bard",
+        "by": "谷歌",
+        "date": "2023-03-21"
+      }
+    ],
+    "usAdults": [
+      {
+        "label": "2023 年",
+        "value": 18
+      },
+      {
+        "label": "2024 年",
+        "value": 23
+      },
+      {
+        "label": "2025 年",
+        "value": 34
+      },
+      {
+        "label": "2026 年",
+        "value": 44
       }
     ]
   }

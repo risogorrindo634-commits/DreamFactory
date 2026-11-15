@@ -101,8 +101,15 @@ export function heardNumbers(text) {
   // A recognizer may write a number right against a word: "API2~45". In a transcript that is still a number.
   const out = extractNumbers(text.replace(/([A-Za-z])(?=\d)|(\d)(?=[A-Za-z])/g, '$1$2 ')).map((n) => n.value);
   for (const m of text.matchAll(/[零〇一二两三四五六七八九十百千万亿点]+/g)) {
-    const v = chineseNumber(m[0].replace(/^点+|点+$/g, ''));
+    const run = m[0].replace(/^点+|点+$/g, '');
+    const v = chineseNumber(run);
     if (Number.isFinite(v)) out.push(v);
+    // "一亿" is 100,000,000, and it is also what a subtitle writes as "1 亿": the number in front of
+    // each 万 or 亿 counts too. That also untangles "一亿一路", where the next word begins with a numeral.
+    for (const part of run.matchAll(/([零〇一二两三四五六七八九十百千点]+)[万亿]/g)) {
+      const front = chineseNumber(part[1].replace(/^点+|点+$/g, ''));
+      if (Number.isFinite(front)) out.push(front);
+    }
   }
   out.push(...englishNumbers(text));
   return out;

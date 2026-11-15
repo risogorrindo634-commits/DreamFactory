@@ -1,28 +1,38 @@
 {
   "duration": [
-    80,
-    110
+    45,
+    75
   ],
   "requireCustomScene": true,
+  "maxFrozenSec": 4,
   "mustShow": [
     "facts.daysToMillionUsers",
-    "series.wau[2023 年 11 月]",
-    "series.wau[2026 年 2 月]",
+    "series.monthsTo100M[ChatGPT]",
+    "series.monthsTo100M[TikTok]",
+    "series.monthsTo100M[Instagram]",
     "series.wau[2026 年 9 月]",
-    "facts.payingFeb2026Wan",
+    "of series.wau[2026 年 9 月] facts.worldPopulationYi",
+    "series.usAdults[2023 年]",
+    "series.usAdults[2026 年]",
     "series.arr[2023 年]",
     "series.arr[2026 年 9 月底]",
-    "times series.arr[2023 年] series.arr[2026 年 9 月底]"
+    "times series.arr[2023 年] series.arr[2026 年 9 月底]",
+    "times series.monthsTo100M[ChatGPT] series.monthsTo100M[Instagram]"
   ],
   "mustSay": [
     "facts.daysToMillionUsers",
-    "series.wau[2023 年 11 月]",
+    "series.monthsTo100M[TikTok]",
+    "series.monthsTo100M[Instagram]",
     "series.wau[2026 年 9 月]",
-    "facts.payingFeb2026Wan",
+    "of series.wau[2026 年 9 月] facts.worldPopulationYi",
+    "series.usAdults[2023 年]",
+    "series.usAdults[2026 年]",
     "series.arr[2026 年 9 月底]",
-    "times series.arr[2023 年] series.arr[2026 年 9 月底]"
+    "times series.arr[2023 年] series.arr[2026 年 9 月底]",
+    "times series.monthsTo100M[ChatGPT] series.monthsTo100M[Instagram]"
   ],
   "mustShowText": [
-    "媒体报道"
+    "媒体报道",
+    "瑞银"
   ]
 }

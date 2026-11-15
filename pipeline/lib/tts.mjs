@@ -109,8 +109,9 @@ export async function synth({ backend, lang, voice, rate, text }) {
   // A film names a voice of one supplier. Under another supplier the name means nothing, so the default speaks.
   const names = VOICES[backend];
   const v = voice && names?.own.test(voice) ? voice : names?.[lang] ?? '';
-  if (backend !== 'edge') rate = undefined; // only Edge takes a speaking rate
-  const speed = backend === 'espeak' ? ESPEAK_SPEED[lang] ?? '170' : `${rate ?? ''}/trimmed`;
+  const tempo = rate == null ? 1 : 1 + Number(String(rate).replace('%', '')) / 100;
+  if (!(tempo >= 0.7 && tempo <= 1.5)) throw new Error(`voice.rate "${rate}" must be a percentage between -30% and +50%, like "+12%"`);
+  const speed = backend === 'espeak' ? `${ESPEAK_SPEED[lang] ?? '170'}/${rate ?? ''}` : `${rate ?? ''}/trimmed`;
   const dir = cacheDir();
   const outFile = path.join(dir, `${backend}-${hash([backend, v, speed, lang, text].join('|'))}.wav`);
   const fresh = !fs.existsSync(outFile);
@@ -118,7 +119,14 @@ export async function synth({ backend, lang, voice, rate, text }) {
     fs.mkdirSync(dir, { recursive: true });
     // Two films in one process can ask for the same line at once; each call works in files of its own.
     const tmp = `${outFile}.${process.pid}.${++calls}.tmp.wav`;
-    await fn({ text, voice: v, lang, rate, outFile: tmp });
+    // Edge speaks at the asked rate itself. The other voices have no such setting: their clip is
+    // stretched or squeezed in time afterwards, which leaves the pitch alone.
+    await fn({ text, voice: v, lang, rate: backend === 'edge' ? rate : undefined, outFile: tmp });
+    if (backend !== 'edge' && backend !== 'silent' && tempo !== 1) {
+      const stretched = `${tmp}.tempo.wav`;
+      await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', tmp, '-af', `atempo=${tempo}`, '-ar', String(RATE), '-ac', '1', '-c:a', 'pcm_s16le', stretched]);
+      fs.renameSync(stretched, tmp);
+    }
     fs.renameSync(tmp, outFile); // a clip appears in the cache only once it is complete
   }
   const { samples, rate: hz } = readWav(outFile);

@@ -19,6 +19,7 @@ export const CHECKS = [
   media.videoStillness,
   media.audioLevels,
   media.audioGaps,
+  media.music,
   media.asr,
 ];
 

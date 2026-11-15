@@ -8,7 +8,7 @@
 node pipeline/cli.mjs run <影片目录> --no-video   # 只做文字层检查，十几秒
 node pipeline/cli.mjs run <影片目录> --draft      # 草稿画质，带视频和声音检查
 node pipeline/cli.mjs run <影片目录>              # 成片
-node evals/run.mjs                                # 跑评测集，约七分钟
+node evals/run.mjs                                # 跑评测集，约十分钟
 node evals/run.mjs --only <用例或缺陷的 id>
 node evals/agent-run.mjs                          # 让模型无人值守做完每个用例，要花模型费用
 node evals/agent-run.mjs --provider deepseek      # 同上，模型换成 DeepSeek，需要 DEEPSEEK_API_KEY
@@ -20,9 +20,10 @@ node evals/agent-run.mjs --provider deepseek      # 同上，模型换成 DeepSe
 
 - `pipeline/`：管线本体。`film.mjs` 是一次运行的全流程，`lib/` 是各个环节，`checks/` 是自检，`tools/asr.py` 是本机语音识别的 Python 小工具。
 - `pipeline/lib/deepseek.mjs`：DeepSeek 语音接口的请求函数和密钥读取，语音合成和听写核对共用。
+- `pipeline/lib/music.mjs`：配乐。由代码合成，不用任何素材；`pipeline/lib/audio.mjs` 把它压在人声下面混进去。
 - `.cache/tts/`：合成过的语音和听写结果的缓存，不入库，删掉只会让下次运行慢一些。
 - `verticals/data-story/`：数据短片的画面。`runtime/df.js` 里每种场景是一个函数。影片目录里的 `scenes.js` 可以为那一支片子增加场景。
-- `films/`：用真实数据做的片子，一支一个目录。除了简报、数据、要求和分镜，还有 `sources.md`（每个数字的出处和核对情况）和 `records/`（运行记录、自检报告、抽帧图）。成片在 `out/` 里，不入库。
+- `films/`：用真实数据做的片子，一支一个目录。除了简报、数据、要求和分镜，还有 `sources.md`（每个数字的出处和核对情况）和 `records/`（运行记录、自检报告、抽帧图）。成片在 `out/` 里，不入库。这些片子也在评测的干净用例里，改了检查它们必须还能通过。
 - `evals/cases/`：评测用例，每个目录有简报、数据、要求和一支参考影片，个别带参考的 `scenes.js`。
 - `evals/defects.json`：缺陷注入集，每条在参考影片上改一处，并写明哪项检查必须失败。
 - `evals/BASELINE.md`：上一次评测的结果。
@@ -63,5 +64,6 @@ node evals/agent-run.mjs --provider deepseek      # 同上，模型换成 DeepSe
 - 没有网络时加 `--tts espeak`，这时听写核对会跳过，对应的缺陷记为“未判定”。
 - 无人值守评测接新的模型供应商，在 `evals/agent-run.mjs` 的 `PROVIDERS` 里加一项：兼容 Anthropic 接口的地址、密钥、默认模型和公布的单价。命令行自己报的费用只对它自家的模型准确。
 - 用真实数据做片子时，每个数字都要有读过原文的出处，写进那支片子的 `sources.md`；只见转述、没读到原文的数字要在画面上区分出来。做完把识别结果逐句对一遍：数字念对了不等于意思没听错。
+- 通过全部检查不等于片子能看。交给人之前，先自己问一遍：开头有没有钩子，数字有没有参照，有没有在念清单。人的意见用 `--intervention` 记下来，并且想一想它该变成管线里的什么，不要只改那一支片子。
 - 代码注释用英文，文档和报告用中文。
 - 改动直接提交并推送到 `main`，不另开分支，不开 PR。

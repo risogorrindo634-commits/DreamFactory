@@ -921,5 +921,20 @@
     "expectFail": [
       "spec"
     ]
+  },
+  {
+    "id": "music-over-voice",
+    "title": "配乐的音量调错了，高了 12 分贝，盖过旁白",
+    "base": "long-report",
+    "ops": [
+      {
+        "file": "faults",
+        "set": "musicGainDb",
+        "value": 12
+      }
+    ],
+    "expectFail": [
+      "music"
+    ]
   }
 ]
