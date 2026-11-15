@@ -103,6 +103,8 @@ export const asr = {
       const c = compareSpeech(line.display, heard[i]);
       if (c.missing.length) {
         problems.push(`字幕里的 ${c.missing.join('、')} 没有在语音里听到：字幕「${clip(line.display)}」，听到「${clip(heard[i])}」`);
+      } else if (c.wrongUnit.length) {
+        problems.push(`数字后面的字听成了别的：字幕是「${c.wrongUnit[0].written}」，听到的是「${c.wrongUnit[0].heard}」，整句听到「${clip(heard[i])}」`);
       } else if (c.letters >= 4 && c.distance > 0.5) {
         // Homophones ("支" heard as "只") stay well under this; a different sentence does not.
         problems.push(`语音和字幕说的不是一回事：字幕「${clip(line.display)}」，听到「${clip(heard[i])}」`);

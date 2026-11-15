@@ -14,13 +14,13 @@ import { deepseekKey } from '../pipeline/lib/deepseek.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repo = path.dirname(here);
-const casesDir = path.join(here, 'cases');
-
 const args = process.argv.slice(2);
 const value = (name) => {
   const i = args.indexOf(name);
   return i >= 0 ? args[i + 1] : undefined;
 };
+// Tasks normally come from the eval cases. --cases points at another folder of tasks, such as films/.
+const casesDir = value('--cases') ? path.resolve(value('--cases')) : path.join(here, 'cases');
 if (args.includes('--help')) {
   console.log(`用法：node evals/agent-run.mjs [选项]
 
@@ -28,6 +28,7 @@ if (args.includes('--help')) {
   需要 Claude Code 命令行（claude）。默认用它已登录的账号和模型。
 
   --only <a,b>      只跑指定的用例
+  --cases <目录>    任务所在的目录，默认是 evals/cases；也可以指向 films，让模型重做一支真实的片子
   --repeat <n>      每个用例跑几遍，默认 1；多于 1 遍时汇总里有每个用例的通过次数
   --provider <名称> 换一家模型供应商：deepseek（需要 DEEPSEEK_API_KEY）
   --model <名称>    指定模型，默认用命令行当前配置的模型；换供应商时默认用它的 deepseek-flash

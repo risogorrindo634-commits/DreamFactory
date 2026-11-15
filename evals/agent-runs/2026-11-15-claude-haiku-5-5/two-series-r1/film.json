@@ -1,0 +1,46 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "两种做法，哪一种在什么时候反超",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "opening",
+      "type": "title",
+      "kicker": "数据短片",
+      "headline": "两种做法，谁在什么时候反超",
+      "sub": "每月新增作品数量",
+      "narration": [
+        "这支短片比较两类新增作品。",
+        "一类由代码生成，一类由视频模型生成。"
+      ]
+    },
+    {
+      "id": "crossover",
+      "type": "line",
+      "title": "每月新增作品（件）",
+      "sub": "代码生成与视频模型",
+      "names": { "$": "names" },
+      "code": { "$": "series.code" },
+      "model": { "$": "series.model" },
+      "narration": [
+        "两条线分别是代码生成和视频模型。",
+        "代码生成增长更快，视频模型增长放缓。",
+        "7月，代码生成还在视频模型下面。",
+        "8月，代码生成反超：{{series.code[8月]}}件对{{series.model[8月]}}件。",
+        "到12月，差距拉开：{{series.code[12月]}}件对{{series.model[12月]}}件。"
+      ]
+    },
+    {
+      "id": "outro",
+      "type": "outro",
+      "headline": "选择路线，先看团队的需要",
+      "sub": "数据为虚构示例",
+      "narration": [
+        "这是虚构的示例数据，不代表真实统计。"
+      ]
+    }
+  ]
+}

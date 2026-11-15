@@ -1,0 +1,70 @@
+{
+  "case": "top-of-long-list",
+  "run": "top-of-long-list-r3",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 27.067
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "a550bc7d704c",
+      "backend": "deepseek",
+      "ttsBilled": 192
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "a550bc7d704c",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 11,
+    "toolUses": 10,
+    "wallSec": 92,
+    "costUsd": 0.0122,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 14,
+      "output": 6976,
+      "cacheRead": 319838,
+      "cacheWrite": 27446
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 192,
+    "costUsd": 0.0086
+  },
+  "costUsd": 0.0208,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "通过。草稿渲染（`--draft`）的全部自检都过了，片长 27.1 秒，成片在 `task/out/film.mp4`。管线共跑了 2 次：第一次 `--no-video` 文字层检查通过，第二次 `--draft` 全部通过。我先读了 `DIRECTOR.md`、简报和数据，写出 `task/film.json`：前 6 名按数据取出（科普动画 521、教程 455、知识讲解 412、产品演示 388、游戏实况 367、编程教学 344），品类总数和第一名用引用写入。第一次跑之前，我把两句旁白里的“前三名”“六个”改成了不用汉字数字的写法，没有等检查报错才改，所以两次运行之间没有返工。没有人工介入，也没有补 `--cost-usd`，因为我没有这一轮的模型费用数字。",
+  "outcome": "passed"
+}

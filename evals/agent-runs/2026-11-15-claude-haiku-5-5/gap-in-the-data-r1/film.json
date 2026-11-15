@@ -1,0 +1,48 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "一年的走势，中间缺了一个月",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "开场",
+      "type": "title",
+      "kicker": "每月新增学员",
+      "headline": "一年的走势，中间缺了一个月",
+      "sub": "某课程平台 2026 年数据",
+      "narration": [
+        "这是某课程平台今年每月新增学员的走势。",
+        "运营负责人最想知道：增长是不是稳定。",
+        "这是虚构的示例数据，不是真实统计。"
+      ]
+    },
+    {
+      "id": "走势",
+      "type": "line",
+      "title": "每月新增学员",
+      "sub": "6月数据缺失，折线在此断开",
+      "series": { "$": "series.monthly" },
+      "gap": "{{series.monthly[6月].note}}",
+      "narration": [
+        "1月，新增学员{{series.monthly[1月]}}人。",
+        "之后每个月都在往上走。",
+        "6月系统迁移，没有留下数据。",
+        "折线在这里断开，不连起来。",
+        "7月起，又接着往上走。",
+        "12月，新增学员{{series.monthly[12月]}}人。"
+      ]
+    },
+    {
+      "id": "收尾",
+      "type": "outro",
+      "headline": "除6月外，每个月都比上个月多",
+      "sub": "6月的数据补上，结论才完整",
+      "narration": [
+        "除6月外，每个月都比上个月多。",
+        "6月的数据补上，结论才完整。"
+      ]
+    }
+  ]
+}

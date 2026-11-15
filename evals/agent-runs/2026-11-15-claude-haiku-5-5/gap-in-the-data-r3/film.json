@@ -1,0 +1,44 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "全年走势，6 月断了线",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "2026 年 · 学员增长",
+      "headline": "全年走势，6 月断了线",
+      "sub": "某课程平台每月新增学员",
+      "narration": [
+        "这是某课程平台 2026 年的学员增长走势。",
+        "中间有一个月的数据缺失。"
+      ]
+    },
+    {
+      "id": "trend",
+      "type": "line",
+      "title": "每月新增学员",
+      "sub": "2026 年，单位：人",
+      "series": { "$": "series.monthly" },
+      "narration": [
+        "图中是每月新增的学员人数。",
+        "1 月新增 {{series.monthly[1月]}} 人。",
+        "12 月增长到 {{series.monthly[12月]}} 人。",
+        "6 月系统迁移，没有留下数据，折线在这里断开。",
+        "除 6 月外，每个月都比上个月多。"
+      ]
+    },
+    {
+      "id": "outro",
+      "type": "outro",
+      "headline": "增长没有回落，6 月待补",
+      "sub": "数据来源：{{source.name}}",
+      "narration": [
+        "6 月数据补上后，再看这条线。"
+      ]
+    }
+  ]
+}

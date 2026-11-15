@@ -1,0 +1,82 @@
+{
+  "case": "chatgpt-four-years",
+  "run": "chatgpt-four-years",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 84
+  },
+  "pipelineRuns": 3,
+  "failedRuns": 1,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": false,
+      "failed": [
+        "spec",
+        "crowding"
+      ],
+      "rendered": false,
+      "filmVersion": "dab45feec9b5",
+      "backend": "deepseek",
+      "ttsBilled": 641
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "0941b4662000",
+      "backend": "deepseek",
+      "ttsBilled": 50
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "0941b4662000",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 39,
+    "toolUses": 38,
+    "wallSec": 469,
+    "costUsd": 0.0384,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 61042,
+      "output": 43280,
+      "cacheRead": 1095424,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 691,
+    "costUsd": 0.0311
+  },
+  "costUsd": 0.0695,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "草稿自检已全部通过：片长 84.0 秒（要求 80–110 秒），语音后端为 deepseek，画面、声音、听写核对共 22 项检查全部通过。\n\n管线共运行 3 次：第 1 轮 `--no-video` 未通过，片长 78.4 秒且折线图第一个点的“1”被 Y 轴穿过；第 2 轮把该标签移到点的右上侧，并在周活跃用户场景、片尾各补一句旁白，片长降到 84.0 秒、文字层全过；第 3 轮 `--draft` 无改动，草稿渲染全过。\n\n媒体转述的数据已用空心点、图例和片尾说明区分开，周活跃用户折线按真实日期排横轴。需要说明：工作目录里没有 brief 提到的 `sources.md`，我无法逐条核对每个数字的原始出处，画面来源只能按 `data.json` 的 `source` 字段标注。",
+  "outcome": "passed"
+}

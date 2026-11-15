@@ -1,0 +1,28 @@
+{
+  "duration": [
+    80,
+    110
+  ],
+  "requireCustomScene": true,
+  "mustShow": [
+    "facts.daysToMillionUsers",
+    "series.wau[2023 年 11 月]",
+    "series.wau[2026 年 2 月]",
+    "series.wau[2026 年 9 月]",
+    "facts.payingFeb2026Wan",
+    "series.arr[2023 年]",
+    "series.arr[2026 年 9 月底]",
+    "times series.arr[2023 年] series.arr[2026 年 9 月底]"
+  ],
+  "mustSay": [
+    "facts.daysToMillionUsers",
+    "series.wau[2023 年 11 月]",
+    "series.wau[2026 年 9 月]",
+    "facts.payingFeb2026Wan",
+    "series.arr[2026 年 9 月底]",
+    "times series.arr[2023 年] series.arr[2026 年 9 月底]"
+  ],
+  "mustShowText": [
+    "媒体报道"
+  ]
+}

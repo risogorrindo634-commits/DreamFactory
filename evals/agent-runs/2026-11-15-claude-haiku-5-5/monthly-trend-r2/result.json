@@ -1,0 +1,70 @@
+{
+  "case": "monthly-trend",
+  "run": "monthly-trend-r2",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 32.133
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "ab37dd1b0c40",
+      "backend": "deepseek",
+      "ttsBilled": 241
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "ab37dd1b0c40",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 12,
+    "toolUses": 11,
+    "wallSec": 177,
+    "costUsd": 0.0241,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 16,
+      "output": 21533,
+      "cacheRead": 420598,
+      "cacheWrite": 45797
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 241,
+    "costUsd": 0.0108
+  },
+  "costUsd": 0.035,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "通过。管线跑了两次：第一次 `--no-video` 文字层检查全部通过，第二次 `--draft` 草稿渲染后 16 项检查也全部通过，成片草稿在 `task/out/film.mp4`。没有返工，所以没有改动。我写了 `task/film.json`（三个场景：片头、折线图、收尾）和 `task/scenes.js`（自定义折线图，四个指定月份的数量标在图上）。折线图的 0/200/400/600 刻度是手写的，但已标为刻度，不算数据。",
+  "outcome": "passed"
+}

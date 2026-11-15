@@ -1,0 +1,70 @@
+{
+  "case": "cost-per-minute",
+  "run": "cost-per-minute-r3",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 47.267
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "f89d08571b32",
+      "backend": "deepseek",
+      "ttsBilled": 365
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "f89d08571b32",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 9,
+    "toolUses": 8,
+    "wallSec": 137,
+    "costUsd": 0.0142,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 12,
+      "output": 10130,
+      "cacheRead": 279546,
+      "cacheWrite": 31493
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 365,
+    "costUsd": 0.0164
+  },
+  "costUsd": 0.0306,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "**通过。** 草稿（`--draft`）自检全部通过，片长 47.3 秒，视频在 `task/out/film.mp4`。管线一共跑了 2 次：先 `--no-video` 做文字层检查，再 `--draft` 渲染草稿，两次都通过，没有返工。我只写了一次 `task/film.json`，没有写 `scenes.js`，也没有改 `data.json` 或 `expect.json`。`--cost-usd` 和 `--intervention` 这两项记录超出了本次放行的命令范围，没有补上。",
+  "outcome": "passed"
+}

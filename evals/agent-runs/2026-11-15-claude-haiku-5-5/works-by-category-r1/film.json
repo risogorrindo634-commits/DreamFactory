@@ -1,0 +1,70 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "2,793 件作品都在做什么",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "开场",
+      "type": "title",
+      "kicker": "公开清单",
+      "headline": "{{facts.total}} 件作品都在做什么",
+      "sub": "按类型看分布",
+      "narration": [
+        "这是一份公开的 AI 视频作品清单。",
+        "一共收录 {{facts.total}} 件作品。"
+      ]
+    },
+    {
+      "id": "总数",
+      "type": "bignumber",
+      "label": "作品总数",
+      "value": "{{facts.total}}",
+      "unit": "件",
+      "note": "只收浏览量 {{facts.minViews}} 以上的作品",
+      "narration": [
+        "作品总数是 {{facts.total}} 件。",
+        "清单只收浏览量 {{facts.minViews}} 以上的作品，不代表全部。"
+      ]
+    },
+    {
+      "id": "分布",
+      "type": "bars",
+      "title": "按类型看分布",
+      "sub": "作品数量",
+      "series": { "$": "series.categories" },
+      "highlight": "游戏",
+      "unit": "件",
+      "showShare": true,
+      "narration": [
+        "数量最多的是模型对比，{{series.categories[模型对比]}} 件。",
+        "游戏类紧随其后。",
+        "其他类型各有一定规模。"
+      ]
+    },
+    {
+      "id": "游戏",
+      "type": "bignumber",
+      "label": "游戏类",
+      "value": "{{series.categories[游戏]}}",
+      "unit": "件",
+      "note": "占全部作品的 {{share series.categories[游戏]}}",
+      "narration": [
+        "游戏类有 {{series.categories[游戏]}} 件。",
+        "占全部作品的 {{share series.categories[游戏]}}。"
+      ]
+    },
+    {
+      "id": "收尾",
+      "type": "outro",
+      "headline": "以上只是高热度作品",
+      "sub": "数据截至 {{source.asOf}}",
+      "narration": [
+        "这份清单只看浏览量较高的作品。",
+        "看趋势时请记住这个口径。"
+      ]
+    }
+  ]
+}

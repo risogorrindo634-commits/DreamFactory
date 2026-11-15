@@ -1,0 +1,66 @@
+{
+  "vertical": "data-story",
+  "lang": "en",
+  "title": "Works by type",
+  "source": "Data source: {{source.name}} (as of {{source.asOf}})",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "Works by type",
+      "headline": "What are these works making?",
+      "sub": "{{facts.total}} works, sorted by type",
+      "narration": ["This film looks at one list of works, sorted by type."]
+    },
+    {
+      "id": "total",
+      "type": "bignumber",
+      "label": "Works on the list",
+      "value": "{{facts.total}}",
+      "unit": "works",
+      "note": "Each one has at least {{facts.minViews}} views",
+      "narration": [
+        "The list holds {{facts.total}} works.",
+        "It only holds works with at least {{facts.minViews}} views."
+      ]
+    },
+    {
+      "id": "types",
+      "type": "bars",
+      "title": "Works by type",
+      "sub": "Number of works in each type",
+      "series": { "$": "series.categories" },
+      "highlight": "Games",
+      "unit": "works",
+      "showShare": true,
+      "narration": [
+        "Model comparisons is the largest type, with {{series.categories[Model comparisons]}} works.",
+        "Games come second, with {{series.categories[Games]}} works."
+      ]
+    },
+    {
+      "id": "games",
+      "type": "bignumber",
+      "label": "Games",
+      "value": "{{series.categories[Games]}}",
+      "unit": "works",
+      "note": "{{share series.categories[Games]}} of all works",
+      "narration": [
+        "Games are {{series.categories[Games]}} works.",
+        "That is {{share series.categories[Games]}} of the total."
+      ]
+    },
+    {
+      "id": "outro",
+      "type": "outro",
+      "headline": "Keep the caveat in mind",
+      "sub": "Only works with at least {{facts.minViews}} views are counted",
+      "narration": [
+        "Read these numbers with one caveat in mind.",
+        "Only works with at least {{facts.minViews}} views are counted."
+      ]
+    }
+  ]
+}

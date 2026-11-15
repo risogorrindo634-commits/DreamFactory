@@ -1,0 +1,70 @@
+{
+  "case": "top-of-long-list",
+  "run": "top-of-long-list-r1",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 32.967
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "80b235e3f751",
+      "backend": "deepseek",
+      "ttsBilled": 257
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "80b235e3f751",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 9,
+    "toolUses": 8,
+    "wallSec": 104,
+    "costUsd": 0.0125,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 12,
+      "output": 7807,
+      "cacheRead": 274808,
+      "cacheWrite": 29162
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 257,
+    "costUsd": 0.0116
+  },
+  "costUsd": 0.0241,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "草稿通过：文字层检查和 `--draft` 的全部自检都通过，片长 33.0 秒。管线跑了 2 次，分别是 `--no-video` 和 `--draft`。我只写了一次 `task/film.json`，两次运行之间没有改动，所以没有返工。我看过抽帧图，六根柱子顺序正确，数字都来自数据，来源标注齐全。草稿视频在 `task/out/film.mp4`，没有去掉 `--draft` 出成片，因为指令只要求到草稿通过为止。",
+  "outcome": "passed"
+}

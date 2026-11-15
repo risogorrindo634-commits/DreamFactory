@@ -1,0 +1,70 @@
+{
+  "case": "twenty-seconds",
+  "run": "twenty-seconds-r1",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 16.433
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "cfe1996b710b",
+      "backend": "deepseek",
+      "ttsBilled": 82
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "cfe1996b710b",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 10,
+    "toolUses": 9,
+    "wallSec": 67,
+    "costUsd": 0.0108,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 12,
+      "output": 5912,
+      "cacheRead": 268533,
+      "cacheWrite": 25913
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 82,
+    "costUsd": 0.0037
+  },
+  "costUsd": 0.0145,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "**通过。** 草稿渲染的自检全部通过，片长 16.4 秒，在 12–22 秒的要求之内。管线一共跑了两次：先用 `--no-video` 做文字层检查，再用 `--draft` 渲染草稿并检查画面和声音。两次都是首次通过，没有返工，所以只写了一版 `task/film.json`，没有改过它，也没有写 `scenes.js`。片子由四个内置场景组成：标题、总数（2,793 件）、各类型柱状图（讲解与教育在画面上，未念出）、游戏类（483 件）。草稿在 `task/out/film.mp4`。按任务要求没有出成片。我没有加 `--intervention` 和 `--cost-usd`，因为权限只放行 `--no-video` 和 `--draft`，所以 `out/runs.jsonl` 里的人工介入和费用记录需要人补上。",
+  "outcome": "passed"
+}

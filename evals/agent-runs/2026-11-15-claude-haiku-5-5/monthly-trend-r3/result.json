@@ -1,0 +1,70 @@
+{
+  "case": "monthly-trend",
+  "run": "monthly-trend-r3",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 28.867
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "fd1f6e170f3b",
+      "backend": "deepseek",
+      "ttsBilled": 232
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "fd1f6e170f3b",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 11,
+    "toolUses": 10,
+    "wallSec": 165,
+    "costUsd": 0.0215,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 14,
+      "output": 19795,
+      "cacheRead": 354715,
+      "cacheWrite": 40221
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 232,
+    "costUsd": 0.0104
+  },
+  "costUsd": 0.0319,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "通过。管线跑了两次：一次 `--no-video`（文字层检查），一次 `--draft`（渲染草稿并检查画面与声音），两次都是\"通过\"，没有返工。第一次运行前我写了 `task/film.json`（三个场景：开场、折线图、收尾）和 `task/scenes.js`（内置场景没有折线图，所以自定义了一个 `line` 场景）；之后没有再改任何文件。草稿片长 28.9 秒，成片在 `task/out/film.mp4`。我没能用 `--cost-usd` 和 `--intervention` 补记录，因为这两个参数不在放行范围内。",
+  "outcome": "passed"
+}

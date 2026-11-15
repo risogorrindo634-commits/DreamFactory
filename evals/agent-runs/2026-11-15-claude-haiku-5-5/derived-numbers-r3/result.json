@@ -1,0 +1,70 @@
+{
+  "case": "derived-numbers",
+  "run": "derived-numbers-r3",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 42.2
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "ebd73f4010dc",
+      "backend": "deepseek",
+      "ttsBilled": 284
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "ebd73f4010dc",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 9,
+    "toolUses": 8,
+    "wallSec": 121,
+    "costUsd": 0.0128,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 12,
+      "output": 8266,
+      "cacheRead": 274427,
+      "cacheWrite": 29626
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 284,
+    "costUsd": 0.0128
+  },
+  "costUsd": 0.0256,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "**通过。** 草稿渲染（`--draft`）的全部自检都过了，成片草稿在 `task/out/film.mp4`，片长 42.2 秒。管线一共跑了 2 次：先跑 `--no-video` 文字层检查，再跑 `--draft`。两次都是一次通过，没有返工，所以只写了一版 `film.json`，没有改动或新建 `scenes.js`。用到的数字（36→162 支，倍数 4.5，单片成本 4200→380 元，下降 91%）都用了引用，没有手写。我没有运行去掉 `--draft` 的成片，也没有补写 `--cost-usd` 和 `--intervention` 记录，因为放行的命令里不包含这两个参数。",
+  "outcome": "passed"
+}

@@ -1,0 +1,83 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "每分钟视频要花多少钱",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "开场",
+      "type": "title",
+      "kicker": "每分钟成片成本",
+      "headline": "每分钟视频要花多少钱",
+      "sub": "各种做法的成本对比",
+      "narration": [
+        "每分钟视频要花多少钱？",
+        "我们比较了各种做法的成本。"
+      ]
+    },
+    {
+      "id": "区间",
+      "type": "ranges",
+      "title": "每分钟成片成本区间",
+      "sub": "单位：美元，对数刻度",
+      "series": { "$": "series.cost" },
+      "highlight": "代码生成短片",
+      "unit": "美元",
+      "narration": [
+        "横轴是对数刻度，每一格差一个数量级。",
+        "代码生成短片：每分钟 2 美元到 20 美元。",
+        "视频模型 API：每分钟 2 美元到 45 美元。",
+        "自由职业者：每分钟 1000 美元到 4000 美元。",
+        "工作室：每分钟 3000 美元到 15000 美元。"
+      ]
+    },
+    {
+      "id": "代码生成短片上限",
+      "type": "bignumber",
+      "label": "代码生成短片，每分钟成本上限",
+      "value": "{{series.cost[代码生成短片].high}}",
+      "unit": "美元",
+      "note": "创作者自报，只看量级",
+      "narration": [
+        "用代码生成的短片，每分钟上限是 {{series.cost[代码生成短片].high}} 美元。"
+      ]
+    },
+    {
+      "id": "工作室报价上限",
+      "type": "bignumber",
+      "label": "工作室报价上限，每分钟",
+      "value": "{{series.cost[工作室].high}}",
+      "unit": "美元",
+      "note": "来自报价指南",
+      "narration": [
+        "工作室报价的上限，是每分钟 {{series.cost[工作室].high}} 美元。"
+      ]
+    },
+    {
+      "id": "结论",
+      "type": "bullets",
+      "title": "结论",
+      "items": [
+        "代码生成短片最便宜。",
+        "自由职业者每分钟至少 {{series.cost[自由职业者].low}} 美元。",
+        "数字多为自报和报价，只看量级。"
+      ],
+      "narration": [
+        "代码生成短片最便宜。",
+        "自由职业者每分钟至少 {{series.cost[自由职业者].low}} 美元。",
+        "数字多为自报和报价，只看量级。"
+      ]
+    },
+    {
+      "id": "收尾",
+      "type": "outro",
+      "headline": "数字只看量级",
+      "sub": "选做法前，先对照自己的预算",
+      "narration": [
+        "选做法前，先对照自己的预算。"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "case": "cost-per-minute",
+  "run": "cost-per-minute-r1",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 39.867
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "030c0a7f9f7c",
+      "backend": "deepseek",
+      "ttsBilled": 305
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "030c0a7f9f7c",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 9,
+    "toolUses": 8,
+    "wallSec": 129,
+    "costUsd": 0.0148,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 12,
+      "output": 10657,
+      "cacheRead": 276322,
+      "cacheWrite": 33754
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 305,
+    "costUsd": 0.0137
+  },
+  "costUsd": 0.0286,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "**结论：通过。** 管线跑了 2 次：先 `--no-video` 做文字层检查，通过后 `--draft` 渲染草稿，两次都全部通过，片长 39.9 秒。第一版 `film.json` 一次通过，没有返工，也没有写 `scenes.js`，用的是内置的区间（对数刻度）、大数字和收尾场景。草稿在 `task/out/film.mp4`，抽帧图在 `task/out/contact.jpg`。\n\n几点说明：\n- 我没有听音频本身，声音只看了草稿报告里的自动听写核对，它通过了。\n- 没有传 `--cost-usd`，也没有记录人工介入，因为这次没有人参与，我也拿不到管线的真实模型费用。\n- `data.json` 没有写明成本的计量口径，片名和旁白按简报写成“每分钟”，这一点请人确认。",
+  "outcome": "passed"
+}

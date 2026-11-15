@@ -1,0 +1,83 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "2026 年度盘点",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "opening",
+      "type": "title",
+      "kicker": "2026 年度盘点",
+      "headline": "代码生成作品的一年",
+      "sub": "视频社区",
+      "narration": ["这是视频社区代码生成作品的 2026 年度盘点。"],
+      "minDuration": 6
+    },
+    {
+      "id": "total",
+      "type": "bignumber",
+      "label": "2026 年全年作品",
+      "value": "{{facts.total}}",
+      "unit": "件",
+      "note": "相当于 2025 年的 {{times series.yearly[2025 年] series.yearly[2026 年]}} 倍",
+      "narration": [
+        "2026 年，社区共完成 {{facts.total}} 件代码生成作品。",
+        "相当于 2025 年的 {{times series.yearly[2025 年] series.yearly[2026 年]}} 倍。"
+      ],
+      "minDuration": 8
+    },
+    {
+      "id": "categories",
+      "type": "bars",
+      "title": "按类型的分布",
+      "sub": "2026 年作品数量",
+      "series": { "$": "series.categories" },
+      "highlight": "模型对比",
+      "unit": "件",
+      "showShare": true,
+      "narration": [
+        "按类型看，模型对比最多。",
+        "共 {{series.categories[模型对比]}} 件，占全年的 {{share series.categories[模型对比]}}。"
+      ],
+      "minDuration": 18
+    },
+    {
+      "id": "monthly",
+      "type": "line",
+      "title": "逐月走势",
+      "sub": "2026 年每月作品数量",
+      "series": { "$": "series.monthly" },
+      "narration": [
+        "全年走势一路上扬。",
+        "12 月最高，达到 {{series.monthly[12月]}} 件。"
+      ],
+      "minDuration": 20
+    },
+    {
+      "id": "cost",
+      "type": "ranges",
+      "title": "三种做法的成本区间",
+      "sub": "每分钟成片成本，对数刻度",
+      "series": { "$": "series.cost" },
+      "highlight": "代码生成",
+      "unit": "美元",
+      "narration": [
+        "每分钟成片成本，用对数刻度展示。",
+        "图上每一格差一个数量级。",
+        "代码生成为 {{series.cost[代码生成].low}} 到 {{series.cost[代码生成].high}} 美元。",
+        "外包制作为 {{series.cost[外包制作].low}} 到 {{series.cost[外包制作].high}} 美元。"
+      ],
+      "minDuration": 24
+    },
+    {
+      "id": "outro",
+      "type": "outro",
+      "headline": "感谢收看",
+      "sub": "这是虚构的示例数据，仅用于演示。",
+      "narration": ["提醒一次：本片使用的是虚构的示例数据。"],
+      "minDuration": 6
+    }
+  ]
+}

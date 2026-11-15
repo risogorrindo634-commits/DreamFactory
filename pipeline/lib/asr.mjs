@@ -122,6 +122,9 @@ function editDistance(a, b) {
   return prev[b.length];
 }
 
+// Words of magnitude: mishear one and the quantity changes.
+const MAGNITUDE = new Set('亿万千百倍成');
+
 // Words that sound like a digit. Right after a number a recognizer can write them as one more digit:
 // "52期" (qī) comes back as "527".
 const SOUNDS_LIKE = { 期: 7, 起: 7, 其: 7, 气: 7, 就: 9, 久: 9, 酒: 9, 是: 4, 事: 4, 式: 4, 市: 4, 无: 5, 物: 5, 务: 5, 流: 6, 留: 6, 把: 8, 吧: 8, 以: 1, 已: 1, 亿: 1, 意: 1, 而: 2, 儿: 2, 散: 3, 伞: 3, 领: 0, 另: 0 };
@@ -138,8 +141,20 @@ export function compareSpeech(subtitle, heard) {
     return forms.some((f) => said.some((v) => Math.abs(v - f) < 1e-9));
   };
   const missing = extractNumbers(subtitle).filter((n) => !heardAs(n)).map((n) => n.raw);
+  // The word of magnitude right after a number is part of the quantity: "4亿" heard as "4日" has the
+  // digit right and the fact wrong. Checked only where the transcript wrote the same number in digits.
+  const spaced = heard.replace(/([A-Za-z])(?=\d)|(\d)(?=[A-Za-z])/g, '$1$2 ');
+  const after = (text, n) => text.slice(n.end).match(/^\s*(\p{Script=Han})/u)?.[1] ?? '';
+  const heardWith = extractNumbers(spaced).map((n) => ({ value: n.value, raw: n.raw, unit: after(spaced, n) }));
+  const wrongUnit = [];
+  for (const n of extractNumbers(subtitle)) {
+    const unit = after(subtitle, n);
+    if (!MAGNITUDE.has(unit)) continue;
+    const same = heardWith.filter((h) => Math.abs(h.value - n.value) < 1e-9);
+    if (same.length && !same.some((h) => h.unit === unit)) wrongUnit.push({ written: `${n.raw}${unit}`, heard: `${same[0].raw}${same[0].unit}` });
+  }
   const a = [...wording(subtitle)];
   const b = [...wording(heard)];
   const distance = Math.max(a.length, b.length) ? editDistance(a, b) / Math.max(a.length, b.length) : 0;
-  return { missing, distance, letters: a.length };
+  return { missing, wrongUnit, distance, letters: a.length };
 }

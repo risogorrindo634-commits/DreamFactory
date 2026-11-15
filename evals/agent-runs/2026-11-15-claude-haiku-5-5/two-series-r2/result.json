@@ -1,0 +1,70 @@
+{
+  "case": "two-series",
+  "run": "two-series-r2",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 33.867
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "d4e9d2b1ae3a",
+      "backend": "deepseek",
+      "ttsBilled": 243
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "d4e9d2b1ae3a",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 11,
+    "toolUses": 10,
+    "wallSec": 177,
+    "costUsd": 0.0218,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 14,
+      "output": 19597,
+      "cacheRead": 373451,
+      "cacheWrite": 41191
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 243,
+    "costUsd": 0.0109
+  },
+  "costUsd": 0.0327,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "通过。草稿自检全部通过，片长 33.9 秒，成片在 `task/out/film.mp4`。因为内置场景没有折线图，我在 `task/scenes.js` 里写了一个自定义的 `line` 场景来画两条线，`task/film.json` 用它组装了开场、折线、收尾三个场景。管线一共跑了 2 次：先 `--no-video` 做文字层检查，通过后再 `--draft` 渲染草稿。两次都一次通过，没有返工，只在第一次运行前把旁白里一句多余的话改掉了。报告里的“第 2 轮”是运行次数，不是返工轮数。",
+  "outcome": "passed"
+}

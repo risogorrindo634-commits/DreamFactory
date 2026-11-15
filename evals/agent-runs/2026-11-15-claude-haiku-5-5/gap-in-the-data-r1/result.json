@@ -1,0 +1,70 @@
+{
+  "case": "gap-in-the-data",
+  "run": "gap-in-the-data-r1",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 35.533
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "5d33cb84e2af",
+      "backend": "deepseek",
+      "ttsBilled": 267
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "5d33cb84e2af",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 10,
+    "toolUses": 9,
+    "wallSec": 177,
+    "costUsd": 0.0224,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 12,
+      "output": 21488,
+      "cacheRead": 313750,
+      "cacheWrite": 42476
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 267,
+    "costUsd": 0.012
+  },
+  "costUsd": 0.0344,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "草稿通过，没有返工。管线一共跑了 2 次：第一次只做文字层检查（`--no-video`）全部通过，第二次 `--draft` 渲染草稿后自检也全部通过。我写了 `task/film.json` 和自定义的 `task/scenes.js`（折线场景，因为内置场景没有折线图），6 月在折线处断开，并标出 `data.json` 里的“数据缺失”备注，1 月和 12 月的数值都标在图上，旁白也提到了它们。草稿在 `task/out/film.mp4`，片长 35.5 秒。没有修改 `data.json`、`expect.json` 或 `pipeline/checks/`，也没有渲染成片。费用没有记录，因为我拿不到这一轮的模型费用。",
+  "outcome": "passed"
+}

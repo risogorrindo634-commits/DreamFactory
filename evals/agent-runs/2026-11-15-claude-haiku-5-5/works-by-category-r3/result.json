@@ -1,0 +1,70 @@
+{
+  "case": "works-by-category",
+  "run": "works-by-category-r3",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 40.067
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "c04c268c93da",
+      "backend": "deepseek",
+      "ttsBilled": 238
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "c04c268c93da",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 9,
+    "toolUses": 8,
+    "wallSec": 113,
+    "costUsd": 0.0122,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 12,
+      "output": 7585,
+      "cacheRead": 271121,
+      "cacheWrite": 28562
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 238,
+    "costUsd": 0.0107
+  },
+  "costUsd": 0.0229,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "**通过。** 文字层检查和草稿渲染的 `--draft` 自检全部通过，共跑了两次管线：先 `--no-video` 做文字层检查，再 `--draft` 渲染草稿。第一版 `film.json` 一次写成，没有返工，也没有改 `data.json`、`expect.json` 或 `pipeline/checks/`。我看了抽帧图，构图和节奏没有问题；听感只能靠报告里的响度、停顿和听写核对，我没有实际听。片长 40.1 秒，草稿在 `task/out/film.mp4`。我没有去掉 `--draft` 出成片，也没有补记 `--cost-usd`，因为这次没有人介入，两项都不在要求内。",
+  "outcome": "passed"
+}

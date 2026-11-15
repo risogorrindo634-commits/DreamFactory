@@ -1,0 +1,70 @@
+{
+  "case": "twenty-seconds",
+  "run": "twenty-seconds-r2",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 17.667
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "6b4ca46e0d02",
+      "backend": "deepseek",
+      "ttsBilled": 54
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "6b4ca46e0d02",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 9,
+    "toolUses": 8,
+    "wallSec": 65,
+    "costUsd": 0.0099,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 12,
+      "output": 5041,
+      "cacheRead": 261616,
+      "cacheWrite": 23955
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 54,
+    "costUsd": 0.0024
+  },
+  "costUsd": 0.0124,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "通过了。草稿渲染的自检全部通过（片长 17.7 秒，在 12–22 秒之间），管线一共跑了 2 次：第 1 次是文字层检查（`--no-video`），第 2 次是草稿（`--draft`）。两次之间没有改动，所以只写了一版 `film.json`，没有返工，也没有写 `scenes.js`，内置场景已够用。片子是开场、作品总数（2,793 件）、各类型柱状图（模型对比最多，游戏 483 件，讲解与教育只在图上出现、不念）和收尾四个场景。成片在 `/tmp/claude-0/-home-user-DreamFactory/58cc25c1-2c66-5589-b40e-01c9c76faeb6/scratchpad/haiku-run5/twenty-seconds-r2/task/out/film.mp4`。没有记录费用，因为运行时没有给出成本数字，我没有编造 `--cost-usd`。",
+  "outcome": "passed"
+}

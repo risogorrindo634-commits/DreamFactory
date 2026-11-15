@@ -1,0 +1,43 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "中间缺了一个月",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "课程平台 · 月度数据",
+      "headline": "新增学员，一年的走势",
+      "sub": "中间缺了一个月",
+      "narration": ["这是一个课程平台全年每月新增学员的走势。"]
+    },
+    {
+      "id": "trend",
+      "type": "line",
+      "title": "每月新增学员",
+      "sub": "单位：人",
+      "series": { "$": "series.monthly" },
+      "gapNote": "{{series.monthly[6月].note}}",
+      "narration": [
+        "1月新增{{series.monthly[1月]}}人，是全年的起点。",
+        "此后每个有数据的月份，都比上个月多。",
+        "6月系统迁移，没有留下数据。",
+        "12月新增{{series.monthly[12月]}}人，是全年最高。",
+        "全年上升了{{up series.monthly[1月] series.monthly[12月]}}。"
+      ]
+    },
+    {
+      "id": "close",
+      "type": "outro",
+      "headline": "增长稳定，6月的缺口待补",
+      "sub": "示例数据（虚构，仅用于演示）",
+      "narration": [
+        "这些数据是虚构的示例，仅用于演示。",
+        "6月的数据缺失，补上之后才能完整判断。"
+      ]
+    }
+  ]
+}

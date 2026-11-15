@@ -1,0 +1,70 @@
+{
+  "case": "works-by-category-en",
+  "run": "works-by-category-en-r3",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 39.233
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "df23c53bb7c4",
+      "backend": "deepseek",
+      "ttsBilled": 211
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "df23c53bb7c4",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 12,
+    "toolUses": 11,
+    "wallSec": 100,
+    "costUsd": 0.0129,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 18,
+      "output": 6680,
+      "cacheRead": 405163,
+      "cacheWrite": 27585
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 211,
+    "costUsd": 0.0095
+  },
+  "costUsd": 0.0224,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "通过。草稿（`--draft`）的全部自检都过了，片长 39.2 秒，成片在 `task/out/film.mp4`，抽帧图在 `task/out/contact.jpg`。管线共跑了 2 次：第 1 次只做文字层检查（`--no-video`），第 2 次渲染草稿（`--draft`），两次都通过，中间没有返工。我只写了一次 `task/film.json`，没有改动 `scenes.js`、`data.json` 和 `expect.json`。片子按简报做成英文版，共 5 个场景：总数、各类型条形图、游戏的数量和占比（483，占 17%），末尾说明只统计了播放量不少于 5000 的作品。所有数字都用数据引用写入，没有手写。",
+  "outcome": "passed"
+}

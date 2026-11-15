@@ -1,0 +1,2 @@
+{"at":"2026-11-15T11:13:43.542Z","round":1,"filmVersion":"8d313c7499a0","passed":true,"failed":[],"draft":false,"rendered":false,"durationSec":35.067,"wallSec":30,"backend":"deepseek","ttsBilled":262,"costUsd":null,"intervention":null}
+{"at":"2026-11-15T11:14:27.799Z","round":2,"filmVersion":"8d313c7499a0","passed":true,"failed":[],"draft":true,"rendered":true,"durationSec":35.067,"wallSec":36.8,"backend":"deepseek","ttsBilled":0,"costUsd":null,"intervention":null}

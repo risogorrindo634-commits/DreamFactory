@@ -1,0 +1,124 @@
+{
+  "source": {
+    "name": "OpenAI 公告与 TechCrunch、CNBC 等媒体报道",
+    "asOf": "2026-11-15"
+  },
+  "units": {
+    "wau": "亿",
+    "paying": "万",
+    "arr": "亿美元"
+  },
+  "facts": {
+    "launchDate": "2022-11-30",
+    "anniversaryDate": "2026-11-30",
+    "millionUsersDate": "2022-12-05",
+    "daysToMillionUsers": 5,
+    "firstMilestoneWan": 100,
+    "payingFeb2026Wan": 5000,
+    "payingQ3ApproxYi": 1
+  },
+  "series": {
+    "wau": [
+      {
+        "label": "2023 年 11 月",
+        "date": "2023-11-06",
+        "value": 1,
+        "by": "官方"
+      },
+      {
+        "label": "2024 年 8 月",
+        "date": "2024-08-29",
+        "value": 2,
+        "by": "官方"
+      },
+      {
+        "label": "2024 年 12 月",
+        "date": "2024-12-04",
+        "value": 3,
+        "by": "官方"
+      },
+      {
+        "label": "2025 年 2 月",
+        "date": "2025-02-20",
+        "value": 4,
+        "by": "官方"
+      },
+      {
+        "label": "2025 年 3 月",
+        "date": "2025-03-31",
+        "value": 5,
+        "by": "官方"
+      },
+      {
+        "label": "2025 年 8 月",
+        "date": "2025-08-04",
+        "value": 7,
+        "by": "官方"
+      },
+      {
+        "label": "2025 年 10 月",
+        "date": "2025-10-06",
+        "value": 8,
+        "by": "官方"
+      },
+      {
+        "label": "2026 年 2 月",
+        "date": "2026-02-27",
+        "value": 9,
+        "by": "官方"
+      },
+      {
+        "label": "2026 年 8 月",
+        "date": "2026-08-31",
+        "value": 10,
+        "by": "媒体"
+      },
+      {
+        "label": "2026 年 9 月",
+        "date": "2026-09-30",
+        "value": 12,
+        "by": "媒体"
+      }
+    ],
+    "arr": [
+      {
+        "label": "2023 年",
+        "value": 20
+      },
+      {
+        "label": "2024 年",
+        "value": 60
+      },
+      {
+        "label": "2025 年",
+        "value": 200
+      },
+      {
+        "label": "2026 年 9 月底",
+        "value": 500
+      }
+    ],
+    "models": [
+      {
+        "label": "GPT-4",
+        "date": "2023-03-14",
+        "when": "2023 年 3 月"
+      },
+      {
+        "label": "GPT-4o",
+        "date": "2024-05-13",
+        "when": "2024 年 5 月"
+      },
+      {
+        "label": "GPT-5",
+        "date": "2025-08-07",
+        "when": "2025 年 8 月"
+      },
+      {
+        "label": "GPT-6",
+        "date": "2026-09-03",
+        "when": "2026 年 9 月"
+      }
+    ]
+  }
+}

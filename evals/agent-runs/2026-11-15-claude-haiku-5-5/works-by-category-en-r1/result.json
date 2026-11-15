@@ -1,0 +1,70 @@
+{
+  "case": "works-by-category-en",
+  "run": "works-by-category-en-r1",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 39.1
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "fc15dc610b51",
+      "backend": "deepseek",
+      "ttsBilled": 348
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "fc15dc610b51",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 10,
+    "toolUses": 9,
+    "wallSec": 116,
+    "costUsd": 0.0118,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 14,
+      "output": 6477,
+      "cacheRead": 313875,
+      "cacheWrite": 27349
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 348,
+    "costUsd": 0.0157
+  },
+  "costUsd": 0.0275,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "**结果：通过。** 草稿渲染（`--draft`）的全部自检都过了，成片时长 39.1 秒，英文版，覆盖总数、最大类型、游戏的数量和占比，并标注了“只含至少 5,000 次观看的作品”这一限制。管线一共跑了 2 次：第 1 次 `--no-video` 文字层检查全部通过，我看了抽帧图，构图没有问题；第 2 次 `--draft` 渲染并通过全部检查。两次之间没有改动，所以没有返工。`task/film.json` 是唯一新写的文件，数字全部用引用生成。成片在 `task/out/film.mp4`，草稿同目录。DIRECTOR.md 要求的 `--cost-usd` 和 `--intervention` 记录没有补，因为它们不在这次放行的命令范围内。",
+  "outcome": "passed"
+}

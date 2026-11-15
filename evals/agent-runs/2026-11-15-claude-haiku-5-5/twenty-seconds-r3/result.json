@@ -1,0 +1,70 @@
+{
+  "case": "twenty-seconds",
+  "run": "twenty-seconds-r3",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 13.667
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "bc6bb47fcf77",
+      "backend": "deepseek",
+      "ttsBilled": 40
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "bc6bb47fcf77",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 9,
+    "toolUses": 8,
+    "wallSec": 60,
+    "costUsd": 0.0105,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 12,
+      "output": 5920,
+      "cacheRead": 264365,
+      "cacheWrite": 24457
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 40,
+    "costUsd": 0.0018
+  },
+  "costUsd": 0.0123,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "通过。我写了一次 `task/film.json`，两次管线运行都通过：第一次只跑文字层检查（`--no-video`），第二次渲染草稿（`--draft`），两次都没有报错。片长 13.7 秒，在 12–22 秒范围内。片子共三幕：开场标题、作品总数 2,793 件、三类数量对比（模型对比 534 件、游戏 483 件，讲解与教育 233 件只出现在画面上，旁白未念）。所有数字都用引用写入，没有手写。没有改 `data.json`、`expect.json` 或 `scenes.js`，也没有返工。`--cost-usd` 没有填，因为我无法测到这轮的模型费用；`--intervention` 也没有填，因为没有人工修改。",
+  "outcome": "passed"
+}

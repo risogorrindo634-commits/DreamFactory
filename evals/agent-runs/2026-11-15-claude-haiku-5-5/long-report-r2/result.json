@@ -1,0 +1,82 @@
+{
+  "case": "long-report",
+  "run": "long-report-r2",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 75.533
+  },
+  "pipelineRuns": 3,
+  "failedRuns": 1,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": false,
+      "failed": [
+        "spec",
+        "data-accuracy"
+      ],
+      "rendered": false,
+      "filmVersion": "b5717d8859b8",
+      "backend": "deepseek",
+      "ttsBilled": 514
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "26a1b49e4ebe",
+      "backend": "deepseek",
+      "ttsBilled": 46
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "26a1b49e4ebe",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 14,
+    "toolUses": 13,
+    "wallSec": 305,
+    "costUsd": 0.029,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 18,
+      "output": 27195,
+      "cacheRead": 544662,
+      "cacheWrite": 49709
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 560,
+    "costUsd": 0.0252
+  },
+  "costUsd": 0.0542,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "通过了。草稿渲染（`--draft`）的自检全部通过，片长 75.5 秒，草稿视频在 `task/out/film.mp4`。管线一共跑了 3 次：前两次是 `--no-video`，第三次是 `--draft`。\n\n- **第 1 次（未通过）**：片长 70.5 秒，低于 75 秒的下限；“4.5 倍”在画面上停留不足 1 秒。我把总量场景的备注改成显示“相当于 2025 年的 4.5 倍”，并在逐月走势和成本区间各加了一句旁白来拉长片长。\n- **第 2 次（通过）**：文字层检查全部通过。我看了抽帧图，构图和节奏没有问题。\n- **第 3 次（`--draft`，通过）**：画面、响度、停顿和听写核对也都通过。\n\n逐月走势用的是自定义折线图场景，写在 `task/scenes.js`，因为内置场景里没有折线图。片子没有运行成片渲染（去掉 `--draft`），也没有补记 `--cost-usd`，因为任务只要求到草稿通过为止。",
+  "outcome": "passed"
+}

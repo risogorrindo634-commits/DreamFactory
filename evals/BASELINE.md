@@ -1,6 +1,6 @@
 # 评测基线
 
-干净用例误报 0/11，缺陷检出 53/53。
+干净用例误报 0/11，缺陷检出 54/54。
 
 运行环境：Node v22.23.4 · 语音后端 deepseek · 草稿画质 · 2026-11-15
 
@@ -73,6 +73,7 @@
 | voice-says-wrong-number-english | 英文版字幕写 233，语音念成 323 | data-accuracy、asr | 抓到 |  |
 | voice-says-wrong-number-before-unit | 字幕写 52 期，语音念成 57 期 | data-accuracy、asr | 抓到 |  |
 | voice-says-wrong-number-after-letters | 字幕写“API，2 到 45 美元”，语音念成 3 到 45 | data-accuracy、asr | 抓到 |  |
+| voice-says-wrong-unit | 字幕写 4.5 倍，语音念成 4.5 度：数字对了，量级的字错了 | asr | 抓到 |  |
 | machine-without-cjk-font | 渲染的机器上没有中文字体，中文全部显示成方框 | fonts | 抓到 |  |
 | mix-too-loud | 混音出错，旁白整体响了 6 分贝，峰值过载 | audio-levels | 抓到 |  |
 | mix-too-quiet | 混音出错，旁白整体轻了 6 分贝 | audio-levels | 抓到 |  |
@@ -103,4 +104,4 @@
 | video-stillness | 2 | 2 |  |
 | audio-levels | 2 | 2 |  |
 | audio-gaps | 1 | 1 |  |
-| asr | 5 | 5 |  |
+| asr | 6 | 6 |  |

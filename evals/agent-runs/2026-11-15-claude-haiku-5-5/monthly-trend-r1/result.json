@@ -1,0 +1,70 @@
+{
+  "case": "monthly-trend",
+  "run": "monthly-trend-r1",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 26
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "e021bcb591e6",
+      "backend": "deepseek",
+      "ttsBilled": 209
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "e021bcb591e6",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 11,
+    "toolUses": 10,
+    "wallSec": 161,
+    "costUsd": 0.0217,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 14,
+      "output": 20109,
+      "cacheRead": 353436,
+      "cacheWrite": 40427
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 209,
+    "costUsd": 0.0094
+  },
+  "costUsd": 0.0311,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "通过。管线跑了 2 次：第 1 次 `--no-video` 文字层检查全部通过，抽帧图也看过；第 2 次 `--draft` 渲染草稿，画面、响度、停顿和听写核对全部通过，成片在 `task/out/film.mp4`。改动只有两处新建：`task/film.json`（开场、折线图场景、收尾）和 `task/scenes.js`（自定义折线图，因为内置场景没有折线图，expect.json 要求自定义场景）。两次检查之间没有返工。没有补 `--cost-usd` 和 `--intervention` 记录，也没有出去掉 `--draft` 的成片，因为这次的范围只到草稿。",
+  "outcome": "passed"
+}

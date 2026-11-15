@@ -1,0 +1,70 @@
+{
+  "case": "two-series",
+  "run": "two-series-r3",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 34.033
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "2974b0185a3d",
+      "backend": "deepseek",
+      "ttsBilled": 270
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "2974b0185a3d",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 14,
+    "toolUses": 13,
+    "wallSec": 168,
+    "costUsd": 0.0234,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 18,
+      "output": 18760,
+      "cacheRead": 471548,
+      "cacheWrite": 46377
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 270,
+    "costUsd": 0.0122
+  },
+  "costUsd": 0.0355,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "通过。草稿渲染（`--draft`）的全部检查都过了，片长 34.0 秒，成片在 `task/out/film.mp4`。\n\n管线共跑了 2 次：先 `--no-video` 做文字层检查，通过后再 `--draft` 渲染草稿。没有返工，也没有改过 `data.json`、`expect.json` 或 `pipeline/checks/`。\n\n这次要自写折线图场景，所以新建了 `task/scenes.js`（`line` 类型），`task/film.json` 用它画两条线、标出名字，并在 8 月和 12 月标上数值。数字都用引用写，没有手写。",
+  "outcome": "passed"
+}

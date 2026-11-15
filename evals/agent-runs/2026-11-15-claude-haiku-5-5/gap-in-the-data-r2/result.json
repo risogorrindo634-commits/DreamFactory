@@ -1,0 +1,79 @@
+{
+  "case": "gap-in-the-data",
+  "run": "gap-in-the-data-r2",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 31.267
+  },
+  "pipelineRuns": 3,
+  "failedRuns": 0,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "c1e6ed391485",
+      "backend": "deepseek",
+      "ttsBilled": 223
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "77463f6baee8",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "77463f6baee8",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 17,
+    "toolUses": 16,
+    "wallSec": 195,
+    "costUsd": 0.0307,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 24,
+      "output": 24584,
+      "cacheRead": 740318,
+      "cacheWrite": 54870
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 223,
+    "costUsd": 0.01
+  },
+  "costUsd": 0.0407,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "通过了。草稿（`--draft`）的全部自检都过了，成片在 `task/out/film.mp4`。管线一共跑了 3 次：前两次是 `--no-video`，第 3 次是 `--draft`。\n\n- **第 1 轮：** 写了 `task/film.json`（开场、折线图、收尾三个场景）和 `task/scenes.js`。简报要求折线图，内置场景没有，所以加了一个自定义的 `line` 场景。折线在 6 月断开，缺口处标“数据缺失”，1 月和 12 月的数值标在图上，旁白提到 6 月没有数据和 12 月的数量。\n- **第 2 轮：** 检查全部通过，但抽帧图上 11 月、12 月的点在线条画到之前就露出来了。原因是线段的圆头端帽在零长度虚线上画出了点。我把端帽改成平头，并在线段开始画之前隐藏它。\n- **第 3 轮：** 只跑了草稿渲染，没有再改任何东西，结论直接通过。",
+  "outcome": "passed"
+}

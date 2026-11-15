@@ -1,0 +1,89 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "2026 年度盘点",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "开场",
+      "type": "title",
+      "kicker": "2026 年度盘点",
+      "headline": "代码生成作品的一年",
+      "sub": "社区年终总结",
+      "narration": [
+        "这是社区代码生成作品的2026年度盘点。",
+        "我们依次看总量、分布、走势和成本。",
+        "先从总量说起。"
+      ]
+    },
+    {
+      "id": "总量",
+      "type": "bignumber",
+      "label": "今年完成的作品",
+      "value": "{{facts.total}}",
+      "unit": "件",
+      "note": "相当于 2025 年的 {{times series.yearly[2025 年] series.yearly[2026 年]}} 倍",
+      "narration": [
+        "今年共完成{{facts.total}}件作品。",
+        "相当于 2025 年的 {{times series.yearly[2025 年] series.yearly[2026 年]}} 倍。",
+        "这是全年最明显的变化。"
+      ]
+    },
+    {
+      "id": "类型分布",
+      "type": "bars",
+      "title": "按类型的分布",
+      "sub": "全年作品数量与占比",
+      "series": { "$": "series.categories" },
+      "highlight": "模型对比",
+      "unit": "件",
+      "showShare": true,
+      "narration": [
+        "按类型看，模型对比是最多的一类。",
+        "全年{{series.categories[模型对比]}}件，占{{share series.categories[模型对比]}}。",
+        "游戏类作品紧随其后。"
+      ]
+    },
+    {
+      "id": "逐月走势",
+      "type": "line",
+      "title": "逐月走势",
+      "sub": "每月作品数量",
+      "series": { "$": "series.monthly" },
+      "narration": [
+        "全年逐月来看，数量一路向上。",
+        "年初的1月只有{{series.monthly[1月]}}件。",
+        "到了6月，已经增加到{{series.monthly[6月]}}件。",
+        "12月达到全年最高，共{{series.monthly[12月]}}件。",
+        "增长主要出现在下半年。"
+      ]
+    },
+    {
+      "id": "成本区间",
+      "type": "ranges",
+      "title": "每分钟成片的成本区间",
+      "sub": "三种做法，美元，对数刻度",
+      "series": { "$": "series.cost" },
+      "unit": "美元",
+      "narration": [
+        "最后看每分钟成片的成本。",
+        "坐标轴是对数刻度，格子越靠右，数量级越大。",
+        "代码生成每分钟在{{series.cost[代码生成].low}}到{{series.cost[代码生成].high}}美元之间。",
+        "视频模型的区间最宽，覆盖的范围最大。",
+        "三种做法的成本差别很大。",
+        "外包制作每分钟在{{series.cost[外包制作].low}}到{{series.cost[外包制作].high}}美元之间。"
+      ]
+    },
+    {
+      "id": "收尾",
+      "type": "outro",
+      "headline": "以上数据为虚构示例",
+      "sub": "仅供演示，不代表真实作品",
+      "narration": [
+        "提醒一次：以上是虚构的示例数据。",
+        "感谢收看。"
+      ]
+    }
+  ]
+}

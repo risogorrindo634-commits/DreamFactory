@@ -1,0 +1,68 @@
+{
+  "vertical": "data-story",
+  "lang": "en",
+  "title": "What 2,793 works are making (EN)",
+  "source": "Data: {{source.name}} (as of {{source.asOf}})",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "Works by type",
+      "headline": "{{facts.total}} works",
+      "sub": "What are they making?",
+      "narration": [
+        "We looked at {{facts.total}} works, grouped by type.",
+        "Here is what they are making."
+      ]
+    },
+    {
+      "id": "total",
+      "type": "bignumber",
+      "label": "Total works in the list",
+      "value": "{{facts.total}}",
+      "unit": "works",
+      "note": "Only works with at least {{facts.minViews}} views",
+      "narration": [
+        "The list holds {{facts.total}} works in total.",
+        "Caveat: it only holds works with at least {{facts.minViews}} views."
+      ]
+    },
+    {
+      "id": "types",
+      "type": "bars",
+      "title": "Works by type",
+      "sub": "Number of works in each type",
+      "series": { "$": "series.categories" },
+      "highlight": "Games",
+      "unit": "works",
+      "showShare": true,
+      "narration": [
+        "Model comparisons is the largest type, with {{series.categories[Model comparisons]}} works.",
+        "Games come right after."
+      ]
+    },
+    {
+      "id": "games",
+      "type": "bignumber",
+      "label": "Games",
+      "value": "{{series.categories[Games]}}",
+      "unit": "works",
+      "note": "{{share series.categories[Games]}} of all works",
+      "narration": [
+        "Games have {{series.categories[Games]}} works.",
+        "That is {{share series.categories[Games]}} of the total."
+      ]
+    },
+    {
+      "id": "outro",
+      "type": "outro",
+      "headline": "Games: {{series.categories[Games]}} works",
+      "sub": "Out of {{facts.total}}, counting works with at least {{facts.minViews}} views",
+      "narration": [
+        "So, among {{facts.total}} works, games are the second largest type."
+      ]
+    }
+  ]
+}

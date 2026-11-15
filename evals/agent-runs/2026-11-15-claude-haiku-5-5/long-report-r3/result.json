@@ -1,0 +1,99 @@
+{
+  "case": "long-report",
+  "run": "long-report-r3",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": false,
+    "failed": [
+      "video-stillness",
+      "audio-gaps"
+    ],
+    "durationSec": 88
+  },
+  "pipelineRuns": 4,
+  "failedRuns": 3,
+  "filmVersions": 3,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": false,
+      "failed": [
+        "spec",
+        "readability"
+      ],
+      "rendered": false,
+      "filmVersion": "2b8f0aeb9760",
+      "backend": "deepseek",
+      "ttsBilled": 267
+    },
+    {
+      "round": 2,
+      "passed": false,
+      "failed": [
+        "spec"
+      ],
+      "rendered": false,
+      "filmVersion": "33dc6cafd67c",
+      "backend": "deepseek",
+      "ttsBilled": 113
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "db8dfeef2a6b",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    },
+    {
+      "round": 4,
+      "passed": false,
+      "failed": [
+        "video-stillness",
+        "audio-gaps"
+      ],
+      "rendered": true,
+      "filmVersion": "db8dfeef2a6b",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 23,
+    "toolUses": 22,
+    "wallSec": 300,
+    "costUsd": 0.0291,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 24,
+      "output": 24125,
+      "cacheRead": 722539,
+      "cacheWrite": 48948
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 380,
+    "costUsd": 0.0171
+  },
+  "costUsd": 0.0462,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "**结论：未通过，已停下。** 草稿渲染的画面和停顿检查没过，剩下的修法需要第 4 轮返工，超出了规范的 3 轮上限。管线一共跑了 4 次：前 3 次只做文字层检查，第 4 次是 `--draft`。第 1 次因片长 56.8 秒（要求 75–100）和月份标签字号 22px（要求 28px）不过，我把标签改为 28px，并补了旁白、加长了停留时间。第 2 次片长 69.2 秒仍不够，我又加长了停留时间。第 3 次文字层全部通过，片长 88.0 秒。第 4 次草稿有 2 处画面静止（33.9 秒起 6.0 秒，48.4 秒起 11.4 秒）和 6 处超过 3.5 秒的无声，这是我加长停留时间后，旁白念完到下一句之间留出的空白。修法是缩短或拆分这些停留，但那是第 4 轮返工，我没有做。\n\n折线图用 `scenes.js` 里的自定义 `line` 场景实现，最高月份 637 件标在图上。文件在 `/tmp/claude-0/-home-user-DreamFactory/58cc25c1-2c66-5589-b40e-01c9c76faeb6/scratchpad/haiku-run5/long-report-r3/task/film.json` 和 `.../task/scenes.js`。抽帧图是 `.../task/out/contact.jpg`，草稿是 `.../task/out/film.mp4`，没有去掉 `--draft` 出成片。",
+  "outcome": "failed"
+}

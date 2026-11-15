@@ -1,0 +1,70 @@
+{
+  "case": "derived-numbers",
+  "run": "derived-numbers-r2",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 31.5
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "20e82a67de65",
+      "backend": "deepseek",
+      "ttsBilled": 232
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "20e82a67de65",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 9,
+    "toolUses": 8,
+    "wallSec": 96,
+    "costUsd": 0.0104,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 12,
+      "output": 5306,
+      "cacheRead": 263945,
+      "cacheWrite": 25378
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 232,
+    "costUsd": 0.0104
+  },
+  "costUsd": 0.0208,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "草稿已通过全部自检（`--draft`，结论：通过）。管线一共跑了两次：先跑 `--no-video` 做文字层检查，通过后再跑 `--draft` 渲染草稿，中间没有改动。第一次就通过，所以没有返工。我看过抽帧图 `task/out/contact.jpg`，画面和版式没有问题。成片规格是 31.5 秒，草稿视频在 `task/out/film.mp4`。\n\n片子写在 `task/film.json`，共 6 个场景，都用内置类型，没有写 `scenes.js`。数字全部用引用生成，倍数（4.5）和降幅（91%）也由 `times`、`down` 算出。\n\n没有记录人工介入次数和模型费用，因为 `--intervention` 和 `--cost-usd` 不在本次放行的命令范围内。",
+  "outcome": "passed"
+}

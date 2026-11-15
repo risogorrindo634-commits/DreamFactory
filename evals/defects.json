@@ -784,6 +784,24 @@
     ]
   },
   {
+    "id": "voice-says-wrong-unit",
+    "title": "字幕写 4.5 倍，语音念成 4.5 度：数字对了，量级的字错了",
+    "base": "derived-numbers",
+    "ops": [
+      {
+        "file": "film",
+        "set": "scenes[1].narration[2]",
+        "value": {
+          "text": "是原来的{{times series.films[2025 年] series.films[2026 年]}}倍。",
+          "say": "是原来的4.5度。"
+        }
+      }
+    ],
+    "expectFail": [
+      "asr"
+    ]
+  },
+  {
     "id": "machine-without-cjk-font",
     "title": "渲染的机器上没有中文字体，中文全部显示成方框",
     "base": "twenty-seconds",

@@ -22,6 +22,7 @@ node evals/agent-run.mjs --provider deepseek      # 同上，模型换成 DeepSe
 - `pipeline/lib/deepseek.mjs`：DeepSeek 语音接口的请求函数和密钥读取，语音合成和听写核对共用。
 - `.cache/tts/`：合成过的语音和听写结果的缓存，不入库，删掉只会让下次运行慢一些。
 - `verticals/data-story/`：数据短片的画面。`runtime/df.js` 里每种场景是一个函数。影片目录里的 `scenes.js` 可以为那一支片子增加场景。
+- `films/`：用真实数据做的片子，一支一个目录。除了简报、数据、要求和分镜，还有 `sources.md`（每个数字的出处和核对情况）和 `records/`（运行记录、自检报告、抽帧图）。成片在 `out/` 里，不入库。
 - `evals/cases/`：评测用例，每个目录有简报、数据、要求和一支参考影片，个别带参考的 `scenes.js`。
 - `evals/defects.json`：缺陷注入集，每条在参考影片上改一处，并写明哪项检查必须失败。
 - `evals/BASELINE.md`：上一次评测的结果。
@@ -61,5 +62,6 @@ node evals/agent-run.mjs --provider deepseek      # 同上，模型换成 DeepSe
 - 评测默认用 `auto` 选中的语音。参考影片在两种组合下都必须通过，改了语音、混音或听写相关的代码后两种都要跑：直接跑是 DeepSeek 语音加 DeepSeek 听写，`DF_ASR=whisper node evals/run.mjs --tts edge` 是 Edge 语音加本机听写。
 - 没有网络时加 `--tts espeak`，这时听写核对会跳过，对应的缺陷记为“未判定”。
 - 无人值守评测接新的模型供应商，在 `evals/agent-run.mjs` 的 `PROVIDERS` 里加一项：兼容 Anthropic 接口的地址、密钥、默认模型和公布的单价。命令行自己报的费用只对它自家的模型准确。
+- 用真实数据做片子时，每个数字都要有读过原文的出处，写进那支片子的 `sources.md`；只见转述、没读到原文的数字要在画面上区分出来。做完把识别结果逐句对一遍：数字念对了不等于意思没听错。
 - 代码注释用英文，文档和报告用中文。
 - 改动直接提交并推送到 `main`，不另开分支，不开 PR。

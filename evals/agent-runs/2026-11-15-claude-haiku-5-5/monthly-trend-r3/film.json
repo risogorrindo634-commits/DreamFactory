@@ -1,0 +1,45 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "每月新增作品",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "{{facts.year}} 年",
+      "headline": "每月新增的代码生成作品",
+      "sub": "示例数据，虚构",
+      "narration": [
+        "这支短片讲一个视频社区的月度数据。",
+        "数据是虚构的示例。"
+      ]
+    },
+    {
+      "id": "trend",
+      "type": "line",
+      "title": "每月新增作品数",
+      "sub": "{{facts.year}} 年，12 个月",
+      "series": { "$": "series.monthly" },
+      "narration": [
+        "一月新增 {{series.monthly[1月]}} 个作品。",
+        "九月有 {{series.monthly[9月]}} 个，略低于八月。",
+        "十月一下子跳到 {{series.monthly[10月]}} 个。",
+        "十一月达到全年最高，{{series.monthly[11月]}} 个。",
+        "十一月是一月的 {{times series.monthly[1月] series.monthly[11月]}} 倍。"
+      ]
+    },
+    {
+      "id": "outro",
+      "type": "outro",
+      "headline": "下半年，增长明显加快",
+      "sub": "数据来源：{{source.name}}",
+      "narration": [
+        "下半年的增长，明显快于上半年。",
+        "这是示例数据，不是真实统计。"
+      ]
+    }
+  ]
+}

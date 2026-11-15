@@ -1,0 +1,43 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "20 秒讲完类型分布",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "scenes": [
+    {
+      "id": "开场",
+      "type": "title",
+      "kicker": "数据短片",
+      "headline": "作品按类型怎么分",
+      "minDuration": 3,
+      "narration": ["我们来看作品的类型分布。"]
+    },
+    {
+      "id": "总数",
+      "type": "bignumber",
+      "label": "作品总数",
+      "value": "{{facts.total}}",
+      "unit": "件",
+      "minDuration": 3,
+      "narration": ["一共 {{facts.total}} 件作品。"]
+    },
+    {
+      "id": "类型对比",
+      "type": "bars",
+      "title": "作品数量最多的类型",
+      "sub": "作品数（件）",
+      "series": [
+        { "$": "series.categories[模型对比]" },
+        { "$": "series.categories[游戏]" },
+        { "$": "series.categories[讲解与教育]" }
+      ],
+      "highlight": "模型对比",
+      "unit": "件",
+      "minDuration": 6,
+      "narration": [
+        "模型对比最多，{{series.categories[模型对比]}} 件。",
+        "游戏类有 {{series.categories[游戏]}} 件。"
+      ]
+    }
+  ]
+}

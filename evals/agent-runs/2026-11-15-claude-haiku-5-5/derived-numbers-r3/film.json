@@ -1,0 +1,76 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "这家工作室一年里变了多少",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "title",
+      "type": "title",
+      "kicker": "数据短片",
+      "headline": "产量翻了，成本降了",
+      "sub": "2025 年与 2026 年的对比",
+      "narration": ["2025 年到 2026 年，讲解视频的产量和成本发生了什么变化？"]
+    },
+    {
+      "id": "films",
+      "type": "bars",
+      "title": "讲解视频产量",
+      "sub": "每年产出的讲解视频数量",
+      "series": { "$": "series.films" },
+      "highlight": "2026 年",
+      "unit": "支",
+      "narration": [
+        "2025 年，工作室产出{{series.films[2025 年]}}支讲解视频。",
+        "2026 年，产量增长到{{series.films[2026 年]}}支。"
+      ]
+    },
+    {
+      "id": "times",
+      "type": "bignumber",
+      "label": "产量增长到原来的",
+      "value": "{{times series.films[2025 年] series.films[2026 年]}}",
+      "unit": "倍",
+      "note": "2025 年 {{series.films[2025 年]}} 支，2026 年 {{series.films[2026 年]}} 支",
+      "minDuration": 4,
+      "narration": ["产量增长到原来的{{times series.films[2025 年] series.films[2026 年]}}倍。"]
+    },
+    {
+      "id": "cost",
+      "type": "bars",
+      "title": "单片成本",
+      "sub": "每支讲解视频的成本",
+      "series": { "$": "series.costPerFilm" },
+      "highlight": "2026 年",
+      "unit": "元",
+      "narration": [
+        "2025 年，单片成本{{series.costPerFilm[2025 年]}}元。",
+        "2026 年，单片成本降到{{series.costPerFilm[2026 年]}}元。"
+      ]
+    },
+    {
+      "id": "down",
+      "type": "bignumber",
+      "label": "单片成本下降了",
+      "value": "{{down series.costPerFilm[2025 年] series.costPerFilm[2026 年]}}",
+      "note": "2025 年 {{series.costPerFilm[2025 年]}} 元，2026 年 {{series.costPerFilm[2026 年]}} 元",
+      "minDuration": 4,
+      "narration": [
+        "单片成本下降了{{down series.costPerFilm[2025 年] series.costPerFilm[2026 年]}}。",
+        "产量增长和成本下降，同时发生。"
+      ]
+    },
+    {
+      "id": "outro",
+      "type": "outro",
+      "headline": "产量增长，单片成本下降",
+      "sub": "数据为虚构示例，仅供演示",
+      "narration": [
+        "数据为虚构示例，仅供演示。",
+        "你可以用这些数字，对照自己团队的情况。"
+      ]
+    }
+  ]
+}

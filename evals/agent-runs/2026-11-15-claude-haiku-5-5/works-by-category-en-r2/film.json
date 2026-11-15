@@ -1,0 +1,60 @@
+{
+  "vertical": "data-story",
+  "lang": "en",
+  "title": "What are the works making? (English)",
+  "source": "Source: {{source.name}} (as of {{source.asOf}})",
+  "voice": { "backend": "auto" },
+  "scenes": [
+    {
+      "id": "intro",
+      "type": "title",
+      "kicker": "Works by type",
+      "headline": "What are the works making?",
+      "sub": "A short look at an AI content list",
+      "narration": ["This is a short look at a list of AI-made works, sorted by type."]
+    },
+    {
+      "id": "total",
+      "type": "bignumber",
+      "label": "Works in the list",
+      "value": "{{facts.total}}",
+      "unit": "works",
+      "note": "All of them are grouped by type",
+      "narration": ["The list holds {{facts.total}} works.", "They are grouped by type."]
+    },
+    {
+      "id": "types",
+      "type": "bars",
+      "title": "Works by type",
+      "sub": "Number of works in each type",
+      "series": { "$": "series.categories" },
+      "highlight": "Model comparisons",
+      "unit": "works",
+      "showShare": true,
+      "narration": ["Model comparisons is the largest type, with {{series.categories[Model comparisons]}} works."]
+    },
+    {
+      "id": "games",
+      "type": "bignumber",
+      "label": "Games",
+      "value": "{{series.categories[Games]}}",
+      "unit": "works",
+      "note": "{{share series.categories[Games]}} of all works",
+      "narration": ["Games come second, with {{series.categories[Games]}} works.", "That is {{share series.categories[Games]}} of the whole list."]
+    },
+    {
+      "id": "caveat",
+      "type": "bullets",
+      "title": "One caveat",
+      "items": ["The list only holds works with at least {{facts.minViews}} views"],
+      "narration": ["One caveat: the list only holds works with at least {{facts.minViews}} views."]
+    },
+    {
+      "id": "outro",
+      "type": "outro",
+      "headline": "All figures come from one list",
+      "sub": "Same data, shown in English",
+      "narration": ["All the figures here come from the same list."]
+    }
+  ]
+}

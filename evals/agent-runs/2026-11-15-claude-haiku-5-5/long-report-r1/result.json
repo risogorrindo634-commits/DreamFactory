@@ -1,0 +1,87 @@
+{
+  "case": "long-report",
+  "run": "long-report-r1",
+  "model": "claude-haiku-5-5",
+  "provider": null,
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": false,
+    "failed": [
+      "video-stillness",
+      "audio-gaps"
+    ],
+    "durationSec": 83.267
+  },
+  "pipelineRuns": 3,
+  "failedRuns": 2,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": false,
+      "failed": [
+        "spec"
+      ],
+      "rendered": false,
+      "filmVersion": "ff68fe79cb89",
+      "backend": "deepseek",
+      "ttsBilled": 353
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "b6432376ed16",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    },
+    {
+      "round": 3,
+      "passed": false,
+      "failed": [
+        "video-stillness",
+        "audio-gaps"
+      ],
+      "rendered": true,
+      "filmVersion": "b6432376ed16",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 16,
+    "toolUses": 15,
+    "wallSec": 257,
+    "costUsd": 0.0241,
+    "costBasis": "cli",
+    "pricePeriod": null,
+    "tokens": {
+      "input": 20,
+      "output": 20155,
+      "cacheRead": 547447,
+      "cacheWrite": 42863
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 353,
+    "costUsd": 0.0159
+  },
+  "costUsd": 0.04,
+  "limits": {
+    "budgetUsd": 8,
+    "timeoutMin": 30
+  },
+  "report": "**结果：未通过，已停下。** 草稿渲染的自检有 2 项失败（画面静止和停顿过长），都是片子结构问题，不是数据问题。数据准确、来源、字幕、同步、响度和听写核对都通过。管线共跑了 3 次，报告标为第 3 轮，已到返工上限。\n\n- **第 1 次（文字层）**：写出 `task/film.json` 和 `task/scenes.js`（自定义折线图，标出 12 月的 637 件）。片长 71.3 秒，低于要求的 75 秒，报 spec 失败。\n- **第 2 次（文字层）**：把柱状图、折线图、区间图的 `minDuration` 分别从 14、16、20 提到 18、20、24。片长变为 83.3 秒，文字层全部通过。\n- **第 3 次（草稿）**：渲染 `task/out/film.mp4`，报 video-stillness 和 audio-gaps。问题在柱状图、折线图、区间图三个场景：旁白讲完后，靠 `minDuration` 补时长，画面静止约 10 到 15 秒，中间没有旁白。\n\n下一步建议：给这三个场景各补 2 到 3 句旁白（只用 `data.json` 里的数字），减少单纯靠 `minDuration` 补的时间，并保持片长在 80 到 95 秒之间。这一步我没有做，因为已经用完返工轮数。",
+  "outcome": "failed"
+}

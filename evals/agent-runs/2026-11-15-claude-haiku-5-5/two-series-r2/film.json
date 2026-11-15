@@ -1,0 +1,46 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "两种做法，哪一种在什么时候反超",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "开场",
+      "type": "title",
+      "kicker": "月度对比",
+      "headline": "两种做法，哪一种在什么时候反超",
+      "sub": "代码生成与视频模型，每月新增作品",
+      "narration": [
+        "这支片子对比两类新增作品的月度数量。",
+        "它们会在哪个月反超？"
+      ]
+    },
+    {
+      "id": "折线",
+      "type": "line",
+      "title": "两类新增作品，每月数量",
+      "sub": "单位：件",
+      "code": { "$": "series.code" },
+      "model": { "$": "series.model" },
+      "names": { "$": "names" },
+      "narration": [
+        "这是两类新增作品的月度对比。",
+        "代码生成的作品，一开始远少于视频模型。",
+        "到 8 月，代码生成 {{series.code[8月]}} 件，反超视频模型的 {{series.model[8月]}} 件。",
+        "到 12 月，代码生成 {{series.code[12月]}} 件，视频模型 {{series.model[12月]}} 件。",
+        "这是虚构的示例数据，不是真实统计。"
+      ]
+    },
+    {
+      "id": "收尾",
+      "type": "outro",
+      "headline": "8 月之后，代码生成一直领先",
+      "sub": "两条路线，按你的时间表选择",
+      "narration": [
+        "8 月之后，代码生成一直领先。"
+      ]
+    }
+  ]
+}

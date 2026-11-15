@@ -1,0 +1,44 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "两种做法，哪一种在什么时候反超",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "开场",
+      "type": "title",
+      "kicker": "2026 年每月新增作品",
+      "headline": "两种做法，哪一种在什么时候反超",
+      "sub": "代码生成与视频模型",
+      "narration": ["这支短片比较两类作品，看它们在什么时候反超。"],
+      "minDuration": 3
+    },
+    {
+      "id": "折线",
+      "type": "line",
+      "title": "每月新增作品数量",
+      "sub": "单位：件",
+      "code": { "$": "series.code" },
+      "model": { "$": "series.model" },
+      "codeName": { "$": "names.code" },
+      "modelName": { "$": "names.model" },
+      "narration": [
+        "这张图里，两条线分别是两类作品每月新增的数量。",
+        "8月，代码生成 {{series.code[8月]}} 件，视频模型 {{series.model[8月]}} 件。",
+        "代码生成在这个月首次超过视频模型。",
+        "12月，代码生成 {{series.code[12月]}} 件，视频模型 {{series.model[12月]}} 件。",
+        "到年底，两者的差距已经很大。"
+      ],
+      "minDuration": 6
+    },
+    {
+      "id": "结尾",
+      "type": "outro",
+      "headline": "两条线在8月交叉",
+      "sub": "此后代码生成一路领先",
+      "narration": ["两条线在8月交叉，此后代码生成一路领先。"],
+      "minDuration": 3
+    }
+  ]
+}
