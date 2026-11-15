@@ -1,0 +1,69 @@
+{
+  "case": "works-by-category-en",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 42.633
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "f2e0421b5b20",
+      "backend": "deepseek",
+      "ttsBilled": 434
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "f9ef36ce6d23",
+      "backend": "deepseek",
+      "ttsBilled": 58
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 30,
+    "toolUses": 29,
+    "wallSec": 226,
+    "costUsd": 0.0254,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 52048,
+      "output": 25543,
+      "cacheRead": 766080,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 492,
+    "costUsd": 0.0221
+  },
+  "costUsd": 0.0476,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "草稿自检全部通过。抽帧图确认：标题的提问、2,793 大数字、八类横向条形图（Games 高亮并带占比）、尾部两类补充、收尾，排版无溢出或重叠。\n\n**报告**\n\n- **通过**：`node pipeline/cli.mjs run task --draft` 的 17 项自检（含画面静止、响度、停顿、听写核对）全部通过，片长 42.6 秒，符合简报“约 40 秒”和 30–75 秒的要求。\n- 管线共跑了 **2 次**。\n- 第 1 次 `--no-video`：首版文字层检查全部通过，但 DeepSeek 语速较慢，片长 50.3 秒。\n- 第 2 次 `--draft`：拆开 Games 的长句、删去条形图的区间句和结尾泛述句，片长降到 42.6 秒，同时分散字幕刷新以避免画面长时间静止；渲染后全部检查通过。\n- 数据中的数字全部来自引用，旁白说出了总数与 Games 的 483，画面显示了 534 与 233，来源和“至少 5,000 次观看”的门槛都已标明；没有数据中不存在而需要额外补的数字，也没有未满足的简报要求。",
+  "outcome": "passed"
+}

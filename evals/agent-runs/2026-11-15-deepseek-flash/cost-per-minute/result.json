@@ -1,0 +1,69 @@
+{
+  "case": "cost-per-minute",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 41.7
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "0aca1be67981",
+      "backend": "deepseek",
+      "ttsBilled": 345
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "0aca1be67981",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 26,
+    "toolUses": 25,
+    "wallSec": 177,
+    "costUsd": 0.0211,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 65506,
+      "output": 15786,
+      "cacheRead": 613376,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 345,
+    "costUsd": 0.0155
+  },
+  "costUsd": 0.0367,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "**通过。** 第一次运行（`--no-video`）时，我按简报把 `task/film.json` 写成 5 个场景：开场、用对数刻度的 `ranges` 区间图、工作室上限的 `bignumber`、数据口径的 `bullets` 以及收尾；文字层检查一次全部通过，片长 41.7 秒，所有数字均由 `data.json` 引用，代码生成短片与工作室的数字既出现在画面上，也出现在旁白里。\n\n第二次运行（`--draft`）没有改动任何内容，直接渲染草稿并运行全部检查，17 项检查全部通过：没有黑屏，最长静止 4.3 秒，响度与停顿达标，DeepSeek 听写核对 11 句旁白全部一致。整个过程没有返工，管线共运行 2 次，人工介入 0 次。草稿成片在 `task/out/film.mp4`，抽帧图在 `task/out/contact.jpg`。按任务范围停在草稿自检通过；如需成片，可以再运行一次 `node pipeline/cli.mjs run task` 去掉 `--draft` 即可。\n",
+  "outcome": "passed"
+}

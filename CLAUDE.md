@@ -8,7 +8,7 @@
 node pipeline/cli.mjs run <影片目录> --no-video   # 只做文字层检查，十几秒
 node pipeline/cli.mjs run <影片目录> --draft      # 草稿画质，带视频和声音检查
 node pipeline/cli.mjs run <影片目录>              # 成片
-node evals/run.mjs                                # 跑评测集，约两分钟
+node evals/run.mjs                                # 跑评测集，约四分钟
 node evals/run.mjs --only <用例或缺陷的 id>
 node evals/agent-run.mjs                          # 让模型无人值守做完每个用例，要花模型费用
 node evals/agent-run.mjs --provider deepseek      # 同上，模型换成 DeepSeek，需要 DEEPSEEK_API_KEY

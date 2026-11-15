@@ -1,0 +1,78 @@
+{
+  "case": "twenty-seconds",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 17.667
+  },
+  "pipelineRuns": 3,
+  "failedRuns": 0,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "9ebe87757ba8",
+      "backend": "deepseek",
+      "ttsBilled": 94
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "9ebe87757ba8",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "505f0e121f53",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 29,
+    "toolUses": 28,
+    "wallSec": 158,
+    "costUsd": 0.0178,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 48485,
+      "output": 13640,
+      "cacheRead": 792832,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 94,
+    "costUsd": 0.0042
+  },
+  "costUsd": 0.0221,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "**通过。** `task/film.json` 已完成，草稿渲染的全部 17 项检查通过：片长 17.7 秒（要求 12–22 秒），语音为 deepseek，画面与声音自检（含听写核对）均无问题。\n\n管线共跑 3 次。第 1 次用 `--no-video` 跑文字层检查，全部通过，片长 16.4 秒；第 2 次跑 `--draft`，17 项全部通过，但看抽帧图发现柱状图八行到位后只剩约 1.5 秒，阅读偏赶；第 3 次给 `all-types` 加 `minDuration: 5`，重跑 `--draft`，仍全部通过，片长 17.7 秒，最长无声 3.0 秒，未超 3.5 秒上限。\n\n片子按简报只讲三件事：总数 2,793、最多的类型模型对比 534、游戏 483；讲解与教育 233 只出现在柱状图里，没念出来。三个数据画面都显示了来源，所有数字都是数据引用。按本次权限只能跑到草稿，`out/film.mp4` 是草稿画质的渲染，没有出成片。",
+  "outcome": "passed"
+}

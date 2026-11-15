@@ -1,0 +1,66 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "一家工作室的两年：产量与单片成本",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "示例数据 · 虚构",
+      "headline": "一家工作室的两年",
+      "sub": "讲解视频的产量与单片成本",
+      "narration": [
+        "这是一份虚构的示例数据，只用来对比两年。"
+      ]
+    },
+    {
+      "id": "films",
+      "type": "bars",
+      "title": "讲解视频产量",
+      "sub": "两年对比",
+      "unit": "支",
+      "highlight": "2026 年",
+      "series": { "$": "series.films" },
+      "narration": [
+        "{{series.films[2025 年].label}}，做了 {{series.films[2025 年]}} 支讲解视频。",
+        "{{series.films[2026 年].label}}，产量是 {{series.films[2026 年]}} 支。"
+      ]
+    },
+    {
+      "id": "cost",
+      "type": "bars",
+      "title": "单片成本",
+      "sub": "每支讲解视频的平均成本",
+      "unit": "元",
+      "highlight": "2026 年",
+      "series": { "$": "series.costPerFilm" },
+      "narration": [
+        "{{series.costPerFilm[2025 年].label}}，每支成本是 {{series.costPerFilm[2025 年]}} 元。",
+        "{{series.costPerFilm[2026 年].label}}，每支降到 {{series.costPerFilm[2026 年]}} 元。"
+      ]
+    },
+    {
+      "id": "compare",
+      "type": "bullets",
+      "title": "两年放在一起看",
+      "items": [
+        "产量：{{series.films[2025 年]}} 支 → {{series.films[2026 年]}} 支",
+        "单片成本：{{series.costPerFilm[2025 年]}} 元 → {{series.costPerFilm[2026 年]}} 元"
+      ],
+      "narration": [
+        "产量从 {{series.films[2025 年]}} 支到 {{series.films[2026 年]}} 支。",
+        "单片成本从 {{series.costPerFilm[2025 年]}} 元到 {{series.costPerFilm[2026 年]}} 元。"
+      ]
+    },
+    {
+      "id": "close",
+      "type": "outro",
+      "headline": "产量上升，成本下降",
+      "sub": "示例数据，仅用于演示",
+      "narration": [
+        "这些是虚构的示例数字，不能当作真实统计。"
+      ]
+    }
+  ]
+}

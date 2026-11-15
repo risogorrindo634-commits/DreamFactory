@@ -1,0 +1,62 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "{{facts.categoryCount}} 个品类里，谁的作品最多",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "虚构示例 · 数据短片",
+      "headline": "{{facts.categoryCount}} 个品类，谁的作品最多",
+      "sub": "按作品数量取前 6 名",
+      "narration": [
+        "这个视频社区一共有 {{facts.categoryCount}} 个品类。"
+      ]
+    },
+    {
+      "id": "top6",
+      "type": "bars",
+      "title": "作品最多的 6 个品类",
+      "sub": "按作品数量从多到少排列",
+      "unit": "个作品",
+      "highlight": "科普动画",
+      "series": [
+        { "$": "series.categories[科普动画]" },
+        { "$": "series.categories[教程]" },
+        { "$": "series.categories[知识讲解]" },
+        { "$": "series.categories[产品演示]" },
+        { "$": "series.categories[游戏实况]" },
+        { "$": "series.categories[编程教学]" }
+      ],
+      "narration": [
+        "按作品数量从多到少，前 6 名是这样。",
+        "科普动画、教程和知识讲解排在前面。",
+        "产品演示、游戏实况、编程教学紧随其后。",
+        "数量越多，说明这个方向的供给越挤。"
+      ]
+    },
+    {
+      "id": "first",
+      "type": "bignumber",
+      "label": "第一名 · 科普动画",
+      "value": "{{series.categories[科普动画]}}",
+      "unit": "个作品",
+      "note": "在 {{facts.categoryCount}} 个品类中居首",
+      "narration": [
+        "第一名是科普动画，{{series.categories[科普动画]}} 个作品。",
+        "在 {{facts.categoryCount}} 个品类里，它排在最前。"
+      ]
+    },
+    {
+      "id": "close",
+      "type": "outro",
+      "headline": "选品类之前，先看清供给",
+      "sub": "数据为虚构示例，仅用于演示",
+      "narration": [
+        "对创作者来说，先看清供给最挤的地方。",
+        "找空位，比追热点更稳。"
+      ]
+    }
+  ]
+}

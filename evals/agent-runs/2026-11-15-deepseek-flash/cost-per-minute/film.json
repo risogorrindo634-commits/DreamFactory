@@ -1,0 +1,71 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "一分钟视频要花多少钱",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto" },
+  "scenes": [
+    {
+      "id": "opening",
+      "type": "title",
+      "kicker": "成本对比",
+      "headline": "一分钟视频要花多少钱",
+      "sub": "四种做法的每分钟成片成本",
+      "narration": [
+        "一分钟视频，到底要花多少钱？",
+        "我们比较四种做法。"
+      ]
+    },
+    {
+      "id": "cost-ranges",
+      "type": "ranges",
+      "title": "每分钟成片成本",
+      "sub": "对数刻度 · 单位：美元",
+      "series": { "$": "series.cost" },
+      "highlight": "代码生成短片",
+      "unit": "美元",
+      "narration": [
+        "代码生成短片，每分钟 2 到 20 美元。",
+        "视频模型 API，每分钟 2 到 45 美元。",
+        "自由职业者，每分钟 1,000 到 4,000 美元。",
+        "工作室最高，每分钟 3,000 到 15,000 美元。"
+      ]
+    },
+    {
+      "id": "studio-cap",
+      "type": "bignumber",
+      "label": "工作室报价上限",
+      "value": { "$": "series.cost[工作室].high" },
+      "unit": "美元",
+      "note": "每分钟成片成本",
+      "narration": [
+        "工作室报价的上限，每分钟 15,000 美元。"
+      ]
+    },
+    {
+      "id": "caveats",
+      "type": "bullets",
+      "title": "这些数字怎么读",
+      "items": [
+        "多为创作者自报",
+        "部分来自报价指南",
+        "只能看量级，不能当作精确报价"
+      ],
+      "narration": [
+        "这些数字多为创作者自报。",
+        "部分来自报价指南。",
+        "所以只能看量级，不能当作精确报价。"
+      ]
+    },
+    {
+      "id": "closing",
+      "type": "outro",
+      "headline": "先按量级做预算",
+      "sub": "再选择适合的做法",
+      "narration": [
+        "先按量级做预算，再选择适合的做法。"
+      ]
+    }
+  ]
+}

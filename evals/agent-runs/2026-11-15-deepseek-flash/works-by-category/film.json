@@ -1,0 +1,69 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "{{facts.total}} 件作品都在做什么",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "scenes": [
+    {
+      "id": "title",
+      "type": "title",
+      "kicker": "AI 视频作品清单",
+      "headline": "{{facts.total}} 件作品，都在做什么",
+      "sub": "按类型看这份公开清单的分布",
+      "narration": [
+        "这是一份公开的 AI 视频清单。",
+        "看看它们都在做什么。"
+      ]
+    },
+    {
+      "id": "total",
+      "type": "bignumber",
+      "label": "清单收录作品",
+      "value": { "$": "facts.total" },
+      "unit": "件",
+      "note": "只收浏览量 5,000 以上的作品",
+      "narration": [
+        "这份清单收录了 {{facts.total}} 件作品。",
+        "只收浏览量 5,000 以上的作品。",
+        "所以它不代表全部。"
+      ]
+    },
+    {
+      "id": "categories",
+      "type": "bars",
+      "title": "作品按类型分布",
+      "sub": "按类型统计，单位：件",
+      "series": { "$": "series.categories" },
+      "unit": "件",
+      "highlight": "模型对比",
+      "showShare": true,
+      "narration": [
+        "数量最多的是模型对比，{{series.categories[模型对比]}} 件。",
+        "游戏和 3D 世界与模拟紧随其后。",
+        "动效、产品、故事和音乐也都在里面。"
+      ]
+    },
+    {
+      "id": "game",
+      "type": "bignumber",
+      "label": "游戏类作品",
+      "value": { "$": "series.categories[游戏].value" },
+      "unit": "件",
+      "note": "占全部作品的 {{share series.categories[游戏]}}",
+      "narration": [
+        "游戏类有 {{series.categories[游戏]}} 件。",
+        "占全部作品的 {{share series.categories[游戏]}}。"
+      ]
+    },
+    {
+      "id": "outro",
+      "type": "outro",
+      "headline": "被看见的 {{facts.total}} 件",
+      "sub": "清单只收浏览量 5,000 以上的作品，不代表全部",
+      "narration": [
+        "这份分布，只属于被看见的作品。",
+        "看清口径，比记住数字更重要。"
+      ]
+    }
+  ]
+}

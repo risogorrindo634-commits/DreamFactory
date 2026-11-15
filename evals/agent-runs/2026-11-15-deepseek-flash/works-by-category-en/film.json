@@ -1,0 +1,76 @@
+{
+  "vertical": "data-story",
+  "lang": "en",
+  "title": "Works by type (English)",
+  "source": "Source: {{source.name}} (as of {{source.asOf}})",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto" },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "AI VIDEO WORKS, BY TYPE",
+      "headline": "What are {{facts.total}} works making?",
+      "sub": "Eight types, one list",
+      "narration": [
+        "What are {{facts.total}} works making?",
+        "We sorted every work in the list by type."
+      ]
+    },
+    {
+      "id": "total",
+      "type": "bignumber",
+      "label": "Works in the list",
+      "value": { "$": "facts.total" },
+      "unit": "works",
+      "note": "At least {{facts.minViews}} views each.",
+      "narration": [
+        "The list holds {{facts.total}} works.",
+        "Every one has at least {{facts.minViews}} views."
+      ]
+    },
+    {
+      "id": "types",
+      "type": "bars",
+      "title": "Eight types of work",
+      "sub": "Number of works in each type",
+      "series": { "$": "series.categories" },
+      "highlight": "Games",
+      "unit": "works",
+      "showShare": true,
+      "narration": [
+        "Model comparisons is the largest type, with {{series.categories[Model comparisons]}} works.",
+        "Games come next: {{series.categories[Games]}} works.",
+        "That is {{share series.categories[Games]}} of the list."
+      ]
+    },
+    {
+      "id": "tail",
+      "type": "bullets",
+      "title": "The rest of the list",
+      "items": [
+        "Explainers & education has {{series.categories[Explainers & education]}} works.",
+        "Music, editing & production has {{series.categories[Music, editing & production]}} works."
+      ],
+      "narration": [
+        {
+          "text": "Explainers & education has {{series.categories[Explainers & education]}} works.",
+          "say": "Explainers and education has {{series.categories[Explainers & education]}} works."
+        },
+        {
+          "text": "Music, editing & production has {{series.categories[Music, editing & production]}} works.",
+          "say": "Music, editing and production has {{series.categories[Music, editing & production]}} works."
+        }
+      ]
+    },
+    {
+      "id": "close",
+      "type": "outro",
+      "headline": "{{facts.total}} works, eight types.",
+      "sub": "A wide range, from comparisons to music.",
+      "narration": [
+        "AI video work is broad, and still uneven."
+      ]
+    }
+  ]
+}
