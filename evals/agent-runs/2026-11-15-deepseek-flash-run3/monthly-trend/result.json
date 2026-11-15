@@ -1,0 +1,69 @@
+{
+  "case": "monthly-trend",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 36.4
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "77f2c66998bf",
+      "backend": "deepseek",
+      "ttsBilled": 272
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "77f2c66998bf",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 27,
+    "toolUses": 26,
+    "wallSec": 286,
+    "costUsd": 0.0327,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 50968,
+      "output": 38112,
+      "cacheRead": 738944,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 272,
+    "costUsd": 0.0122
+  },
+  "costUsd": 0.045,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "草稿渲染的自检全部通过。报告如下。\n\n**结论：通过。** 共跑了 2 轮管线：第 1 轮 `--no-video` 文字层检查一次通过，第 2 轮 `--draft` 渲染含画面、响度、停顿、听写共 18 项检查全部通过，片长 36.4 秒（简报要求 35 秒左右，规格允许 20–60 秒）。\n\n首轮写入了 `task/film.json`（开场标题 → 折线图 → 收尾共三场，数字全部用 `{{series.monthly[…]}}` 和 `{\"$\": \"series.monthly\"}` 引用）和 `task/scenes.js`（自定义 `line` 场景：12 个月折线、零基线刻度、1/9/10/11 月四个数值标签，峰值 11 月用强调色）。两轮之间没有返工，未修改任何文件。\n\n简报的各项要求都已满足：折线呈现 12 个月走势，四个数量标在图上，旁白讲到了 1 月 42、9 月 149、10 月 418 和全年最高 11 月 531，来源固定显示“示例数据（虚构，仅用于评测）”。按约定流程到此为止，未再出成片画质的 `out/film.mp4`。",
+  "outcome": "passed"
+}

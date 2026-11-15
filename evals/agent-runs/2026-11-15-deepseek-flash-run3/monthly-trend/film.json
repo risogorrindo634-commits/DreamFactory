@@ -1,0 +1,47 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "{{facts.year}} 年每月新增作品",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "示例数据 · {{facts.year}}",
+      "headline": "代码生成作品在加速吗",
+      "sub": "看这个社区每月的新增数量",
+      "narration": [
+        "{{facts.year}} 年，代码生成作品在加速吗？",
+        "先看这个社区每月的新增数量。"
+      ]
+    },
+    {
+      "id": "trend",
+      "type": "line",
+      "title": "{{facts.year}} 年每月新增作品",
+      "sub": "代码生成作品，单位：件",
+      "series": { "$": "series.monthly" },
+      "annotate": ["1月", "9月", "10月"],
+      "narration": [
+        "1 月是 {{series.monthly[1月]}} 件，起点很低。",
+        "此后缓慢上升，6 月到 {{series.monthly[6月]}} 件。",
+        "9 月是 {{series.monthly[9月]}} 件，还不算快。",
+        "10 月突然跳到 {{series.monthly[10月]}} 件。",
+        "11 月继续涨到 {{series.monthly[11月]}} 件，全年最高。",
+        "12 月回落到 {{series.monthly[12月]}} 件。"
+      ]
+    },
+    {
+      "id": "close",
+      "type": "outro",
+      "headline": "真正的跳升在秋天",
+      "sub": "这是虚构的示例数据，只用来看走势",
+      "narration": [
+        "真正的跳升，发生在 10 月。",
+        "这是虚构的示例数据，只用来演示走势。"
+      ]
+    }
+  ]
+}
