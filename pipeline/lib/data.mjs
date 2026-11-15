@@ -115,7 +115,7 @@ export function allowedNumbers(data) {
   const set = new Set();
   const walk = (v) => {
     if (typeof v === 'number') set.add(v);
-    else if (typeof v === 'string') extractNumbers(v).forEach((n) => set.add(n.value));
+    else if (typeof v === 'string') [...extractNumbers(v), ...extractChineseNumbers(v)].forEach((n) => set.add(n.value));
     else if (Array.isArray(v)) {
       if (v.length && v.every((it) => it && typeof it === 'object' && typeof it.value === 'number')) {
         const total = v.reduce((a, it) => a + it.value, 0);
@@ -144,6 +144,62 @@ export function extractNumbers(text) {
     const next = text[m.index + m[0].length] ?? '';
     if (/[A-Za-z]/.test(prev) || /[A-Za-z]/.test(next)) continue;
     out.push({ raw: m[0], value: Number(m[0].replace(/,/g, '')) });
+  }
+  return out;
+}
+
+const CN_DIGIT = { 零: 0, 〇: 0, 一: 1, 二: 2, 两: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9 };
+const CN_UNIT = { 十: 10, 百: 100, 千: 1000 };
+
+/** "两千七百九十三" -> 2793, "十七" -> 17, "二七九三" -> 2793, "五点五" -> 5.5 */
+export function chineseNumber(s) {
+  const [whole, frac] = s.split('点');
+  let value = 0;
+  if (!/[十百千万亿]/.test(whole)) {
+    value = whole ? Number([...whole].map((c) => CN_DIGIT[c]).join('')) : 0;
+  } else {
+    let total = 0;
+    let section = 0;
+    let digit = 0;
+    for (const c of whole) {
+      if (c in CN_DIGIT) digit = CN_DIGIT[c];
+      else if (c in CN_UNIT) {
+        section += (digit || 1) * CN_UNIT[c];
+        digit = 0;
+      } else {
+        total += (section + digit) * (c === '万' ? 1e4 : 1e8);
+        section = 0;
+        digit = 0;
+      }
+    }
+    value = total + section + digit;
+  }
+  if (frac) value += Number(`0.${[...frac].map((c) => CN_DIGIT[c] ?? '').join('')}`);
+  return value;
+}
+
+// These read as words, not as quantities.
+const CN_NOT_A_NUMBER = new Set(['千万', '万一', '万万', '一一', '一五一十', '三三两两']);
+
+/**
+ * Quantities written in Chinese characters. Counted: a numeral with a unit ("两千七百", "十七"), a decimal
+ * ("四点五"), three or more digits in a row ("二〇二六"), and a single numeral in front of 倍 or 成
+ * ("四倍" is 4, "九成" is 90). A lone numeral in ordinary prose ("三件事", "第二", "两年") is not counted.
+ */
+export function extractChineseNumbers(text) {
+  const out = [];
+  for (const m of text.matchAll(/[零〇一二两三四五六七八九十百千万亿点]+/g)) {
+    const raw = m[0].replace(/^点+|点+$/g, '');
+    if (!raw || CN_NOT_A_NUMBER.has(raw)) continue;
+    const next = m[0].endsWith('点') ? '' : text[m.index + m[0].length] ?? '';
+    const digits = [...raw].every((c) => c in CN_DIGIT);
+    let value = null;
+    if ([...raw].length === 1) {
+      if (next === '倍' || next === '成') value = chineseNumber(raw) * (next === '成' ? 10 : 1);
+    } else if (raw.includes('点') || !digits || [...raw].length >= 3) {
+      value = chineseNumber(raw);
+    }
+    if (value !== null && Number.isFinite(value)) out.push({ raw: [...raw].length === 1 ? raw + next : raw, value });
   }
   return out;
 }

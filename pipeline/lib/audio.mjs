@@ -17,7 +17,7 @@ export async function measureLevels(file) {
   return { lufs, peak };
 }
 
-export async function mixNarration({ timeline, outDir }) {
+export async function mixNarration({ timeline, outDir, faultGainDb }) {
   const total = Math.round(timeline.duration * RATE);
   const mix = new Float32Array(total);
   let clips = 0;
@@ -63,6 +63,12 @@ export async function mixNarration({ timeline, outDir }) {
     if (over > 0) limitDb -= over;
   }
   fs.rmSync(raw, { force: true });
+  if (faultGainDb) {
+    // Evals only: knock the finished mix off its target, to show that the loudness check notices.
+    fs.renameSync(file, raw);
+    await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', raw, '-af', `volume=${faultGainDb}dB`, '-ar', String(RATE), '-ac', '1', '-c:a', 'pcm_s16le', file]);
+    fs.rmSync(raw, { force: true });
+  }
   // Keep the track exactly as long as the timeline.
   const { samples } = readWav(file);
   if (samples.length !== total) {

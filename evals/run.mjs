@@ -86,7 +86,12 @@ const planted = await pool(defectRuns, async (d) => {
     data: readJson(path.join(dir, 'data.json')),
     expect: readJson(path.join(dir, 'expect.json')),
     scenes: fs.existsSync(scenesFile) ? fs.readFileSync(scenesFile, 'utf8') : null,
+    faults: {}, // a stage of the pipeline broken on purpose, for checks that no film content can trip
   };
+  if (d.platform && d.platform !== process.platform) {
+    console.log(`跳过   ${d.id}  ← 这条缺陷只能在 ${d.platform} 上注入`);
+    return { ...d, ok: null, missed: [], extra: [], unjudged: `只能在 ${d.platform} 上注入` };
+  }
   try {
     for (const op of d.ops) {
       if (op.file !== 'scenes') applyOp(files[op.file], op);
@@ -105,7 +110,7 @@ const planted = await pool(defectRuns, async (d) => {
     const skippedChecks = d.expectFail.filter((id) => r.checks.find((c) => c.id === id)?.status === 'skip');
     if (skippedChecks.length) {
       console.log(`跳过   ${d.id}  ← 本次运行跳过了 ${skippedChecks.join('、')}`);
-      return { ...d, ok: null, missed: [], extra: [], skippedChecks };
+      return { ...d, ok: null, missed: [], extra: [], unjudged: `${skippedChecks.join('、')} 被跳过` };
     }
     const missed = d.expectFail.filter((id) => !r.failed.includes(id));
     const extra = r.failed.filter((id) => !d.expectFail.includes(id));
@@ -138,7 +143,7 @@ const cell = (s) => String(s).replace(/\|/g, '\\|');
 const md = [
   '# 评测基线',
   '',
-  `干净用例误报 ${falseAlarms}/${clean.length}，缺陷检出 ${caught}/${judged.length}${passedOver ? `，另有 ${passedOver} 条因对应的检查被跳过而没有判定` : ''}。`,
+  `干净用例误报 ${falseAlarms}/${clean.length}，缺陷检出 ${caught}/${judged.length}${passedOver ? `，另有 ${passedOver} 条没有判定` : ''}。`,
   '',
   `运行环境：Node ${process.version} · 语音后端 ${backend} · 草稿画质 · ${new Date().toISOString().slice(0, 10)}`,
   '',
@@ -156,7 +161,7 @@ const md = [
   '',
   '| 缺陷 | 改了什么 | 应失败的检查 | 结果 | 连带失败的检查 |',
   '| --- | --- | --- | --- | --- |',
-  ...planted.map((d) => `| ${d.id} | ${cell(d.title)} | ${d.expectError ? '拒绝运行并报错' : d.expectFail.join('、')} | ${d.ok === null ? `未判定：${d.skippedChecks.join('、')} 被跳过` : d.ok ? '抓到' : `漏检：${d.missed.join('、')}`} | ${d.extra.join('、')} |`),
+  ...planted.map((d) => `| ${d.id} | ${cell(d.title)} | ${d.expectError ? '拒绝运行并报错' : d.expectFail.join('、')} | ${d.ok === null ? `未判定：${d.unjudged}` : d.ok ? '抓到' : `漏检：${d.missed.join('、')}`} | ${d.extra.join('、')} |`),
   '',
   '## 各项检查的覆盖',
   '',

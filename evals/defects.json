@@ -354,6 +354,51 @@
     ]
   },
   {
+    "id": "derived-multiple-in-chinese",
+    "title": "数据里没有的倍数，自己算出来写成汉字：四点五倍",
+    "base": "asks-for-derived-number",
+    "ops": [
+      {
+        "file": "film",
+        "set": "scenes[3].narration[1]",
+        "value": "产量增长到原来的四点五倍。"
+      }
+    ],
+    "expectFail": [
+      "data-accuracy"
+    ]
+  },
+  {
+    "id": "derived-share-in-chinese",
+    "title": "数据里没有的降幅，写在画面上：成本降了九成",
+    "base": "asks-for-derived-number",
+    "ops": [
+      {
+        "file": "film",
+        "set": "scenes[3].sub",
+        "value": "一年里，单片成本降了九成"
+      }
+    ],
+    "expectFail": [
+      "data-accuracy"
+    ]
+  },
+  {
+    "id": "number-wrong-in-chinese",
+    "title": "旁白把总数写成汉字，而且写错了：两千八百",
+    "base": "works-by-category",
+    "ops": [
+      {
+        "file": "film",
+        "set": "scenes[0].narration[1]",
+        "value": "一份公开清单，收录了两千八百件作品。"
+      }
+    ],
+    "expectFail": [
+      "data-accuracy"
+    ]
+  },
+  {
     "id": "long-list-overflow",
     "title": "把 24 个品类全部塞进一张图",
     "base": "top-of-long-list",
@@ -512,6 +557,66 @@
     ]
   },
   {
+    "id": "chart-label-on-line",
+    "title": "折线图的数值标签压在折线和圆点上",
+    "base": "monthly-trend",
+    "ops": [
+      {
+        "file": "scenes",
+        "replace": "y: y(it.value) - 24,",
+        "with": "y: y(it.value) + 12,"
+      }
+    ],
+    "expectFail": [
+      "crowding"
+    ]
+  },
+  {
+    "id": "chart-label-touches-tick",
+    "title": "数值标签紧贴纵轴刻度，150 和 42 读起来像 15042",
+    "base": "monthly-trend",
+    "ops": [
+      {
+        "file": "scenes",
+        "replace": "label.textContent = fmt(it.value);",
+        "with": "label.textContent = fmt(it.value);\n        if (i === 0) {\n          label.setAttribute('text-anchor', 'start');\n          label.setAttribute('x', String(box.left - 16));\n          label.setAttribute('y', String(y(top / 4) + 9));\n        }"
+      }
+    ],
+    "expectFail": [
+      "crowding"
+    ]
+  },
+  {
+    "id": "chart-label-covered",
+    "title": "最高点的数值标签被后画的图形整个盖住，画面上看不见",
+    "base": "monthly-trend",
+    "ops": [
+      {
+        "file": "scenes",
+        "replace": "label.textContent = fmt(it.value);",
+        "with": "label.textContent = fmt(it.value);\n        if (hot) svg('rect', { x: x(i) - 70, y: y(it.value) - 68, width: 140, height: 50, style: 'fill: var(--bg)' }, chart);"
+      }
+    ],
+    "expectFail": [
+      "crowding"
+    ]
+  },
+  {
+    "id": "chart-box-over-tick",
+    "title": "图表里一块底框盖住了半个纵轴刻度",
+    "base": "monthly-trend",
+    "ops": [
+      {
+        "file": "scenes",
+        "replace": "label.textContent = fmt(it.value);",
+        "with": "label.textContent = fmt(it.value);\n        if (i === 0) svg('rect', { x: box.left - 46, y: y(top / 4) - 30, width: 70, height: 40, rx: 8, style: 'fill: var(--bar)' }, chart);"
+      }
+    ],
+    "expectFail": [
+      "crowding"
+    ]
+  },
+  {
     "id": "voice-says-something-else",
     "title": "字幕是一句话，语音念的是另一句话",
     "base": "works-by-category",
@@ -565,6 +670,52 @@
     "expectFail": [
       "data-accuracy",
       "asr"
+    ]
+  },
+  {
+    "id": "machine-without-cjk-font",
+    "title": "渲染的机器上没有中文字体，中文全部显示成方框",
+    "base": "twenty-seconds",
+    "platform": "linux",
+    "ops": [
+      {
+        "file": "faults",
+        "set": "noCjkFonts",
+        "value": true
+      }
+    ],
+    "expectFail": [
+      "fonts"
+    ]
+  },
+  {
+    "id": "mix-too-loud",
+    "title": "混音出错，旁白整体响了 6 分贝，峰值过载",
+    "base": "twenty-seconds",
+    "ops": [
+      {
+        "file": "faults",
+        "set": "mixGainDb",
+        "value": 6
+      }
+    ],
+    "expectFail": [
+      "audio-levels"
+    ]
+  },
+  {
+    "id": "mix-too-quiet",
+    "title": "混音出错，旁白整体轻了 6 分贝",
+    "base": "twenty-seconds",
+    "ops": [
+      {
+        "file": "faults",
+        "set": "mixGainDb",
+        "value": -6
+      }
+    ],
+    "expectFail": [
+      "audio-levels"
     ]
   }
 ]

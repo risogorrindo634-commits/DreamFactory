@@ -3,15 +3,51 @@
 // Text is read back from the live DOM, so checks see exactly what a viewer would.
 import { createRequire } from 'node:module';
 import { spawn } from 'node:child_process';
+import fs from 'node:fs';
 import path from 'node:path';
 import { startServer } from './server.mjs';
 
 const require = createRequire(import.meta.url);
 
-export async function openStage({ outDir, vertical, draft = false }) {
+// With this class on <html> every glyph turns transparent and nothing moves: a screenshot then shows
+// only what lies behind and around the text. Borders and shapes drawn in the text colour stay.
+const NO_TEXT_CSS = `
+html.df-no-text *, html.df-no-text *::before, html.df-no-text *::after {
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke-color: transparent !important;
+  text-decoration-color: transparent !important;
+  text-shadow: none !important;
+}
+html.df-no-text svg text, html.df-no-text svg tspan, html.df-no-text svg textPath {
+  fill: transparent !important;
+  stroke: transparent !important;
+}`;
+
+// Evals only: a font setup that hides every font able to draw Chinese, as on a machine that has none.
+// It works through fontconfig, which is what the browser asks for fonts on Linux.
+const NO_CJK_FONTS = `<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+  <include ignore_missing="yes">/etc/fonts/fonts.conf</include>
+  <selectfont>
+    <rejectfont>
+      <pattern><patelt name="charset"><charset><int>0x6c38</int></charset></patelt></pattern>
+    </rejectfont>
+  </selectfont>
+</fontconfig>
+`;
+
+export async function openStage({ outDir, vertical, draft = false, noCjkFonts = false }) {
   const { chromium } = require('playwright');
   const server = await startServer({ '/runtime/': vertical.runtimeDir, '/film/': path.join(outDir, 'build') });
-  const browser = await chromium.launch();
+  const launch = {};
+  if (noCjkFonts) {
+    if (process.platform !== 'linux') throw new Error('fonts can only be taken away on Linux');
+    const conf = path.join(outDir, 'build', 'no-cjk-fonts.conf');
+    fs.writeFileSync(conf, NO_CJK_FONTS);
+    launch.env = { ...process.env, FONTCONFIG_FILE: conf };
+  }
+  const browser = await chromium.launch(launch);
   const scale = draft ? 0.5 : 1;
   const context = await browser.newContext({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: scale });
   const page = await context.newPage();
@@ -25,6 +61,7 @@ export async function openStage({ outDir, vertical, draft = false }) {
     await server.close();
     throw new Error(`the film page did not become ready${errors.length ? `: ${errors.join('; ')}` : ''}`);
   }
+  await page.addStyleTag({ content: NO_TEXT_CSS });
   return {
     page,
     scale,
@@ -75,8 +112,14 @@ function readTexts() {
     const boxEl = el.closest('[data-df-box]');
     const b = boxEl ? boxEl.getBoundingClientRect() : null;
     const sceneEl = el.closest('[data-scene]');
+    // Pieces of one run of text sit side by side by design: inline elements share their block's run.
+    // An SVG <text> is placed by coordinates and is a run of its own.
+    let flowEl = el instanceof SVGElement ? el.closest('text') || el : el;
+    while (!(flowEl instanceof SVGElement) && flowEl.parentElement && getComputedStyle(flowEl).display.startsWith('inline')) flowEl = flowEl.parentElement;
+    if (!ids.has(flowEl)) ids.set(flowEl, ++window.__dfSeq);
     out.push({
       id: ids.get(el),
+      flow: ids.get(flowEl),
       text,
       role,
       opacity: Math.round(opacity * 1000) / 1000,
@@ -113,21 +156,26 @@ function readMarks() {
   return out;
 }
 
-/** Runs in the page: contrast of each text against the pixels just outside its box, from a screenshot. */
-async function measureContrast({ png, items, scale }) {
-  const blob = await (await fetch(`data:image/png;base64,${png}`)).blob();
-  const bmp = await createImageBitmap(blob);
-  const canvas = new OffscreenCanvas(bmp.width, bmp.height);
-  const g = canvas.getContext('2d', { willReadFrequently: true });
-  g.drawImage(bmp, 0, 0);
-  const W = bmp.width;
-  const H = bmp.height;
-  const px = g.getImageData(0, 0, W, H).data;
-  const lin = (v) => {
-    v /= 255;
-    return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+/**
+ * Runs in the page, on two screenshots of one moment: the frame as shown, and the same frame with the
+ * glyphs made transparent. For each text, in the order given:
+ *   ratio  - contrast against the pixels just outside its box
+ *   behind - the share of its box where, with the glyphs gone, something stands out from the box's own
+ *            background: a line, a shape or the edge of a shape running through the text
+ *   ink    - the share of its box that the glyphs actually change; zero when the text cannot be seen
+ */
+async function measurePixels({ png, plate, items, scale }) {
+  const load = async (b64) => {
+    const bmp = await createImageBitmap(await (await fetch(`data:image/png;base64,${b64}`)).blob());
+    const g = new OffscreenCanvas(bmp.width, bmp.height).getContext('2d', { willReadFrequently: true });
+    g.drawImage(bmp, 0, 0);
+    return { px: g.getImageData(0, 0, bmp.width, bmp.height).data, W: bmp.width, H: bmp.height };
   };
-  const lum = (c) => 0.2126 * lin(c[0]) + 0.7152 * lin(c[1]) + 0.0722 * lin(c[2]);
+  const { px, W, H } = await load(png);
+  const back = (await load(plate)).px;
+  const LIN = Float64Array.from({ length: 256 }, (_, v) => (v / 255 <= 0.03928 ? v / 255 / 12.92 : ((v / 255 + 0.055) / 1.055) ** 2.4));
+  const lum = (c) => 0.2126 * LIN[Math.round(c[0])] + 0.7152 * LIN[Math.round(c[1])] + 0.0722 * LIN[Math.round(c[2])];
+  const lumAt = (data, i) => 0.2126 * LIN[data[i]] + 0.7152 * LIN[data[i + 1]] + 0.0722 * LIN[data[i + 2]];
   const median = (a) => a.sort((p, q) => p - q)[a.length >> 1];
   return items.map((it) => {
     const x0 = Math.round(it.x * scale) - 2;
@@ -150,13 +198,35 @@ async function measureContrast({ png, items, scale }) {
       take(x0, y);
       take(x1, y);
     }
-    if (!ch[0].length) return { id: it.id, ratio: null };
+    if (!ch[0].length) return { ratio: null, behind: null, ink: null };
     const bg = ch.map(median);
     const [r, gg, b, a = 1] = (it.color.match(/[\d.]+/g) || []).map(Number);
     const fg = [r, gg, b].map((v, i) => v * a + bg[i] * (1 - a));
     const l1 = lum(fg);
     const l2 = lum(bg);
-    return { id: it.id, ratio: Math.round(((Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05)) * 100) / 100 };
+    const ratio = Math.round(((Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05)) * 100) / 100;
+
+    // Inside the box. Large boxes are read on a coarser grid; a few thousand pixels say enough.
+    const bx0 = Math.max(0, Math.floor(it.x * scale));
+    const by0 = Math.max(0, Math.floor(it.y * scale));
+    const bx1 = Math.min(W, Math.ceil((it.x + it.w) * scale));
+    const by1 = Math.min(H, Math.ceil((it.y + it.h) * scale));
+    const step = Math.max(1, Math.floor(Math.sqrt(((bx1 - bx0) * (by1 - by0)) / 6000)));
+    const at = [];
+    for (let y = by0; y < by1; y += step) for (let x = bx0; x < bx1; x += step) at.push((y * W + x) * 4);
+    if (!at.length) return { ratio, behind: null, ink: null };
+    const own = [0, 1, 2].map((k) => median(at.map((i) => back[i + k])));
+    const ownLum = lum(own);
+    let standsOut = 0;
+    let changed = 0;
+    for (const i of at) {
+      const l = lumAt(back, i);
+      const contrast = (Math.max(l, ownLum) + 0.05) / (Math.min(l, ownLum) + 0.05);
+      const far = Math.max(Math.abs(back[i] - own[0]), Math.abs(back[i + 1] - own[1]), Math.abs(back[i + 2] - own[2]));
+      if (contrast >= 1.5 || far >= 80) standsOut++;
+      if (Math.max(Math.abs(px[i] - back[i]), Math.abs(px[i + 1] - back[i + 1]), Math.abs(px[i + 2] - back[i + 2])) > 24) changed++;
+    }
+    return { ratio, behind: Math.round((standsOut / at.length) * 1000) / 1000, ink: Math.round((changed / at.length) * 1000) / 1000 };
   });
 }
 
@@ -205,7 +275,7 @@ export const SAMPLE_STEP = 0.25;
 
 /**
  * Walk the film once: read text on a fixed grid (plus the midpoint of every narration line and
- * scene), measure contrast once a second, read data marks once each scene has settled, tile a
+ * scene), measure contrast and what lies behind each text once a second, read data marks once each scene has settled, tile a
  * contact sheet for the agent to look at, and redraw a few moments to see that they repeat.
  */
 export async function sampleFilm(stage, timeline, { contactFile } = {}) {
@@ -250,9 +320,15 @@ export async function sampleFilm(stage, timeline, { contactFile } = {}) {
       const settled = texts.filter((x) => x.opacity >= 0.95 && x.role !== 'animating');
       if (settled.length) {
         const png = (await stage.page.screenshot({ type: 'png' })).toString('base64');
-        const ratios = await stage.page.evaluate(measureContrast, { png, items: settled, scale: stage.scale });
-        const byId = new Map(ratios.map((r) => [r.id, r.ratio]));
-        for (const x of settled) x.contrast = byId.get(x.id) ?? null;
+        await stage.page.evaluate(() => document.documentElement.classList.add('df-no-text'));
+        const plate = (await stage.page.screenshot({ type: 'png' })).toString('base64');
+        await stage.page.evaluate(() => document.documentElement.classList.remove('df-no-text'));
+        const measured = await stage.page.evaluate(measurePixels, { png, plate, items: settled, scale: stage.scale });
+        settled.forEach((x, i) => {
+          x.contrast = measured[i].ratio;
+          x.behind = measured[i].behind;
+          x.ink = measured[i].ink;
+        });
       }
       if (sheet && Math.round(t) % sheetEvery === 0) {
         sheet.stdin.write(await stage.page.screenshot({ type: 'jpeg', quality: 85 }));

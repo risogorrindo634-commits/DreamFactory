@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { extractNumbers } from './data.mjs';
+import { chineseNumber, extractNumbers } from './data.mjs';
 import { deepseekKey, deepseekTranscribe } from './deepseek.mjs';
 import { retry, run } from './util.mjs';
 
@@ -50,41 +50,12 @@ export async function transcribe(files, lang) {
   return files.map((f) => fs.readFileSync(cached(f), 'utf8'));
 }
 
-const CN_DIGIT = { 零: 0, 〇: 0, 一: 1, 二: 2, 两: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9 };
-const CN_UNIT = { 十: 10, 百: 100, 千: 1000 };
 const EN_SMALL = Object.fromEntries(
   'zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen'.split(' ').map((w, i) => [w, i]),
 );
 const EN_TENS = Object.fromEntries('twenty thirty forty fifty sixty seventy eighty ninety'.split(' ').map((w, i) => [w, 20 + 10 * i]));
 const EN_SCALE = { thousand: 1e3, million: 1e6, billion: 1e9 };
 const EN_NUMBER_WORD = new RegExp(`\\b(${[...Object.keys(EN_SMALL), ...Object.keys(EN_TENS), ...Object.keys(EN_SCALE), 'hundred', 'percent'].join('|')})\\b`, 'g');
-
-/** "两千七百九十三" -> 2793, "十七" -> 17, "二七九三" -> 2793, "五点五" -> 5.5 */
-export function chineseNumber(s) {
-  const [whole, frac] = s.split('点');
-  let value = 0;
-  if (!/[十百千万亿]/.test(whole)) {
-    value = whole ? Number([...whole].map((c) => CN_DIGIT[c]).join('')) : 0;
-  } else {
-    let total = 0;
-    let section = 0;
-    let digit = 0;
-    for (const c of whole) {
-      if (c in CN_DIGIT) digit = CN_DIGIT[c];
-      else if (c in CN_UNIT) {
-        section += (digit || 1) * CN_UNIT[c];
-        digit = 0;
-      } else {
-        total += (section + digit) * (c === '万' ? 1e4 : 1e8);
-        section = 0;
-        digit = 0;
-      }
-    }
-    value = total + section + digit;
-  }
-  if (frac) value += Number(`0.${[...frac].map((c) => CN_DIGIT[c] ?? '').join('')}`);
-  return value;
-}
 
 /**
  * Numbers spoken in English, however the recognizer wrote them down. Each unbroken run of number words

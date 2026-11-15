@@ -40,7 +40,11 @@ export default {
       const dot = svg('circle', { cx: x(i), cy: y(it.value), r: hot ? 12 : 8, 'data-df-value': it.value, style: `fill: var(${hot ? '--accent' : '--text'})` }, chart);
       let label = null;
       if (labelled.has(it.label)) {
-        label = svg('text', { x: x(i), y: y(it.value) - 24, 'text-anchor': 'middle', style: `fill: var(${hot ? '--accent' : '--text'}); font-size: 36px; font-weight: 700` }, chart);
+        // A label sits above its point. Where the line climbs steeply to the next point it would run
+        // through the label, so there the label moves to the upper left of the point.
+        const next = items[i + 1];
+        const steep = next && (y(it.value) - y(next.value)) / (x(i + 1) - x(i)) > 0.4;
+        label = svg('text', { x: steep ? x(i) - 14 : x(i), y: y(it.value) - 24, 'text-anchor': steep ? 'end' : 'middle', style: `fill: var(${hot ? '--accent' : '--text'}); font-size: 36px; font-weight: 700` }, chart);
         label.textContent = fmt(it.value);
       }
       return { dot, label, at: x(i) };

@@ -8,7 +8,7 @@
 node pipeline/cli.mjs run <影片目录> --no-video   # 只做文字层检查，十几秒
 node pipeline/cli.mjs run <影片目录> --draft      # 草稿画质，带视频和声音检查
 node pipeline/cli.mjs run <影片目录>              # 成片
-node evals/run.mjs                                # 跑评测集，约四分钟
+node evals/run.mjs                                # 跑评测集，约五分钟
 node evals/run.mjs --only <用例或缺陷的 id>
 node evals/agent-run.mjs                          # 让模型无人值守做完每个用例，要花模型费用
 node evals/agent-run.mjs --provider deepseek      # 同上，模型换成 DeepSeek，需要 DEEPSEEK_API_KEY
@@ -37,6 +37,8 @@ node evals/agent-run.mjs --provider deepseek      # 同上，模型换成 DeepSe
 - 文字必须留在最近的 `data-df-box` 容器内，新场景要给会溢出的文字加上这个标记。
 - 代表数据的图形要带 `data-df-value`，`marks` 检查靠它核对图形与数值是否一致。
 - 缺陷可以改场景代码：`{"file": "scenes", "replace": "原文", "with": "改成"}`。改参考的 `scenes.js` 时要确认缺陷里引用的原文还在。
+- 有的检查守的是管线的一个环节，影片内容怎么改都触发不了（字体、响度）。这类缺陷直接弄坏那个环节：`{"file": "faults", "set": "mixGainDb", "value": 6}`。可用的故障见 `pipeline/film.mjs` 里 `faults` 的说明；只能在某个系统上注入的缺陷要写 `"platform"`。
+- 检查里的阈值要有出处。`crowding` 的三个阈值是在全部参考影片和 `evals/agent-runs/` 里历次交付的片子上量出来的，改之前先重量一遍。
 - 不引入 npm 依赖，除了 Playwright。在已经预装 Playwright 的云端环境里不要运行 `npm install`。
 - 语音供应商都在 `pipeline/lib/tts.mjs`，一个后端一个函数。新增后端后跑一遍评测，参考影片的片长会随语速变化，贴着时长上下限的要调整参考影片，不要放宽要求。
 - `auto` 选语音的顺序：有 DeepSeek 密钥时用 `deepseek`，否则 `edge`，再否则 `espeak`，最后是静音轨。听写核对同理：有密钥用 DeepSeek，否则用本机的 faster-whisper。
@@ -45,3 +47,4 @@ node evals/agent-run.mjs --provider deepseek      # 同上，模型换成 DeepSe
 - 没有网络时加 `--tts espeak`，这时听写核对会跳过，对应的缺陷记为“未判定”。
 - 无人值守评测接新的模型供应商，在 `evals/agent-run.mjs` 的 `PROVIDERS` 里加一项：兼容 Anthropic 接口的地址、密钥、默认模型和公布的单价。命令行自己报的费用只对它自家的模型准确。
 - 代码注释用英文，文档和报告用中文。
+- 改动直接提交并推送到 `main`，不另开分支，不开 PR。

@@ -1,5 +1,5 @@
 // Checks that read the film through its live page: what text is on screen, where, for how long.
-import { allowedNumbers, extractNumbers, getScalar, hasNumber } from '../lib/data.mjs';
+import { allowedNumbers, extractChineseNumbers, extractNumbers, getScalar, hasNumber } from '../lib/data.mjs';
 import { SAMPLE_STEP } from '../lib/stage.mjs';
 
 const SHOWN = 0.6; // opacity from which text counts as on screen
@@ -60,23 +60,25 @@ export const dataAccuracy = {
     const allowed = allowedNumbers(ctx.data);
     const problems = [];
     const seen = new Set();
-    const flag = (raw, where) => {
-      const key = `${raw}|${where}`;
-      if (seen.has(key)) return;
-      seen.add(key);
+    // One line per number and place: a text that stays on screen is reported once, at its first moment.
+    const flag = (raw, where, key = where) => {
+      if (seen.has(`${raw}|${key}`)) return;
+      seen.add(`${raw}|${key}`);
       problems.push(`数字 ${raw} 不在数据里：${where}`);
     };
+    // A number is a number however it is written: "四点五倍" is held to the data like "4.5 倍".
+    const numbersIn = (text) => [...extractNumbers(text), ...extractChineseNumbers(text)];
     for (const s of ctx.sampling.samples) {
       for (const x of s.texts) {
         if (!shown(x) || !isFact(x) || x.role === 'subtitle') continue;
-        for (const n of extractNumbers(x.text)) if (!hasNumber(allowed, n.value)) flag(n.raw, `画面「${clip(x.text)}」(${fmtT(s.t)})`);
+        for (const n of numbersIn(x.text)) if (!hasNumber(allowed, n.value)) flag(n.raw, `画面「${clip(x.text)}」(${fmtT(s.t)})`, `画面|${x.id}|${x.text}`);
       }
     }
     const lines = ctx.timeline.scenes.flatMap((sc) => sc.lines);
     for (const line of lines) {
-      for (const n of extractNumbers(line.display)) if (!hasNumber(allowed, n.value)) flag(n.raw, `旁白「${clip(line.display)}」`);
+      for (const n of numbersIn(line.display)) if (!hasNumber(allowed, n.value)) flag(n.raw, `旁白「${clip(line.display)}」`);
       if (line.speech === line.display) continue;
-      for (const n of extractNumbers(line.speech)) if (!hasNumber(allowed, n.value)) flag(n.raw, `念出来的旁白「${clip(line.speech)}」`);
+      for (const n of numbersIn(line.speech)) if (!hasNumber(allowed, n.value)) flag(n.raw, `念出来的旁白「${clip(line.speech)}」`);
     }
 
     // Required facts must be readable in the picture itself, not only in subtitles.
@@ -172,6 +174,73 @@ export const layout = {
       }
     }
     return result([...problems.values()], '没有出界、溢出或重叠的文字');
+  },
+};
+
+// From these shares of a text's box on, something is running through it, or it cannot be seen.
+// Measured on 54 films: built-in scenes read 0; a line grazing a label's corner reads up to 0.016,
+// a line or box edge through a label 0.05 and more; visible glyphs change at least 0.13 of their box.
+const CROSSED = 0.02;
+const UNSEEN = 0.004;
+// Unrelated texts closer than this share of the smaller font size read as one text.
+const ABUTTING = 0.15;
+
+export const crowding = {
+  id: 'crowding',
+  title: '拥挤：文字不被图形穿过或盖住，不和别的文字贴在一起',
+  tier: 'dom',
+  run(ctx) {
+    const problems = [];
+    // Once a second the sampler looks behind each settled text and at whether its glyphs show at all.
+    const seen = new Map();
+    for (const s of ctx.sampling.samples) {
+      for (const x of s.texts) {
+        if (x.behind == null || x.ink == null) continue;
+        const key = `${x.id}|${x.text}`;
+        const rec = seen.get(key) ?? { text: x.text, n: 0, crossed: 0, unseen: 0 };
+        rec.n++;
+        if (x.behind >= CROSSED && !rec.crossed++) rec.crossedAt = s.t;
+        // Text in a colour too close to its background is the contrast check's business.
+        if (x.ink < UNSEEN && x.contrast >= 1.5 && !rec.unseen++) rec.unseenAt = s.t;
+        seen.set(key, rec);
+      }
+    }
+    for (const rec of seen.values()) {
+      // One reading can catch a shape in mid-move. Two readings a second apart cannot.
+      const lasting = (k) => k >= 2 || (k === 1 && rec.n === 1);
+      if (lasting(rec.unseen) && rec.unseen * 2 >= rec.n) {
+        problems.push(`文字在画面上看不见，被别的图形盖住了：「${clip(rec.text)}」(${fmtT(rec.unseenAt)})`);
+      } else if (lasting(rec.crossed)) {
+        problems.push(`文字被线条或图形穿过：「${clip(rec.text)}」(${fmtT(rec.crossedAt)})`);
+      }
+    }
+    // Two unrelated texts side by side with no gap read as one: "100" next to "42" becomes "10042".
+    const pairs = new Map();
+    for (const s of ctx.sampling.samples) {
+      const on = s.texts.filter(shown);
+      for (let i = 0; i < on.length; i++) {
+        for (let j = i + 1; j < on.length; j++) {
+          const a = on[i];
+          const b = on[j];
+          if (a.flow === b.flow) continue;
+          const w = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+          const hgt = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+          if (hgt < 0.5 * Math.min(a.h, b.h)) continue; // not on one line
+          if (w > 0 && (w * hgt) / Math.min(a.w * a.h, b.w * b.h) > 0.15) continue; // an overlap: the layout check reports it
+          if (-w >= ABUTTING * Math.min(a.fontSize, b.fontSize)) continue;
+          const [left, right] = a.x <= b.x ? [a, b] : [b, a];
+          const key = `${left.id}|${left.text}|${right.id}|${right.text}`;
+          const rec = pairs.get(key) ?? { left: left.text, right: right.text, n: 0, t: s.t };
+          rec.n++;
+          pairs.set(key, rec);
+        }
+      }
+    }
+    for (const rec of pairs.values()) {
+      if (rec.n * SAMPLE_STEP < 1) continue; // passing by during an animation
+      problems.push(`两段文字贴在一起，中间没有空隙：「${clip(rec.left, 14)}」和「${clip(rec.right, 14)}」(${fmtT(rec.t)})`);
+    }
+    return result(problems, '没有被图形穿过、盖住或贴在一起的文字');
   },
 };
 

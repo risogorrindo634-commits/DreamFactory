@@ -7,6 +7,7 @@ export const CHECKS = [
   dom.citation,
   dom.readability,
   dom.layout,
+  dom.crowding,
   dom.contrast,
   dom.subtitles,
   dom.sync,
