@@ -153,7 +153,7 @@ node evals/agent-run.mjs --provider deepseek
 | Haiku 5.5 | 全部 7 个用例，[第四遍](evals/agent-runs/2026-11-14-claude-haiku-5-5-run4/SUMMARY.md)，最终版脚本 | 7 | 7 | 0 | 0.013 美元 |
 | DeepSeek `deepseek-flash` | [全部 7 个用例](evals/agent-runs/2026-11-15-deepseek-flash/SUMMARY.md)，DeepSeek 语音和听写 | 7 | 7 | 0 | 0.037 美元，其中语音 0.013 |
 | DeepSeek `deepseek-flash` | [全部 7 个用例，第二遍](evals/agent-runs/2026-11-15-deepseek-flash-run2/SUMMARY.md)，加了拥挤检查和汉字数字核对 | 7 | 7 | 0 | 0.040 美元，其中语音 0.014 |
-| DeepSeek `deepseek-flash` | [折线图用例，第三遍](evals/agent-runs/2026-11-15-deepseek-flash-run3/SUMMARY.md)，拥挤检查补漏之后 | 1 | 1 | 0 | 0.045 美元，其中语音 0.014 |
+| DeepSeek `deepseek-flash` | [折线图用例，第三遍](evals/agent-runs/2026-11-15-deepseek-flash-run3/SUMMARY.md)，拥挤检查补漏之后 | 1 | 1 | 0 | 0.045 美元，其中语音 0.012 |
 
 怎么读这张表：
 
