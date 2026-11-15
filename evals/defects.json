@@ -547,5 +547,24 @@
       "data-accuracy",
       "asr"
     ]
+  },
+  {
+    "id": "voice-says-wrong-number-english",
+    "title": "英文版字幕写 233，语音念成 323",
+    "base": "works-by-category-en",
+    "ops": [
+      {
+        "file": "film",
+        "set": "scenes[2].narration[3]",
+        "value": {
+          "text": "Explainers sit near the bottom with {{series.categories[Explainers & education]}}.",
+          "say": "Explainers sit near the bottom with 323."
+        }
+      }
+    ],
+    "expectFail": [
+      "data-accuracy",
+      "asr"
+    ]
   }
 ]

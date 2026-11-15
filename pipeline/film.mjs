@@ -93,6 +93,8 @@ export async function runFilm(filmDir, opts = {}) {
       rendered: report.rendered,
       durationSec: timeline.duration,
       wallSec: report.wallSec,
+      backend,
+      ttsBilled: timeline.ttsBilled,
       costUsd: opts.costUsd ?? null,
       intervention: opts.intervention ?? null,
     };

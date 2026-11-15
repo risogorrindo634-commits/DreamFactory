@@ -43,19 +43,24 @@ export async function mixNarration({ timeline, outDir }) {
   if (!Number.isFinite(before.lufs)) return { file, voiced: false };
 
   // Raise the voice to the target through a limiter: speech peaks sit far above its average level,
-  // so plain gain would stop short. The limiter trims loudness a little, hence the second pass.
+  // so plain gain would stop short. The limiter trims loudness a little, hence the repeated passes.
+  // It holds sample peaks, while the meter reads true peaks, which land higher by an amount that depends
+  // on the voice: start 1 dB under the ceiling and lower the limit by whatever still gets past.
   const raw = path.join(outDir, 'audio', 'mix.raw.wav');
   fs.renameSync(file, raw);
-  const limit = 10 ** ((PEAK_CEILING - 1) / 20); // 1 dB under the ceiling: the meter reads true peak
+  let limitDb = PEAK_CEILING - 1;
   let gainDb = LOUDNESS_TARGET - before.lufs;
-  for (let pass = 0; pass < 4; pass++) {
+  for (let pass = 0; pass < 6; pass++) {
     const levelIn = Math.min(64, 10 ** (gainDb / 20));
     await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', raw,
-      '-af', `alimiter=level_in=${levelIn}:limit=${limit}:attack=5:release=60:level=false`,
+      '-af', `alimiter=level_in=${levelIn}:limit=${10 ** (limitDb / 20)}:attack=5:release=60:level=false`,
       '-ar', String(RATE), '-ac', '1', '-c:a', 'pcm_s16le', file]);
-    const off = LOUDNESS_TARGET - (await measureLevels(file)).lufs;
-    if (Math.abs(off) <= 0.5) break;
-    gainDb += off;
+    const after = await measureLevels(file);
+    const off = LOUDNESS_TARGET - after.lufs;
+    const over = after.peak - PEAK_CEILING;
+    if (Math.abs(off) <= 0.5 && over <= 0) break;
+    if (Math.abs(off) > 0.5) gainDb += off;
+    if (over > 0) limitDb -= over;
   }
   fs.rmSync(raw, { force: true });
   // Keep the track exactly as long as the timeline.

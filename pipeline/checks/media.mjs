@@ -1,6 +1,6 @@
 // Checks that read the encoded film and its audio mix.
 import { LOUDNESS_TARGET, measureLevels } from '../lib/audio.mjs';
-import { asrAvailable, compareSpeech, transcribe } from '../lib/asr.mjs';
+import { compareSpeech, pickRecognizer, transcribe } from '../lib/asr.mjs';
 import { run } from '../lib/util.mjs';
 
 const fmtT = (t) => `${t.toFixed(1)}s`;
@@ -85,7 +85,8 @@ export const asr = {
     const skip = (summary) => ({ status: 'skip', summary, details: [] });
     if (!ctx.audio.voiced) return skip('没有人声（静音语音后端）');
     if (ctx.timeline.backend === 'espeak') return skip('espeak 的发音连语音识别都听不懂，只用来占位，不做核对');
-    if (!(await asrAvailable())) return skip('没有安装语音识别，运行 pip install faster-whisper 后可用');
+    const who = await pickRecognizer();
+    if (!who) return skip('没有可用的语音识别：设置 DEEPSEEK_API_KEY，或运行 pip install faster-whisper');
     const lines = ctx.timeline.scenes.flatMap((sc) => sc.lines);
     const heard = await transcribe(lines.map((l) => l.audio), ctx.resolved.lang);
     const clip = (t) => (t.length > 26 ? `${t.slice(0, 26)}…` : t);
@@ -101,7 +102,7 @@ export const asr = {
     });
     return {
       status: problems.length ? 'fail' : 'pass',
-      summary: problems.length ? `${problems.length} 处问题` : `${lines.length} 句旁白，听到的内容和数字都与字幕一致`,
+      summary: problems.length ? `${problems.length} 处问题` : `${lines.length} 句旁白，听到的内容和数字都与字幕一致（${who === 'deepseek' ? 'DeepSeek' : 'faster-whisper'} 听写）`,
       details: problems.slice(0, 12),
     };
   },

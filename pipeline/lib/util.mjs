@@ -22,6 +22,18 @@ export function hasCommand(cmd) {
   }
 }
 
+/** Try again after a short, growing pause. For calls to online services. */
+export async function retry(fn, times) {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await fn();
+    } catch (e) {
+      if (attempt >= times) throw e;
+      await new Promise((r) => setTimeout(r, 800 * attempt));
+    }
+  }
+}
+
 /** Run a command to completion. Rejects with the tail of stderr on a non-zero exit. */
 export function run(cmd, args, { input, binary = false } = {}) {
   return new Promise((resolve, reject) => {

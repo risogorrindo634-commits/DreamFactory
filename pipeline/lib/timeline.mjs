@@ -12,10 +12,12 @@ export async function buildTimeline({ resolved, outDir, backend, vertical, fps =
   const audioDir = path.join(outDir, 'audio');
   const scenes = [];
   let t = 0;
+  let billed = 0; // what the speech supplier charged for lines synthesized in this run, in its own unit
   for (const scene of resolved.scenes) {
     const clips = [];
     for (const line of scene.lines) {
       clips.push(await synth({ backend, lang: resolved.lang, voice: resolved.voice?.name, rate: resolved.voice?.rate, text: line.speech }));
+      billed += clips.at(-1).billed;
     }
     const speech = clips.reduce((a, c) => a + c.duration, 0) + GAP * Math.max(0, clips.length - 1);
     const natural = clips.length ? LEAD + speech + TAIL : 0;
@@ -39,5 +41,5 @@ export async function buildTimeline({ resolved, outDir, backend, vertical, fps =
   // Land the end on a frame boundary.
   const duration = Math.ceil(t * fps - 1e-6) / fps;
   if (scenes.length) scenes[scenes.length - 1].end = round3(duration);
-  return { fps, width: 1920, height: 1080, duration: round3(duration), backend, scenes };
+  return { fps, width: 1920, height: 1080, duration: round3(duration), backend, ttsBilled: billed, scenes };
 }

@@ -59,14 +59,17 @@ node pipeline/cli.mjs run <影片目录> --draft --cost-usd 1.25
   "title": "片名，只用于报告",
   "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
   "theme": { "accent": "#62c6ff" },
-  "voice": { "backend": "auto", "name": "zh-CN-XiaoxiaoNeural", "rate": "+0%" },
+  "voice": { "backend": "auto", "name": "stella" },
   "scenes": []
 }
 ```
 
 - `lang`：`zh` 或 `en`，决定语音和字幕长度上限。
 - `theme`：可选，可改 `bg`、`text`、`muted`、`accent`、`bar`、`track` 六个颜色。
-- `voice`：可选，整段都可以不写。`backend` 是 `auto`、`edge`、`espeak`、`silent` 之一，`auto` 会选已安装的最自然的一种。`name` 是声音，中文默认 `zh-CN-XiaoxiaoNeural`（女声），男声可用 `zh-CN-YunxiNeural`、`zh-CN-YunyangNeural`。`rate` 是语速，比如 `+10%`。
+- `voice`：可选，整段都可以不写。
+  - `backend` 是 `auto`、`deepseek`、`edge`、`espeak`、`silent` 之一。`auto` 会选当前可用的最好的一种，报告开头写着这次用的是哪一种。
+  - `name` 是声音，要用所选后端自己的名字。`deepseek` 有 `stella`（女声，默认）和 `tide`（男声）。`edge` 中文默认 `zh-CN-XiaoxiaoNeural`（女声），男声可用 `zh-CN-YunxiNeural`、`zh-CN-YunyangNeural`。名字不属于所用的后端时，会改用默认声音。
+  - `rate` 是语速，比如 `+10%`。只有 `edge` 支持，其他后端会忽略。要调片长，增删旁白或场景。
 
 每个场景都可以带这些字段：
 

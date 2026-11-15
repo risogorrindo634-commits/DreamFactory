@@ -11,13 +11,15 @@ node pipeline/cli.mjs run <影片目录>              # 成片
 node evals/run.mjs                                # 跑评测集，约两分钟
 node evals/run.mjs --only <用例或缺陷的 id>
 node evals/agent-run.mjs                          # 让模型无人值守做完每个用例，要花模型费用
+node evals/agent-run.mjs --provider deepseek      # 同上，模型换成 DeepSeek，需要 DEEPSEEK_API_KEY
 ```
 
 做片子之前先读 `DIRECTOR.md`。
 
 ## 结构
 
-- `pipeline/`：管线本体。`film.mjs` 是一次运行的全流程，`lib/` 是各个环节，`checks/` 是自检，`tools/asr.py` 是语音识别的 Python 小工具。
+- `pipeline/`：管线本体。`film.mjs` 是一次运行的全流程，`lib/` 是各个环节，`checks/` 是自检，`tools/asr.py` 是本机语音识别的 Python 小工具。
+- `pipeline/lib/deepseek.mjs`：DeepSeek 语音接口的请求函数和密钥读取，语音合成和听写核对共用。
 - `.cache/tts/`：合成过的语音和听写结果的缓存，不入库，删掉只会让下次运行慢一些。
 - `verticals/data-story/`：数据短片的画面。`runtime/df.js` 里每种场景是一个函数。影片目录里的 `scenes.js` 可以为那一支片子增加场景。
 - `evals/cases/`：评测用例，每个目录有简报、数据、要求和一支参考影片，个别带参考的 `scenes.js`。
@@ -37,5 +39,9 @@ node evals/agent-run.mjs                          # 让模型无人值守做完�
 - 缺陷可以改场景代码：`{"file": "scenes", "replace": "原文", "with": "改成"}`。改参考的 `scenes.js` 时要确认缺陷里引用的原文还在。
 - 不引入 npm 依赖，除了 Playwright。在已经预装 Playwright 的云端环境里不要运行 `npm install`。
 - 语音供应商都在 `pipeline/lib/tts.mjs`，一个后端一个函数。新增后端后跑一遍评测，参考影片的片长会随语速变化，贴着时长上下限的要调整参考影片，不要放宽要求。
-- 评测默认用 `auto` 选中的语音。没有网络时加 `--tts espeak`，这时听写核对会跳过，对应的缺陷记为“未判定”。
+- `auto` 选语音的顺序：有 DeepSeek 密钥时用 `deepseek`，否则 `edge`，再否则 `espeak`，最后是静音轨。听写核对同理：有密钥用 DeepSeek，否则用本机的 faster-whisper。
+- 密钥读 `DEEPSEEK_API_KEY`。云端环境里如果变量叫 `api_key`，且旁边的 `base_url` 指向 DeepSeek，也认。密钥不要写进仓库和命令行参数。
+- 评测默认用 `auto` 选中的语音。参考影片在两种组合下都必须通过，改了语音、混音或听写相关的代码后两种都要跑：直接跑是 DeepSeek 语音加 DeepSeek 听写，`DF_ASR=whisper node evals/run.mjs --tts edge` 是 Edge 语音加本机听写。
+- 没有网络时加 `--tts espeak`，这时听写核对会跳过，对应的缺陷记为“未判定”。
+- 无人值守评测接新的模型供应商，在 `evals/agent-run.mjs` 的 `PROVIDERS` 里加一项：兼容 Anthropic 接口的地址、密钥、默认模型和公布的单价。命令行自己报的费用只对它自家的模型准确。
 - 代码注释用英文，文档和报告用中文。

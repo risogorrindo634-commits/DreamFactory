@@ -1,28 +1,48 @@
 // Listening back: transcribe the narration clips and compare what was heard with the script.
-// Speech recognition is optional (pip install faster-whisper); without it the check is skipped.
+// Two recognizers can listen: DeepSeek's speech-to-text API (needs a key) and faster-whisper, which runs
+// on this machine (pip install faster-whisper). With neither, the check is skipped.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { extractNumbers } from './data.mjs';
-import { cacheDir } from './tts.mjs';
-import { run } from './util.mjs';
+import { deepseekKey, deepseekTranscribe } from './deepseek.mjs';
+import { retry, run } from './util.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const MODEL = process.env.DF_ASR_MODEL ?? 'small';
 
-let available;
-export async function asrAvailable() {
-  if (available === undefined) {
-    available = await run('python3', ['-c', 'import faster_whisper, numpy']).then(() => true, () => false);
+let recognizer;
+/**
+ * Who listens: "deepseek", "whisper", or null when nobody can. DeepSeek goes first when a key is set;
+ * DF_ASR=deepseek|whisper forces one.
+ */
+export async function pickRecognizer() {
+  if (recognizer === undefined) {
+    const want = process.env.DF_ASR ?? 'auto';
+    const whisper = () => run('python3', ['-c', 'import faster_whisper, numpy']).then(() => 'whisper', () => null);
+    if (want === 'whisper') recognizer = await whisper();
+    else if (deepseekKey()) recognizer = 'deepseek';
+    else recognizer = want === 'deepseek' ? null : await whisper();
   }
-  return available;
+  return recognizer;
 }
 
-/** Transcripts for a list of clips, in order. Each transcript is cached next to its clip. */
+/** Transcripts for a list of clips, in order. Each transcript is cached next to its clip, per recognizer. */
 export async function transcribe(files, lang) {
-  const cached = (f) => `${f}.${MODEL}.${lang}.txt`;
+  const who = await pickRecognizer();
+  const cached = (f) => `${f}.${who === 'deepseek' ? 'deepseek' : MODEL}.${lang}.txt`;
   const todo = [...new Set(files.filter((f) => !fs.existsSync(cached(f))))];
-  if (todo.length) {
+  if (who === 'deepseek') {
+    // One short request per clip, a few at a time.
+    let next = 0;
+    const worker = async () => {
+      while (next < todo.length) {
+        const f = todo[next++];
+        fs.writeFileSync(cached(f), await retry(() => deepseekTranscribe(f), 3));
+      }
+    };
+    await Promise.all(Array.from({ length: Math.min(4, todo.length) }, worker));
+  } else if (todo.length) {
     const { stdout } = await run('python3', [path.join(here, '..', 'tools', 'asr.py')], { input: JSON.stringify({ model: MODEL, lang, files: todo }) });
     const { texts } = JSON.parse(stdout);
     todo.forEach((f, i) => fs.writeFileSync(cached(f), texts[i]));
@@ -32,7 +52,12 @@ export async function transcribe(files, lang) {
 
 const CN_DIGIT = { 零: 0, 〇: 0, 一: 1, 二: 2, 两: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9 };
 const CN_UNIT = { 十: 10, 百: 100, 千: 1000 };
-const EN_WORD = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12 };
+const EN_SMALL = Object.fromEntries(
+  'zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen'.split(' ').map((w, i) => [w, i]),
+);
+const EN_TENS = Object.fromEntries('twenty thirty forty fifty sixty seventy eighty ninety'.split(' ').map((w, i) => [w, 20 + 10 * i]));
+const EN_SCALE = { thousand: 1e3, million: 1e6, billion: 1e9 };
+const EN_NUMBER_WORD = new RegExp(`\\b(${[...Object.keys(EN_SMALL), ...Object.keys(EN_TENS), ...Object.keys(EN_SCALE), 'hundred', 'percent'].join('|')})\\b`, 'g');
 
 /** "两千七百九十三" -> 2793, "十七" -> 17, "二七九三" -> 2793, "五点五" -> 5.5 */
 export function chineseNumber(s) {
@@ -61,19 +86,58 @@ export function chineseNumber(s) {
   return value;
 }
 
-/** Every number a transcript contains, whether written as digits, Chinese numerals or small English words. */
+/**
+ * Numbers spoken in English, however the recognizer wrote them down. Each unbroken run of number words
+ * and digits gives one number: "two hundred and thirty-three" and "200 and thirty-three" are both 233,
+ * "2 thousand 793" is 2793, "three point five" is 3.5. Any other word or punctuation mark ends a run.
+ */
+export function englishNumbers(text) {
+  const out = [];
+  let total = 0;
+  let current = 0;
+  let frac = null;
+  let parts = 0;
+  const close = () => {
+    if (parts) out.push(total + current + (frac ? Number(`0.${frac}`) : 0));
+    total = 0;
+    current = 0;
+    frac = null;
+    parts = 0;
+  };
+  for (const [tok] of text.toLowerCase().matchAll(/[a-z\d]+(?:[,.]\d+)*|[^\sa-z\d-]+/g)) {
+    const value = /^\d[\d,]*(\.\d+)?$/.test(tok) ? Number(tok.replace(/,/g, '')) : EN_SMALL[tok] ?? EN_TENS[tok];
+    if (value !== undefined && frac !== null && value < 10) frac += value;
+    else if (value !== undefined) {
+      if (frac !== null) close();
+      current += value;
+      parts++;
+    } else if (tok === 'hundred') {
+      current = (current || 1) * 100;
+      parts++;
+    } else if (tok in EN_SCALE && parts) {
+      total += (current || 1) * EN_SCALE[tok];
+      current = 0;
+    } else if (tok === 'point' && parts && frac === null) frac = '';
+    else if (tok !== 'and' || !parts || frac !== null) close();
+  }
+  close();
+  return out;
+}
+
+/** Every number a transcript contains, whether written as digits, Chinese numerals or English words. */
 export function heardNumbers(text) {
   const out = extractNumbers(text).map((n) => n.value);
   for (const m of text.matchAll(/[零〇一二两三四五六七八九十百千万亿点]+/g)) {
     const v = chineseNumber(m[0].replace(/^点+|点+$/g, ''));
     if (Number.isFinite(v)) out.push(v);
   }
-  for (const m of text.toLowerCase().matchAll(/[a-z]+/g)) if (m[0] in EN_WORD) out.push(EN_WORD[m[0]]);
+  out.push(...englishNumbers(text));
   return out;
 }
 
 /** The words of a sentence without numbers, punctuation or spacing, for a like-for-like comparison. */
-const wording = (s) => s.toLowerCase().replace(/[零〇一二两三四五六七八九十百千万亿点\d%％]/g, '').replace(/[^\p{Script=Han}a-z]/gu, '');
+const wording = (s) =>
+  s.toLowerCase().replace(EN_NUMBER_WORD, '').replace(/[零〇一二两三四五六七八九十百千万亿点\d%％]/g, '').replace(/[^\p{Script=Han}a-z]/gu, '');
 
 function editDistance(a, b) {
   let prev = Array.from({ length: b.length + 1 }, (_, j) => j);

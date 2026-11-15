@@ -3,12 +3,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { hasCommand, hash, run } from './util.mjs';
+import { deepseekBilledChars, deepseekKey, deepseekSpeech } from './deepseek.mjs';
+import { hasCommand, hash, retry, run } from './util.mjs';
 import { RATE, readWav, writeWav } from './wav.mjs';
 
+// Default voice per language, and what a voice name of this supplier looks like.
 const VOICES = {
-  edge: { zh: 'zh-CN-XiaoxiaoNeural', en: 'en-US-AriaNeural' },
-  espeak: { zh: 'cmn', en: 'en-us' },
+  deepseek: { zh: 'stella', en: 'stella', own: /^(stella|tide)$/ },
+  edge: { zh: 'zh-CN-XiaoxiaoNeural', en: 'en-US-AriaNeural', own: /Neural$/ },
+  espeak: { zh: 'cmn', en: 'en-us', own: /^[a-z]{2,3}([-+][a-z0-9]+)*$/ },
 };
 
 // espeak-ng speed setting. Its Mandarin is slow at the default; 280 lands near 4.5 characters a second.
@@ -19,11 +22,13 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'
 export const cacheDir = () => process.env.DF_TTS_CACHE ?? path.join(repoRoot, '.cache', 'tts');
 
 /**
- * "auto" takes the most natural voice that is installed: the Edge neural voices (online),
- * then espeak-ng (offline, robotic, a timing placeholder), then a silent track with estimated timing.
+ * "auto" takes the best voice at hand: DeepSeek's speech API when a key is set (online, paid, a documented
+ * service), then the Edge neural voices (online, free, no service terms), then espeak-ng (offline, robotic,
+ * a timing placeholder), then a silent track with estimated timing.
  */
 export function pickBackend(requested) {
   if (requested && requested !== 'auto') return requested;
+  if (deepseekKey()) return 'deepseek';
   if (hasCommand('edge-tts')) return 'edge';
   return hasCommand('espeak-ng') ? 'espeak' : 'silent';
 }
@@ -54,17 +59,6 @@ function trimSilence(file, { lead = 0.04, tail = 0.12, floor = 330 } = {}) {
   writeWav(file, samples.slice(from, to), rate);
 }
 
-async function retry(fn, times) {
-  for (let attempt = 1; ; attempt++) {
-    try {
-      return await fn();
-    } catch (e) {
-      if (attempt >= times) throw e;
-      await new Promise((r) => setTimeout(r, 800 * attempt));
-    }
-  }
-}
-
 const backends = {
   async silent({ text, outFile }) {
     writeWav(outFile, new Int16Array(Math.round(estimateSeconds(text) * RATE)));
@@ -88,22 +82,40 @@ const backends = {
     fs.rmSync(tmp, { force: true });
     trimSilence(outFile);
   },
+  // DeepSeek's text-to-speech tool: a paid API with a key. It needs the network and has no speed setting.
+  async deepseek({ text, voice, outFile }) {
+    const tmp = outFile + '.raw.wav';
+    await retry(() => deepseekSpeech({ text, voice, outFile: tmp }), 3);
+    await toWav(tmp, outFile);
+    fs.rmSync(tmp, { force: true });
+    trimSilence(outFile);
+  },
 };
 
-/** Synthesize one line, or reuse the cached clip. Returns the file and its length in seconds. */
+/** What a supplier charges a line as, in its own unit. Suppliers not listed are free. */
+const BILLED = { deepseek: deepseekBilledChars };
+
+/**
+ * Synthesize one line, or reuse the cached clip. Returns the file, its length in seconds, and what the
+ * supplier billed for it: 0 when the clip came from the cache or the supplier is free.
+ */
 export async function synth({ backend, lang, voice, rate, text }) {
   const fn = backends[backend];
   if (!fn) throw new Error(`unknown speech backend "${backend}" (have: ${Object.keys(backends).join(', ')})`);
-  const v = voice ?? VOICES[backend]?.[lang] ?? '';
+  // A film names a voice of one supplier. Under another supplier the name means nothing, so the default speaks.
+  const names = VOICES[backend];
+  const v = voice && names?.own.test(voice) ? voice : names?.[lang] ?? '';
+  if (backend !== 'edge') rate = undefined; // only Edge takes a speaking rate
   const speed = backend === 'espeak' ? ESPEAK_SPEED[lang] ?? '170' : `${rate ?? ''}/trimmed`;
   const dir = cacheDir();
   const outFile = path.join(dir, `${backend}-${hash([backend, v, speed, lang, text].join('|'))}.wav`);
-  if (!fs.existsSync(outFile)) {
+  const fresh = !fs.existsSync(outFile);
+  if (fresh) {
     fs.mkdirSync(dir, { recursive: true });
     const tmp = `${outFile}.${process.pid}.tmp.wav`;
     await fn({ text, voice: v, lang, rate, outFile: tmp });
     fs.renameSync(tmp, outFile); // a clip appears in the cache only once it is complete
   }
   const { samples, rate: hz } = readWav(outFile);
-  return { file: outFile, duration: samples.length / hz };
+  return { file: outFile, duration: samples.length / hz, billed: fresh ? BILLED[backend]?.(text) ?? 0 : 0 };
 }

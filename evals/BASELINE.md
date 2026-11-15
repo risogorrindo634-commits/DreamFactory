@@ -1,8 +1,8 @@
 # 评测基线
 
-干净用例误报 0/7，缺陷检出 30/30。
+干净用例误报 0/7，缺陷检出 31/31。
 
-运行环境：Node v22.23.4 · 语音后端 edge · 草稿画质 · 2026-11-14
+运行环境：Node v22.23.4 · 语音后端 deepseek · 草稿画质 · 2026-11-15
 
 ## 干净用例
 
@@ -11,12 +11,12 @@
 | 用例 | 结果 | 片长（秒） | 误报的检查 |
 | --- | --- | --- | --- |
 | asks-for-derived-number | 通过 | 26.6 |  |
-| cost-per-minute | 通过 | 43.5 |  |
-| monthly-trend | 通过 | 27.4 |  |
+| cost-per-minute | 通过 | 45.5 |  |
+| monthly-trend | 通过 | 26.0 |  |
 | top-of-long-list | 通过 | 22.0 |  |
-| twenty-seconds | 通过 | 14.1 |  |
-| works-by-category | 通过 | 52.6 |  |
-| works-by-category-en | 通过 | 48.6 |  |
+| twenty-seconds | 通过 | 13.6 |  |
+| works-by-category | 通过 | 52.8 |  |
+| works-by-category-en | 通过 | 53.3 |  |
 
 ## 缺陷注入
 
@@ -54,13 +54,14 @@
 | chart-lags-narration | 折线图画得太晚，旁白念完数字画面才出现 | sync | 抓到 |  |
 | voice-says-something-else | 字幕是一句话，语音念的是另一句话 | asr | 抓到 |  |
 | voice-says-wrong-number | 字幕写 483，语音念成 438 | data-accuracy、asr | 抓到 |  |
+| voice-says-wrong-number-english | 英文版字幕写 233，语音念成 323 | data-accuracy、asr | 抓到 |  |
 
 ## 各项检查的覆盖
 
 | 检查 | 缺陷样例 | 抓到 | 备注 |
 | --- | --- | --- | --- |
 | spec | 3 | 3 |  |
-| data-accuracy | 8 | 8 |  |
+| data-accuracy | 9 | 9 |  |
 | citation | 1 | 1 |  |
 | readability | 1 | 1 |  |
 | layout | 2 | 2 |  |
@@ -75,4 +76,4 @@
 | video-stillness | 1 | 1 |  |
 | audio-levels | 0 | 0 | 没有缺陷样例，效果未经验证 |
 | audio-gaps | 1 | 1 |  |
-| asr | 2 | 2 |  |
+| asr | 3 | 3 |  |
