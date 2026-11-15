@@ -1,0 +1,47 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "二十秒看懂作品类型分布",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto" },
+  "scenes": [
+    {
+      "id": "开场",
+      "type": "title",
+      "kicker": "数据短片",
+      "headline": "这些作品，都投向了哪些类型？",
+      "sub": "{{facts.total}} 件作品按类型分布",
+      "narration": ["这些作品，都投向了哪些类型？"]
+    },
+    {
+      "id": "总数",
+      "type": "bignumber",
+      "label": "作品总数",
+      "value": { "$": "facts.total" },
+      "unit": "件",
+      "note": "按类型汇总",
+      "narration": ["数据集一共收录 {{facts.total}} 件作品。"]
+    },
+    {
+      "id": "类型分布",
+      "type": "bars",
+      "title": "各类型的作品数量",
+      "sub": "共 {{facts.total}} 件",
+      "series": { "$": "series.categories" },
+      "highlight": "模型对比",
+      "unit": "件",
+      "narration": [
+        "数量最多的是模型对比，{{series.categories[模型对比]}} 件。",
+        "游戏类有 {{series.categories[游戏]}} 件。"
+      ]
+    },
+    {
+      "id": "收尾",
+      "type": "outro",
+      "headline": "你的作品，会投向哪一类？",
+      "sub": "从数据看，每一类都有人在做",
+      "narration": ["每一类，都有人在做。"]
+    }
+  ]
+}

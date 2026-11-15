@@ -1,0 +1,92 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "2026 社区代码生成作品年度盘点",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "2026 年度盘点",
+      "headline": "代码生成作品的一年",
+      "sub": "四个画面，看清这一年的创作变化",
+      "narration": [
+        "这是社区代码生成作品的 2026 年度盘点。",
+        "四个画面，看清产量、类型、走势和成本。",
+        "先说结论：2026 年，社区的作品明显变多了。",
+        "这份盘点按四个部分依次展开。"
+      ]
+    },
+    {
+      "id": "total",
+      "type": "bignumber",
+      "label": "2026 年全年作品总量",
+      "value": { "$": "facts.total" },
+      "unit": "件",
+      "note": "是 2025 年的 {{times series.yearly[2025 年] series.yearly[2026 年]}} 倍",
+      "narration": [
+        "2026 年，社区一共生成了 {{facts.total}} 件作品。",
+        "和 2025 年相比，这是 {{times series.yearly[2025 年] series.yearly[2026 年]}} 倍。",
+        "从年初到年尾，增长几乎没有停过。"
+      ]
+    },
+    {
+      "id": "categories",
+      "type": "bars",
+      "title": "按类型分布",
+      "sub": "2026 年全年作品按类型拆分",
+      "unit": "件",
+      "series": { "$": "series.categories" },
+      "highlight": "模型对比",
+      "showShare": true,
+      "narration": [
+        "把作品按类型拆开，模型对比排在第一。",
+        "全年一共 {{series.categories[模型对比]}} 件，是数量最多的类型。",
+        "它占到全部作品的 {{share series.categories[模型对比]}}。",
+        "游戏和 3D 场景紧随其后。"
+      ]
+    },
+    {
+      "id": "months",
+      "type": "line",
+      "title": "逐月走势",
+      "sub": "2026 年每个月的作品数量",
+      "unit": "件",
+      "points": { "$": "series.monthly" },
+      "narration": [
+        "接着看每个月的走势，数字几乎一路向上。",
+        "12 月来到全年最高点，有 {{series.monthly[12月]}} 件。",
+        "越到年底，社区的创作越忙。",
+        "这条线全年没有出现明显回落。",
+        "从 1 月到 12 月，涨势非常明显。"
+      ]
+    },
+    {
+      "id": "cost",
+      "type": "ranges",
+      "title": "每分钟成片成本",
+      "sub": "三种做法，成本区间差别很大",
+      "unit": "美元",
+      "series": { "$": "series.cost" },
+      "highlight": "代码生成",
+      "narration": [
+        "再看成本：三种做法，每分钟成片的价格差距很大。",
+        "代码生成只要 {{series.cost[代码生成].low}} 到 {{series.cost[代码生成].high}} 美元。",
+        "外包制作则要 {{series.cost[外包制作].low}} 到 {{series.cost[外包制作].high}} 美元。",
+        "刻度是对数的，每一格差一个数量级。",
+        "同样的画面，成本可以相差很多。"
+      ]
+    },
+    {
+      "id": "end",
+      "type": "outro",
+      "headline": "更多作品，更低成本",
+      "sub": "以上数据为虚构示例，仅用于演示",
+      "narration": [
+        "最后提醒一次：这是虚构的示例数据。",
+        "把它当作演示参考，不要写进正式报告。"
+      ]
+    }
+  ]
+}

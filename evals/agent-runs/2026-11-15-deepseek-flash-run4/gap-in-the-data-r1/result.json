@@ -1,0 +1,70 @@
+{
+  "case": "gap-in-the-data",
+  "run": "gap-in-the-data-r1",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 33.833
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "9459ebf78649",
+      "backend": "deepseek",
+      "ttsBilled": 256
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "9459ebf78649",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 28,
+    "toolUses": 27,
+    "wallSec": 293,
+    "costUsd": 0.0348,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 56373,
+      "output": 39612,
+      "cacheRead": 846080,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 256,
+    "costUsd": 0.0115
+  },
+  "costUsd": 0.0463,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "自检通过。两轮都一次过：第 1 轮 `node pipeline/cli.mjs run task --no-video` 文字层 14 项全过，第 2 轮 `--draft` 加渲染与声音后 18 项全过（片长 33.8 秒，DeepSeek 语音，响度 -14.5 LUFS，听写核对一致）。两轮之间没有改动——首版就达标，返工 0 轮、人工介入 0 次。\n\n做法上：写了自定义 `line` 场景画折线，1–5 月与 7–12 月分成两条不连通的折线，6 月位置用虚线缺口并压上 `data.json` 里的备注「数据缺失」，11 个有数据的月份各标一个数值点（正好 11 个，符合 markCount）；旁白讲到 1 月 320 人、12 月 760 人、6 月没有留下数据，首尾也标明这是虚构示例数据。草稿成片在 `task/out/film.mp4`，抽帧图在 `task/out/contact.jpg`。",
+  "outcome": "passed"
+}

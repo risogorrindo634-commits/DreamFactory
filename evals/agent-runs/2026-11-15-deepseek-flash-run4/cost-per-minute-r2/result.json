@@ -1,0 +1,90 @@
+{
+  "case": "cost-per-minute",
+  "run": "cost-per-minute-r2",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 42.833
+  },
+  "pipelineRuns": 4,
+  "failedRuns": 1,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "b858d79b9ab5",
+      "backend": "deepseek",
+      "ttsBilled": 332
+    },
+    {
+      "round": 2,
+      "passed": false,
+      "failed": [
+        "asr"
+      ],
+      "rendered": true,
+      "filmVersion": "b858d79b9ab5",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "73b82b1ad61a",
+      "backend": "deepseek",
+      "ttsBilled": 31
+    },
+    {
+      "round": 4,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "73b82b1ad61a",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 27,
+    "toolUses": 26,
+    "wallSec": 317,
+    "costUsd": 0.0224,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 54281,
+      "output": 19746,
+      "cacheRead": 787456,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 363,
+    "costUsd": 0.0163
+  },
+  "costUsd": 0.0387,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "通过：草稿与成片的自检 18 项全部通过，成片 42.8 秒、1920×1080，位于 `task/out/film.mp4`。管线共跑 4 次：第 1 次 `--no-video` 校验文字层，全部通过；第 2 次 `--draft` 只有 ASR 一项失败，听写把「是 2」听成了「12」；第 3 次把该句改成「从 2 到 45 美元」后草稿全部通过；第 4 次去掉 `--draft` 输出成片，仍全部通过。全程只改了这一句旁白，没有动 `data.json`、`expect.json` 或检查代码。`runs.jsonl` 里的 `costUsd` 留空，因为没有拿到这轮模型费用的计价数字。",
+  "outcome": "passed"
+}

@@ -1,0 +1,79 @@
+{
+  "case": "monthly-trend",
+  "run": "monthly-trend-r1",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 34.5
+  },
+  "pipelineRuns": 3,
+  "failedRuns": 0,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "68f2d21c285e",
+      "backend": "deepseek",
+      "ttsBilled": 197
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "aec4a9326b9d",
+      "backend": "deepseek",
+      "ttsBilled": 85
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "aec4a9326b9d",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 35,
+    "toolUses": 34,
+    "wallSec": 350,
+    "costUsd": 0.0413,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 58923,
+      "output": 48359,
+      "cacheRead": 1155072,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 282,
+    "costUsd": 0.0127
+  },
+  "costUsd": 0.054,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "**通过。** 第 3 轮 `--draft` 草稿渲染的全部 18 项检查通过，片长 34.5 秒。\n\n管线共跑了 3 次。第 1 次 `--no-video`：新建 `film.json` 和 `task/scenes.js`（自定义折线图覆盖 12 个月，标注 42 / 149 / 418 / 531），文字层检查全过；但看抽帧图发现倍数写反了——`times` 两个参数顺序颠倒，画面成了“是 1 月的 0.1 倍”。第 2 次 `--no-video`：交换参数改成“12.6 倍”，并补了最高点场景和结尾各一句旁白，把片长从 28.4 秒拉到 34.5 秒，全部通过。第 3 次 `--draft`：没有再改，画面、响度、停顿和语音听写核对全部通过，按任务停在草稿自检，草稿成片在 `task/out/film.mp4`。\n\n（`out/runs.jsonl` 的 `costUsd` 仍为空——没有可查的计费单价，只记录了 TTS 计费字符数。）",
+  "outcome": "passed"
+}

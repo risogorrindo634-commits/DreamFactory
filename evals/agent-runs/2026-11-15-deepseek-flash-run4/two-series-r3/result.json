@@ -1,0 +1,70 @@
+{
+  "case": "two-series",
+  "run": "two-series-r3",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 36.2
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "5c88ec5f080c",
+      "backend": "deepseek",
+      "ttsBilled": 282
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "5c88ec5f080c",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 27,
+    "toolUses": 26,
+    "wallSec": 275,
+    "costUsd": 0.0328,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 55918,
+      "output": 36850,
+      "cacheRead": 770048,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 282,
+    "costUsd": 0.0127
+  },
+  "costUsd": 0.0455,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "自检全部通过，草稿渲染也通过：片长 36.2 秒，语音后端 DeepSeek，18 项检查（含画面静止、响度、停顿、听写核对）无失败。\n\n管线共跑了 2 次。第一次用 `--no-video` 做文字层检查：我新建了 `task/film.json`（标题、折线图、收尾三场）和 `task/scenes.js`（自定义 `twolines` 折线场景，两条线带名称、各自末值、8 月反超标卡，并给每个数据点标了 `data-df-value`），一次通过。第二次用 `--draft` 出草稿，未再改动，14 项文字检查加 4 项媒体检查全部通过。\n\n没有返工轮，也没有人工介入；按任务要求停在草稿验收这一步，未再出成片。",
+  "outcome": "passed"
+}

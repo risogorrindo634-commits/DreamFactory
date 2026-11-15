@@ -1,0 +1,70 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "一分钟视频的成片成本",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "voice": { "backend": "auto" },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "每分钟成片成本",
+      "headline": "一分钟视频，到底要花多少钱",
+      "sub": "美元计价 · 各做法对比",
+      "narration": [
+        "做一分钟视频，到底要花多少钱？",
+        "同一分钟，价格能差出好几个量级。"
+      ]
+    },
+    {
+      "id": "ranges",
+      "type": "ranges",
+      "title": "每分钟成片成本：各做法区间",
+      "sub": "对数刻度，每一格差一个数量级",
+      "series": { "$": "series.cost" },
+      "highlight": "代码生成短片",
+      "unit": "美元",
+      "narration": [
+        "代码生成短片，{{series.cost[代码生成短片].low}} 到 {{series.cost[代码生成短片].high}} 美元。",
+        "视频模型 API 每分钟 {{series.cost[视频模型 API].low}} 到 {{series.cost[视频模型 API].high}} 美元。",
+        "自由职业者，{{series.cost[自由职业者].low}} 到 {{series.cost[自由职业者].high}} 美元。",
+        "工作室，{{series.cost[工作室].low}} 到 {{series.cost[工作室].high}} 美元。",
+        "横轴是对数刻度，每一格差一个数量级。"
+      ]
+    },
+    {
+      "id": "studio-ceiling",
+      "type": "bignumber",
+      "label": "工作室报价的上限",
+      "value": { "$": "series.cost[工作室].high" },
+      "unit": "美元",
+      "note": "是代码生成短片上限的 {{times series.cost[代码生成短片].high series.cost[工作室].high}} 倍",
+      "narration": [
+        "工作室的报价上限，是 {{series.cost[工作室].high}} 美元。",
+        "这是代码生成短片上限的 {{times series.cost[代码生成短片].high series.cost[工作室].high}} 倍。"
+      ]
+    },
+    {
+      "id": "caveat",
+      "type": "bullets",
+      "title": "这组数字怎么读",
+      "items": [
+        "数字多来自创作者自报和报价指南",
+        "只能看量级，别当成精确报价"
+      ],
+      "narration": [
+        "这些数字多来自创作者自报和报价指南。",
+        "只能看量级，别当成精确报价。"
+      ]
+    },
+    {
+      "id": "close",
+      "type": "outro",
+      "headline": "先看清量级，再谈价格",
+      "sub": "便宜的不一定省心，贵的不一定合适",
+      "narration": [
+        "先看清量级，再决定要不要用代码生成。"
+      ]
+    }
+  ]
+}

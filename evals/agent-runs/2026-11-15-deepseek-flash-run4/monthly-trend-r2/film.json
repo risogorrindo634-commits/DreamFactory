@@ -1,0 +1,60 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "2026 年每月新增的代码生成作品",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "{{facts.year}} · 月度趋势",
+      "headline": "每月新增的代码生成作品",
+      "sub": "一份虚构的示例数据",
+      "narration": [
+        "这是一份虚构的示例数据。",
+        "看看 {{facts.year}} 年每月新增的作品。"
+      ]
+    },
+    {
+      "id": "trend",
+      "type": "line",
+      "title": "{{facts.year}} 年每月新增作品",
+      "sub": "单位：件 · 全年走势",
+      "series": { "$": "series.monthly" },
+      "labels": ["1月", "9月", "10月", "11月"],
+      "narration": [
+        "1 月新增 {{series.monthly[1月]}} 件，是全年起点。",
+        "到 9 月慢慢涨到 {{series.monthly[9月]}} 件。",
+        "10 月突然跳到 {{series.monthly[10月]}} 件。",
+        "11 月达到全年最高的 {{series.monthly[11月]}} 件。",
+        "12 月小幅回落到 {{series.monthly[12月]}} 件。"
+      ]
+    },
+    {
+      "id": "reading",
+      "type": "bullets",
+      "title": "加速发生在年底",
+      "items": [
+        "1 月到 9 月，缓慢爬坡。",
+        "10 月比 9 月上涨 {{up series.monthly[9月] series.monthly[10月]}}。",
+        "11 月比 10 月再涨 {{up series.monthly[10月] series.monthly[11月]}}。"
+      ],
+      "narration": [
+        "1 月到 9 月，只是缓慢爬坡。",
+        "10 月比 9 月，上涨 {{up series.monthly[9月] series.monthly[10月]}}。",
+        "11 月比 10 月，又涨了 {{up series.monthly[10月] series.monthly[11月]}}。"
+      ]
+    },
+    {
+      "id": "close",
+      "type": "outro",
+      "headline": "加速集中在年底",
+      "sub": "虚构示例数据，仅用于演示",
+      "narration": [
+        "这份虚构数据里，加速集中在年底。"
+      ]
+    }
+  ]
+}

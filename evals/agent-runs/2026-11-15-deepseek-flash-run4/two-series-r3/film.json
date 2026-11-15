@@ -1,0 +1,56 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "两种做法，谁在后来居上",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "示例数据（虚构）",
+      "headline": "两种做法，谁在后来居上",
+      "sub": "每月新增作品数，单位：件",
+      "narration": [
+        "两条技术路线，在同一张图里赛跑。",
+        "每月新增的作品数，谁先追上来。"
+      ]
+    },
+    {
+      "id": "cross",
+      "type": "twolines",
+      "title": "两条路线的交叉点",
+      "sub": "数据截至 {{source.asOf}}，每月新增作品，单位：件",
+      "unit": { "$": "units.works" },
+      "series": [
+        { "name": "{{names.code}}", "tone": "accent", "items": { "$": "series.code" } },
+        { "name": "{{names.model}}", "tone": "muted", "dashed": true, "items": { "$": "series.model" } }
+      ],
+      "callout": {
+        "month": { "$": "series.code[8月]" },
+        "items": [
+          { "name": "{{names.code}}", "point": { "$": "series.code[8月]" } },
+          { "name": "{{names.model}}", "point": { "$": "series.model[8月]" } }
+        ]
+      },
+      "narration": [
+        "先看代码生成这条线。",
+        "{{series.code[1月].label}}只有 {{series.code[1月]}} 件，{{series.code[12月].label}}到了 {{series.code[12月]}} 件。",
+        "{{series.model[12月].label}}，视频模型是 {{series.model[12月]}} 件。",
+        "{{series.code[8月].label}}，代码生成到 {{series.code[8月]}} 件，反超视频模型的 {{series.model[8月]}} 件。",
+        "之后差距一路拉开。"
+      ]
+    },
+    {
+      "id": "close",
+      "type": "outro",
+      "headline": "交叉之后，差距才真正拉开",
+      "sub": "{{names.code}}是{{names.model}}的 {{times series.model[12月] series.code[12月]}} 倍",
+      "narration": [
+        "交叉发生在 {{series.code[8月].label}}。",
+        "到 {{series.code[12月].label}}，代码生成是视频模型的 {{times series.model[12月] series.code[12月]}} 倍。",
+        "选择哪条路，看你要的曲线。"
+      ]
+    }
+  ]
+}

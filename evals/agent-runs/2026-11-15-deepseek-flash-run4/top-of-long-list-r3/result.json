@@ -1,0 +1,70 @@
+{
+  "case": "top-of-long-list",
+  "run": "top-of-long-list-r3",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 33.733
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "136c13353630",
+      "backend": "deepseek",
+      "ttsBilled": 257
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "2f0340a62342",
+      "backend": "deepseek",
+      "ttsBilled": 30
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 28,
+    "toolUses": 27,
+    "wallSec": 176,
+    "costUsd": 0.0211,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 54872,
+      "output": 17248,
+      "cacheRead": 852224,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 287,
+    "costUsd": 0.0129
+  },
+  "costUsd": 0.0341,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "**通过。** 草稿渲染的自检全部通过（片长 33.7 秒，18 项检查无一失败，含画面静止、响度、停顿与语音听写核对）。\n\n管线共跑了 2 次。第一次用 `--no-video`：写出 `task/film.json`，四个场景依次为开场、前 6 名条形图（科普动画 521 领跑）、第一名数字卡、收尾，文字层检查一次通过，但片长只有 30.8 秒。第二次用 `--draft`：在排行榜场景补了一句“数量越多，说明这个方向越热闹”，把片长拉到 33.7 秒，并完成草稿渲染，全部检查通过。\n\n六个品类的数量都按数据引用显示、按降序排列；品类总数 24 与第一名 521 在旁白和画面上都出现；虚构示例的性质在开场、来源和收尾三处写明。按本次权限只到草稿为止，`out/film.mp4` 是草稿画质；成片渲染（去掉 `--draft`）未在放行范围内，没有执行。",
+  "outcome": "passed"
+}

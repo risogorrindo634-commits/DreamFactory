@@ -1,0 +1,38 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "{{facts.total}} 件作品怎么分布",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto" },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "awesome-opus-5.5-video",
+      "headline": "{{facts.total}} 件作品",
+      "sub": "按类型怎么分布",
+      "narration": ["{{facts.total}} 件作品。", "按类型怎么分布？"]
+    },
+    {
+      "id": "top",
+      "type": "bignumber",
+      "label": "数量最多的类型",
+      "value": { "$": "series.categories[模型对比].value" },
+      "unit": "件",
+      "note": "模型对比",
+      "narration": ["最多的是模型对比，{{series.categories[模型对比]}} 件。"]
+    },
+    {
+      "id": "dist",
+      "type": "bars",
+      "title": "类型分布",
+      "sub": "按作品数量排序",
+      "series": { "$": "series.categories" },
+      "highlight": "游戏",
+      "unit": "件",
+      "minDuration": 5.0,
+      "narration": ["游戏类 {{series.categories[游戏]}} 件，排第二。"]
+    }
+  ]
+}

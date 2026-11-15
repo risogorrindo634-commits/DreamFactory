@@ -1,0 +1,50 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "一年的走势，中间缺了一个月",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "scenes": [
+    {
+      "id": "intro",
+      "type": "title",
+      "kicker": "课程平台 · 2026 年",
+      "headline": "一年在长，缺了一个月",
+      "sub": "每月新增学员的走势",
+      "narration": ["某课程平台 2026 年每月新增学员的走势。"]
+    },
+    {
+      "id": "trend",
+      "type": "linegap",
+      "title": "每月新增学员",
+      "sub": "2026 年 · 单位：人",
+      "series": { "$": "series.monthly" },
+      "narration": [
+        "1 月新增 320 人。",
+        "之后每月都在增加。",
+        "6 月系统迁移，没有留下数据。",
+        "折线在这里断开。",
+        "7 月恢复记录，继续上升。"
+      ]
+    },
+    {
+      "id": "yearEnd",
+      "type": "bignumber",
+      "label": "12 月新增学员",
+      "value": { "$": "series.monthly[12月].value" },
+      "unit": "人",
+      "note": "全年最高",
+      "narration": [
+        "12 月收在 760 人。",
+        "是开年首月的 {{times series.monthly[1月] series.monthly[12月]}} 倍。"
+      ]
+    },
+    {
+      "id": "outro",
+      "type": "outro",
+      "headline": "增长再快，也别忘了缺口",
+      "sub": "示例数据，仅用于演示",
+      "narration": ["看走势，也要看缺口。", "示例数据，仅用于演示。"]
+    }
+  ]
+}

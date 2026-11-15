@@ -1,0 +1,79 @@
+{
+  "case": "derived-numbers",
+  "run": "derived-numbers-r3",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 35.033
+  },
+  "pipelineRuns": 3,
+  "failedRuns": 0,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "e0e1fb52fad3",
+      "backend": "deepseek",
+      "ttsBilled": 277
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "e0e1fb52fad3",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "54ca0a9ac6fc",
+      "backend": "deepseek",
+      "ttsBilled": 48
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 30,
+    "toolUses": 29,
+    "wallSec": 201,
+    "costUsd": 0.019,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 53397,
+      "output": 14569,
+      "cacheRead": 763264,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 325,
+    "costUsd": 0.0146
+  },
+  "costUsd": 0.0337,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "**通过。** `task/film.json` 已写好，草稿渲染（`--draft`）的全部 18 项自检都通过，片长 35.0 秒，语音后端为 deepseek。\n\n管线一共跑了 3 次：第 1 次用 `--no-video` 做文字层检查，一次全通过；第 2 次用 `--draft`，全部通过，但片长 36.9 秒，比简报“30 秒左右”稍长；第 3 次把开场两句旁白合并成一句后重跑 `--draft`，片长收到 35.0 秒，其余各项保持通过，没有返工失败轮。\n\n全片 6 个场景都用内置场景：开场、产量对比条形图（36 支对比 162 支）、大数字“4.5 倍”、单片成本条形图（4200 元对比 380 元）、大数字“91%”、收尾；所有数字均用引用生成，产量倍数与成本降幅既出现在画面上，也在旁白念出，来源标注为虚构的示例数据。最终产物是 `task/out/film.mp4`（草稿画质）和 `task/out/contact.jpg`。\n",
+  "outcome": "passed"
+}

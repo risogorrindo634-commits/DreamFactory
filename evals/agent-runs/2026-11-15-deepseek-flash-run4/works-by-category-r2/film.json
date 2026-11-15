@@ -1,0 +1,66 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "作品类型分布",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "公开清单",
+      "headline": "{{facts.total}} 件作品都在做什么",
+      "sub": "按类型拆开看",
+      "narration": ["一份公开清单，收录了 {{facts.total}} 件作品。"]
+    },
+    {
+      "id": "total",
+      "type": "bignumber",
+      "label": "清单收录的作品",
+      "value": "{{facts.total}}",
+      "unit": "件",
+      "note": "只收浏览量 5,000 以上的作品",
+      "narration": [
+        "清单只收浏览量 {{facts.minViews}} 以上的作品。",
+        "所以，它代表的不是全部创作。"
+      ]
+    },
+    {
+      "id": "categories",
+      "type": "bars",
+      "title": "按类型看，模型对比最多",
+      "sub": "八种类型，共 {{facts.total}} 件作品",
+      "series": { "$": "series.categories" },
+      "highlight": "模型对比",
+      "unit": "件",
+      "showShare": true,
+      "narration": [
+        "八种类型里，模型对比最多，{{series.categories[模型对比]}} 件。",
+        "游戏有 {{series.categories[游戏]}} 件，占 {{share series.categories[游戏]}}。",
+        "其余类型依次递减。"
+      ]
+    },
+    {
+      "id": "takeaways",
+      "type": "bullets",
+      "title": "三个要点",
+      "items": [
+        "模型对比最多，共 {{series.categories[模型对比]}} 件",
+        "游戏 {{series.categories[游戏]}} 件，占 {{share series.categories[游戏]}}",
+        "只收浏览量 {{facts.minViews}} 以上的作品，不代表全部"
+      ],
+      "narration": [
+        "模型对比最多，共 {{series.categories[模型对比]}} 件。",
+        "游戏 {{series.categories[游戏]}} 件，占 {{share series.categories[游戏]}}。",
+        "清单只收浏览量 {{facts.minViews}} 以上的作品。"
+      ]
+    },
+    {
+      "id": "close",
+      "type": "outro",
+      "headline": "热度筛选后的创作分布",
+      "sub": "看清类型，也看清口径",
+      "narration": ["这不是全部，只是高热作品的样子。"]
+    }
+  ]
+}

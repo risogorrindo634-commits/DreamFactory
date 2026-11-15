@@ -1,0 +1,81 @@
+{
+  "case": "long-report",
+  "run": "long-report-r3",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 85.867
+  },
+  "pipelineRuns": 3,
+  "failedRuns": 1,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": false,
+      "failed": [
+        "spec"
+      ],
+      "rendered": false,
+      "filmVersion": "d904365e5ba9",
+      "backend": "deepseek",
+      "ttsBilled": 513
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "2e6df1b312ab",
+      "backend": "deepseek",
+      "ttsBilled": 97
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "2e6df1b312ab",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 33,
+    "toolUses": 32,
+    "wallSec": 357,
+    "costUsd": 0.0315,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 62719,
+      "output": 32336,
+      "cacheRead": 902272,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 610,
+    "costUsd": 0.0275
+  },
+  "costUsd": 0.059,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "通过。管线一共跑了 3 次：第 1 次文字层检查除片长外全部通过（74.8 秒，差 0.2 秒不到下限），第 2 次我给旁白补了四句（3D 场景 548 件、曲线节奏、三种做法的成本区间、“感谢观看”），片长变成 85.9 秒并全部通过。第 3 次是 `--draft` 草稿渲染，含音频、画面静止和语音听写核对在内全部通过。中途只新增了 `task/scenes.js` 里的折线图自定义场景，`data.json` 和 `expect.json` 未动；成片草稿在 `task/out/film.mp4`。",
+  "outcome": "passed"
+}

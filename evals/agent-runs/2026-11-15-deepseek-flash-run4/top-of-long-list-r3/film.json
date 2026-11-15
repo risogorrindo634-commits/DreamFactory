@@ -1,0 +1,64 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "这个社区里，哪些品类作品最多",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "voice": { "backend": "auto" },
+  "scenes": [
+    {
+      "id": "opening",
+      "type": "title",
+      "kicker": "虚构示例 · 仅用于评测",
+      "headline": "{{facts.categoryCount}} 个品类，谁的作品最多",
+      "sub": "按作品数量排出前 {{facts.topN}} 名",
+      "narration": [
+        "这是一份虚构的示例数据，只看作品数量。",
+        "社区里一共有 {{facts.categoryCount}} 个品类。"
+      ]
+    },
+    {
+      "id": "ranking",
+      "type": "bars",
+      "title": "作品数量前 {{facts.topN}} 名",
+      "sub": "{{facts.categoryCount}} 个品类，按数量从多到少",
+      "unit": "件",
+      "highlight": "科普动画",
+      "series": [
+        { "label": "科普动画", "value": "{{series.categories[科普动画]}}" },
+        { "label": "教程", "value": "{{series.categories[教程]}}" },
+        { "label": "知识讲解", "value": "{{series.categories[知识讲解]}}" },
+        { "label": "产品演示", "value": "{{series.categories[产品演示]}}" },
+        { "label": "游戏实况", "value": "{{series.categories[游戏实况]}}" },
+        { "label": "编程教学", "value": "{{series.categories[编程教学]}}" }
+      ],
+      "narration": [
+        "先按作品数量，把全部品类重新排一遍。",
+        "前 {{facts.topN}} 名，就是最热门的方向。",
+        "每根条的长度，就是作品数量。",
+        "数量越多，说明这个方向越热闹。"
+      ]
+    },
+    {
+      "id": "top1",
+      "type": "bignumber",
+      "label": "第一名 · 科普动画",
+      "value": "{{series.categories[科普动画]}}",
+      "unit": "件",
+      "note": "在 {{facts.categoryCount}} 个品类里排第一",
+      "narration": [
+        "排在第一的是科普动画。",
+        "{{series.categories[科普动画]}} 件作品，数量最高。"
+      ]
+    },
+    {
+      "id": "closing",
+      "type": "outro",
+      "headline": "先从这 {{facts.topN}} 个方向里挑一个",
+      "sub": "虚构示例数据，不作为真实统计",
+      "narration": [
+        "这是虚构示例，别当成真实统计。",
+        "选一个方向，开始做你的内容吧。"
+      ]
+    }
+  ]
+}

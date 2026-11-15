@@ -1,0 +1,79 @@
+{
+  "case": "derived-numbers",
+  "run": "derived-numbers-r1",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 31.133
+  },
+  "pipelineRuns": 3,
+  "failedRuns": 0,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "ed0db9e0237f",
+      "backend": "deepseek",
+      "ttsBilled": 209
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "f0ce74ae511d",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "f0ce74ae511d",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 28,
+    "toolUses": 27,
+    "wallSec": 214,
+    "costUsd": 0.0188,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 53786,
+      "output": 14132,
+      "cacheRead": 750848,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 209,
+    "costUsd": 0.0094
+  },
+  "costUsd": 0.0282,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "通过。\n\n管线共跑了 3 次：第一次 `--no-video` 文字层检查一次通过（31.1 秒，deepseek 语音）；看抽帧图时发现「91%」后面多出一个「%」，是模板自带百分号又加了 `unit`，删掉 `unit: \"%\"` 后第二次 `--draft` 全部通过；第三次去掉 `--draft` 出成片，18 项检查（含听写核对）仍全部通过。\n\n成片是 `task/out/film.mp4`，六个场景分别讲了两年产量（36 支 / 162 支）、单片成本（4200 元 / 380 元）、4.5 倍和下降 91%，所有数字均由数据引用或 `times`/`down` 计算得出。",
+  "outcome": "passed"
+}

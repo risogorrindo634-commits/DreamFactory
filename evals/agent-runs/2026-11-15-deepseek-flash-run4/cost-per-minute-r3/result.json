@@ -1,0 +1,90 @@
+{
+  "case": "cost-per-minute",
+  "run": "cost-per-minute-r3",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 48.1
+  },
+  "pipelineRuns": 4,
+  "failedRuns": 1,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "2001e623e032",
+      "backend": "deepseek",
+      "ttsBilled": 257
+    },
+    {
+      "round": 2,
+      "passed": false,
+      "failed": [
+        "asr"
+      ],
+      "rendered": true,
+      "filmVersion": "2001e623e032",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "0518ebab3a33",
+      "backend": "deepseek",
+      "ttsBilled": 34
+    },
+    {
+      "round": 4,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "0518ebab3a33",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 28,
+    "toolUses": 27,
+    "wallSec": 319,
+    "costUsd": 0.0205,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 54151,
+      "output": 16707,
+      "cacheRead": 788480,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 291,
+    "costUsd": 0.0131
+  },
+  "costUsd": 0.0336,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "通过。管线一共跑了 4 次：第 1 次 `--no-video` 文字层全过；第 2 次 `--draft` 只有听写核对失败——语音识别把“API”和后面的数字粘成“API2”，听不出字幕里的 2；第 3 次我在“视频模型 API”和数字之间加了“每分钟”后草稿全过；第 4 次去掉 `--draft` 出成片，18 项检查仍全部通过。最终片长 48.1 秒，成片在 `task/out/film.mp4`，只写了 `task/film.json`，没有用自定义场景。",
+  "outcome": "passed"
+}

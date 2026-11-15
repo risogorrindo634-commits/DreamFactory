@@ -1,0 +1,46 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "{{facts.total}} 件作品按类型分布",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto" },
+  "scenes": [
+    {
+      "id": "total",
+      "type": "title",
+      "kicker": "作品类型分布",
+      "headline": "{{facts.total}} 件作品",
+      "sub": "按类型看，谁最多？",
+      "narration": ["{{facts.total}} 件作品，都是什么类型？"]
+    },
+    {
+      "id": "top",
+      "type": "bignumber",
+      "label": "数量最多的类型",
+      "value": "{{series.categories[模型对比]}}",
+      "unit": "件",
+      "note": "模型对比",
+      "narration": ["数量最多的是模型对比，{{series.categories[模型对比]}} 件。"]
+    },
+    {
+      "id": "bars",
+      "type": "bars",
+      "title": "各类型作品数量",
+      "sub": "共 {{facts.total}} 件作品，按数量排序",
+      "series": { "$": "series.categories" },
+      "highlight": "模型对比",
+      "unit": "件",
+      "narration": [
+        "游戏类 {{series.categories[游戏]}} 件，排第二。",
+        "其余类型，从多到少排开。"
+      ]
+    },
+    {
+      "id": "close",
+      "type": "outro",
+      "headline": "模型对比和游戏，数量最多",
+      "narration": ["模型对比最多，游戏类第二。"]
+    }
+  ]
+}

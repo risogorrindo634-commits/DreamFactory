@@ -1,0 +1,90 @@
+{
+  "case": "two-series",
+  "run": "two-series-r1",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 36.3
+  },
+  "pipelineRuns": 4,
+  "failedRuns": 1,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "7b49114bacd5",
+      "backend": "deepseek",
+      "ttsBilled": 274
+    },
+    {
+      "round": 2,
+      "passed": false,
+      "failed": [
+        "video-stillness"
+      ],
+      "rendered": true,
+      "filmVersion": "7b49114bacd5",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "6c104d760a01",
+      "backend": "deepseek",
+      "ttsBilled": 98
+    },
+    {
+      "round": 4,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "6c104d760a01",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 34,
+    "toolUses": 33,
+    "wallSec": 397,
+    "costUsd": 0.035,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 63257,
+      "output": 36295,
+      "cacheRead": 1238912,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 372,
+    "costUsd": 0.0167
+  },
+  "costUsd": 0.0517,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "通过：草稿与成片的自检全部 18 项通过，片长 36.3 秒，成片在 `task/out/film.mp4`。\n\n管线共跑了 4 次：第 1 次只做文字层检查（`--no-video`），我写了 `film.json` 和自定义折线场景 `task/scenes.js`，一次通过；第 2 次跑 `--draft`，只有“画面静止”未过，因折线场景里一句 6.1 秒的旁白带字幕定格了 6.2 秒；第 3 次我把那句拆成“8 月，代码生成 118 件。”“视频模型 111 件，完成反超。”等四句短句后，草稿全部通过；第 4 次去掉 `--draft` 出成片，同样全部通过。\n\n画面上，一条折线图同时画出了“代码生成”和“视频模型”两条线，用 `names` 的写法标了名称，并标出 8 月（118 / 111）与 12 月的数值（236 / 117）；来源已按虚构示例数据注明。\n",
+  "outcome": "passed"
+}

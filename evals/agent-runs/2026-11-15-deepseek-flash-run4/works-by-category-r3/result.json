@@ -1,0 +1,79 @@
+{
+  "case": "works-by-category",
+  "run": "works-by-category-r3",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 40.133
+  },
+  "pipelineRuns": 3,
+  "failedRuns": 0,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "10d9937d1c19",
+      "backend": "deepseek",
+      "ttsBilled": 183
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "92f52de4ad8d",
+      "backend": "deepseek",
+      "ttsBilled": 56
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "92f52de4ad8d",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 28,
+    "toolUses": 27,
+    "wallSec": 188,
+    "costUsd": 0.0204,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 52162,
+      "output": 17467,
+      "cacheRead": 700032,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 239,
+    "costUsd": 0.0108
+  },
+  "costUsd": 0.0312,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "**通过。**\n\n共跑了 3 次管线。第 1 次 `--no-video` 全部检查通过（片长 33.4 秒），但看抽帧图发现「游戏」大数字引用的是整行对象、画面上显示成 `[object Object]`，同时片长离简报的 40 秒偏短；第 2 次改了两处：值改成 `series.categories[游戏].value`，并给分类场景补了「其余类别在 191 到 356 件之间」、收尾补了一句口径提醒，`--no-video` 通过（40.1 秒）；第 3 次 `--draft` 渲染草稿，18 项检查全部通过（含响度 -14.3 LUFS、最长无声 0.0 秒、DeepSeek 听写核对 12 句一致）。\n\n简报要求的四项都在片子里：总数 2,793、最多的类型模型对比 534、游戏 483 及占比 17%、以及「只收浏览量 5,000 以上」的口径提醒。按授权范围只做到草稿，未渲染成片（去掉 `--draft` 的命令不在放行范围内）。",
+  "outcome": "passed"
+}

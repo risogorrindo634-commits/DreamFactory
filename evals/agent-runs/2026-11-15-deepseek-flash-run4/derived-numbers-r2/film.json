@@ -1,0 +1,77 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "一年里，这家工作室变了多少",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto" },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "示例数据 · 虚构",
+      "headline": "一年里，这家工作室变了多少",
+      "sub": "2025 与 2026：讲解视频的产量和单片成本",
+      "narration": [
+        "这是一组虚构的示例数据。",
+        "看一家小工作室，两年间的变化。"
+      ]
+    },
+    {
+      "id": "films",
+      "type": "bars",
+      "title": "讲解视频产量",
+      "sub": "2025 与 2026 年，一年做了多少支",
+      "series": { "$": "series.films" },
+      "unit": "支",
+      "highlight": "2026 年",
+      "narration": [
+        "2025 年，讲解视频做了 {{series.films[2025 年]}} 支。",
+        "2026 年做到 {{series.films[2026 年]}} 支。"
+      ]
+    },
+    {
+      "id": "times",
+      "type": "bignumber",
+      "label": "产量是 2025 年的",
+      "value": "{{times series.films[2025 年] series.films[2026 年]}}",
+      "unit": "倍",
+      "note": "2025 年 {{series.films[2025 年]}} 支，2026 年 {{series.films[2026 年]}} 支",
+      "narration": [
+        "同样的流程，产量是原来的 {{times series.films[2025 年] series.films[2026 年]}} 倍。"
+      ]
+    },
+    {
+      "id": "cost",
+      "type": "bars",
+      "title": "单片成本",
+      "sub": "2025 与 2026 年，每支讲解视频",
+      "series": { "$": "series.costPerFilm" },
+      "unit": "元",
+      "highlight": "2026 年",
+      "narration": [
+        "单片成本从 {{series.costPerFilm[2025 年]}} 元，降到 {{series.costPerFilm[2026 年]}} 元。"
+      ]
+    },
+    {
+      "id": "fall",
+      "type": "bignumber",
+      "label": "单片成本下降",
+      "value": "{{down series.costPerFilm[2025 年] series.costPerFilm[2026 年]}}",
+      "note": "从 {{series.costPerFilm[2025 年]}} 元降到 {{series.costPerFilm[2026 年]}} 元",
+      "narration": [
+        "单片成本下降了 {{down series.costPerFilm[2025 年] series.costPerFilm[2026 年]}}。"
+      ]
+    },
+    {
+      "id": "close",
+      "type": "outro",
+      "headline": "同样的团队，产量更高，成本更低",
+      "sub": "虚构示例数据，仅供演示",
+      "narration": [
+        "同样的团队，产量更高，成本更低。",
+        "数据是虚构的，不要当成真实统计。"
+      ]
+    }
+  ]
+}

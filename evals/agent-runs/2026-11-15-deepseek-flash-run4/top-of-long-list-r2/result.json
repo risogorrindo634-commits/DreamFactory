@@ -1,0 +1,70 @@
+{
+  "case": "top-of-long-list",
+  "run": "top-of-long-list-r2",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 33.167
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "a1c0ce62b21f",
+      "backend": "deepseek",
+      "ttsBilled": 209
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "a1c0ce62b21f",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 24,
+    "toolUses": 23,
+    "wallSec": 129,
+    "costUsd": 0.0165,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 52271,
+      "output": 11339,
+      "cacheRead": 618240,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 209,
+    "costUsd": 0.0094
+  },
+  "costUsd": 0.0259,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "完成。草稿自检全部通过。\n\n**是否通过：** 通过。`task/film.json` 在草稿渲染（`--draft`）下 18 项检查全部通过，片长 33.2 秒，语音后端 DeepSeek，旁白听写核对也一致。\n\n**管线跑了几次：** 2 次。第 1 轮用 `--no-video` 做文字层检查，一次通过；第 2 轮用 `--draft` 渲染，画面、响度、停顿、听写全部通过。\n\n**每次改了什么：** 第 1 轮新建 `film.json`，由 title → bignumber（521 件）→ bars（按数量降序的前 6 名）→ outro 四个场景组成，所有数字都通过数据引用获取，未手写；第 2 轮没有改动，直接草稿渲染确认。\n\n**内容覆盖：** 讲述了 24 个品类、第一名科普动画及 521 件，前 6 名（科普动画 521、教程 455、知识讲解 412、产品演示 388、游戏实况 367、编程教学 344）都在画面和旁白中出现，并在画面和旁白中说明这是虚构的示例数据。\n\n未执行去掉 `--draft` 的成片渲染，因为本次放行的命令只包含 `--no-video` 和 `--draft`；草稿已位于 `task/out/film.mp4`。",
+  "outcome": "passed"
+}

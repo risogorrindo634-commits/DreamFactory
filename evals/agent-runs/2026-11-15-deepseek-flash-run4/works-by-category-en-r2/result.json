@@ -1,0 +1,70 @@
+{
+  "case": "works-by-category-en",
+  "run": "works-by-category-en-r2",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 44.133
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "9843e78c8095",
+      "backend": "deepseek",
+      "ttsBilled": 429
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "9843e78c8095",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 24,
+    "toolUses": 23,
+    "wallSec": 161,
+    "costUsd": 0.0176,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 51893,
+      "output": 13672,
+      "cacheRead": 539264,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 429,
+    "costUsd": 0.0193
+  },
+  "costUsd": 0.0369,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "草稿自检已全部通过，工作到此完成。\n\n**报告：** 通过了。管线共跑 2 次：第 1 次 `--no-video` 文字层检查一次通过，第 2 次 `--draft` 连音频、听写、画面检查也全部通过（片长 44.1 秒，语音后端 deepseek，DeepSeek 听写核对 11 句旁白一致）。\n\n**改了什么：** 只写了 `task/film.json`，没有返工。五个场景依次是开场标题、总数 2,793（附「至少 5,000 次观看」的口径说明）、八类作品的横向条形图（突出 Games，含占比）、Games 占比 17% 的大数字，以及收尾。简报要求的四项都已覆盖：总数、最大类别 Model comparisons（534）、Games 的数量 483 与占比 17%、以及 5,000 次观看的门槛；所有数字均为数据引用，来源 `zhuyansen/awesome-opus-5.5-video` 每帧可见。按你设定的验收目标，草稿通过即停，未再渲染成片；如需成片，去掉 `--draft` 跑一次 `node pipeline/cli.mjs run task` 即可。",
+  "outcome": "passed"
+}

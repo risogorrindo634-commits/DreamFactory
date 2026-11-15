@@ -1,0 +1,44 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "2026 年每月新增学员：中间缺了一个月",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "opening",
+      "type": "title",
+      "kicker": "数据故事",
+      "headline": "2026 年，每月新增学员",
+      "sub": "某课程平台 · 虚构示例数据",
+      "narration": [
+        "这是一份虚构的示例数据。",
+        "我们来看 2026 年每月新增学员的走势。"
+      ]
+    },
+    {
+      "id": "trend",
+      "type": "line",
+      "title": "2026 年每月新增学员",
+      "sub": "单位：人 · 6 月数据缺失",
+      "series": { "$": "series.monthly" },
+      "narration": [
+        "1 月新增 320 人，12 月到了 760 人。",
+        "可查的月份里，每个月都在增长。",
+        "6 月系统迁移，没有留下数据。",
+        "折线在这一段断开，缺口照实标出。"
+      ]
+    },
+    {
+      "id": "closing",
+      "type": "outro",
+      "headline": "从 {{series.monthly[1月]}} 人到 {{series.monthly[12月]}} 人",
+      "sub": "虚构示例数据，仅用于演示",
+      "narration": [
+        "增长仍在继续，但缺口不能忽略。",
+        "以上数字都是虚构示例，仅用于演示。"
+      ]
+    }
+  ]
+}

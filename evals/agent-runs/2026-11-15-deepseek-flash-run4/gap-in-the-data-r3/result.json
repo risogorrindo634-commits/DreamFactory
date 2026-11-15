@@ -1,0 +1,90 @@
+{
+  "case": "gap-in-the-data",
+  "run": "gap-in-the-data-r3",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 29.4
+  },
+  "pipelineRuns": 4,
+  "failedRuns": 1,
+  "filmVersions": 3,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "1062e076e72a",
+      "backend": "deepseek",
+      "ttsBilled": 145
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "e4b776d4388a",
+      "backend": "deepseek",
+      "ttsBilled": 46
+    },
+    {
+      "round": 3,
+      "passed": false,
+      "failed": [
+        "asr"
+      ],
+      "rendered": true,
+      "filmVersion": "e4b776d4388a",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    },
+    {
+      "round": 4,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "30a30d82dafc",
+      "backend": "deepseek",
+      "ttsBilled": 21
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 38,
+    "toolUses": 37,
+    "wallSec": 296,
+    "costUsd": 0.0331,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 58673,
+      "output": 34002,
+      "cacheRead": 1283200,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 212,
+    "costUsd": 0.0095
+  },
+  "costUsd": 0.0426,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "**通过。** 第 4 轮 `--draft` 渲染后 18 项自检全部通过，片长 29.4 秒，语音后端 DeepSeek。\n\n- 第 1 次 `--no-video`：一次通过，但片长只有 23.7 秒，且图上「320」标签贴着 400 刻度线；据此加了「7 月恢复记录，继续上升。」和收尾的示例数据说明，并把标签右移、去掉多余刻度线。\n- 第 2 次 `--no-video`：通过，片长 29.0 秒，抽帧图确认 6 月处折线断开、缺口写着「数据缺失」。\n- 第 3 次 `--draft`：只有听写核对失败——语音把「1 月」念成了「11月」。\n- 第 4 次 `--draft`：把该句改为「是开年首月的 2.4 倍」，含义不变且避开歧义，全部检查通过。\n\n`task/scenes.js` 里的自定义折线场景每个有数据的月份都标了 `data-df-value`（恰好 11 个），1 月和 12 月的数值画在图上并在旁白里讲到，6 月留空不画成 0、也不连线。按你的要求停在草稿，没有出成片。",
+  "outcome": "passed"
+}

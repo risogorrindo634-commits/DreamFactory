@@ -1,0 +1,65 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "这家工作室一年里变了多少",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "虚构示例 · 工作室年报",
+      "headline": "一年，产量变了多少",
+      "sub": "一家小型工作室的 2025 与 2026",
+      "narration": ["这是一份虚构的示例数据。"]
+    },
+    {
+      "id": "films",
+      "type": "bars",
+      "title": "讲解视频产量",
+      "sub": "单位：支",
+      "series": { "$": "series.films" },
+      "unit": "支",
+      "highlight": "2026 年",
+      "narration": [
+        "2025 年，做了 36 支讲解视频。",
+        "2026 年，产量达到 162 支。"
+      ]
+    },
+    {
+      "id": "cost",
+      "type": "bars",
+      "title": "每支视频的成本",
+      "sub": "单位：元",
+      "series": { "$": "series.costPerFilm" },
+      "unit": "元",
+      "highlight": "2026 年",
+      "narration": [
+        "2025 年，每支成本 4200 元。",
+        "2026 年，降到 380 元。"
+      ]
+    },
+    {
+      "id": "times",
+      "type": "bignumber",
+      "label": "产量是 2025 年的",
+      "value": "{{times series.films[2025 年] series.films[2026 年]}}",
+      "unit": "倍",
+      "narration": ["产量增长到原来的 4.5 倍。"]
+    },
+    {
+      "id": "down",
+      "type": "bignumber",
+      "label": "单片成本下降",
+      "value": "{{down series.costPerFilm[2025 年] series.costPerFilm[2026 年]}}",
+      "narration": ["单片成本下降了 91%。"]
+    },
+    {
+      "id": "close",
+      "type": "outro",
+      "headline": "更低的成本，更高的产量",
+      "sub": "示例数据，不代表真实统计",
+      "narration": ["同样的团队，更低的成本，更高的产量。"]
+    }
+  ]
+}

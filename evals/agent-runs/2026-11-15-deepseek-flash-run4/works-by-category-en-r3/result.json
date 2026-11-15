@@ -1,0 +1,91 @@
+{
+  "case": "works-by-category-en",
+  "run": "works-by-category-en-r3",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 44.4
+  },
+  "pipelineRuns": 4,
+  "failedRuns": 1,
+  "filmVersions": 3,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "1b0b066897f5",
+      "backend": "deepseek",
+      "ttsBilled": 474
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "4e6fc390a0fd",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    },
+    {
+      "round": 3,
+      "passed": false,
+      "failed": [
+        "video-stillness",
+        "asr"
+      ],
+      "rendered": true,
+      "filmVersion": "4e6fc390a0fd",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    },
+    {
+      "round": 4,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "013c6d576c3d",
+      "backend": "deepseek",
+      "ttsBilled": 208
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 39,
+    "toolUses": 38,
+    "wallSec": 343,
+    "costUsd": 0.0328,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 61795,
+      "output": 32784,
+      "cacheRead": 1282944,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 682,
+    "costUsd": 0.0307
+  },
+  "costUsd": 0.0635,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "草稿已全部通过（44.4 秒，11 句旁白，DeepSeek 语音，抽帧图 `task/out/contact.jpg`，草稿视频 `task/out/film.mp4`）。管线共跑了 4 次：第 1 次 `--no-video` 全项通过但片长 51.7 秒；第 2 次删掉开场一句、进度条一句和一条 bullet，压到 43.1 秒并继续通过；第 3 次 `--draft` 暴露两处问题——条形图有一句旁白长达 5.9 秒导致画面静止 6.0 秒，以及语音把“2793”念成“twenty-seven ninety-three”导致听写核对失败；第 4 次把游戏的数字与占比拆成两句、给三处 2,793 加了 `say` 读音写法（字幕仍是阿拉伯数字），片长 44.4 秒，18 项检查全部通过。按任务要求停在草稿自检通过这一步；成片画质（去掉 `--draft`）不在本次放行的命令范围内，未执行。",
+  "outcome": "passed"
+}

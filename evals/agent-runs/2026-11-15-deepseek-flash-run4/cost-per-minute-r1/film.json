@@ -1,0 +1,72 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "做一分钟视频要花多少钱",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "数据短片",
+      "headline": "做一分钟视频，要花多少钱",
+      "sub": "按每分钟成片成本，比较四种做法",
+      "narration": [
+        "做一分钟视频，价钱差得远。",
+        "四种做法，放在同一把尺上。"
+      ]
+    },
+    {
+      "id": "costs",
+      "type": "ranges",
+      "title": "每分钟成片成本",
+      "sub": "对数刻度，每一格差一个数量级",
+      "series": { "$": "series.cost" },
+      "unit": "美元",
+      "highlight": "代码生成短片",
+      "scale": [1, 100000],
+      "narration": [
+        "代码生成短片，2 到 20 美元。",
+        "视频模型接口，2 到 45 美元。",
+        "自由职业者，1000 到 4000 美元。",
+        "工作室，3000 到 15000 美元。"
+      ]
+    },
+    {
+      "id": "ceiling",
+      "type": "bignumber",
+      "label": "工作室的报价上限",
+      "value": "{{series.cost[工作室].high}}",
+      "unit": "美元",
+      "note": "多数报价落在 3000 到 15000 美元",
+      "narration": [
+        "报价最高的是工作室。",
+        "上限每分钟 15000 美元。"
+      ]
+    },
+    {
+      "id": "caveat",
+      "type": "bullets",
+      "title": "看量级，不看精确值",
+      "items": [
+        "数字多为创作者自报",
+        "部分来自报价指南",
+        "只适合比较数量级"
+      ],
+      "narration": [
+        "这些数字，多是创作者自报。",
+        "也有报价指南的区间。",
+        "只能看量级，别当精确值。"
+      ]
+    },
+    {
+      "id": "close",
+      "type": "outro",
+      "headline": "代码生成，每分钟 {{series.cost[代码生成短片].low}} 到 {{series.cost[代码生成短片].high}} 美元",
+      "sub": "具体报价，仍要逐家询价",
+      "narration": [
+        "回到开头：2 到 20 美元。",
+        "先小批量试一次，再决定。"
+      ]
+    }
+  ]
+}

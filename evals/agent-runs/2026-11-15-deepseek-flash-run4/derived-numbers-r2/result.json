@@ -1,0 +1,70 @@
+{
+  "case": "derived-numbers",
+  "run": "derived-numbers-r2",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 35.9
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "262a9c3b4e66",
+      "backend": "deepseek",
+      "ttsBilled": 258
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "262a9c3b4e66",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 24,
+    "toolUses": 23,
+    "wallSec": 151,
+    "costUsd": 0.0181,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 51698,
+      "output": 14727,
+      "cacheRead": 508928,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 258,
+    "costUsd": 0.0116
+  },
+  "costUsd": 0.0297,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "草稿自检全部通过。按规范，我只有三件事要汇报。\n\n**结果：通过。** 草稿渲染（`--draft`）的 18 项自检全部通过，包括数据准确、字幕和听写核对：9 句旁白都被 DeepSeek 听写识别为与字幕一致；片长 35.9 秒，在要求的 20–60 秒内。\n\n**管线一共跑了 2 次。** 第 1 次是 `--no-video` 文字层检查，第 2 次是 `--draft` 全量检查，两次都一次通过，没有返工。\n\n**改动内容：** 第 1 次运行前只新建了 `task/film.json`，用 6 个内置场景来满足简报要求：`title` 片头说明这是虚构示例；`bars` 对比两年产量，分别为 36 支和 162 支；`bignumber` 讲产量是原来的 4.5 倍；`bars` 对比单片成本，分别为 4200 元和 380 元；`bignumber` 讲成本下降 91%；`outro` 收尾强调不要当成真实统计。所有数字都用 `{{...}}` 引用数据，倍数和降幅用 `times`、`down` 计算，没有手写任何数字；第 2 次运行前没有修改 `film.json`。\n\n按权限范围，我只做到草稿通过；规范第 6 步的正式成片渲染（去掉 `--draft`）不在本次允许的命令里，所以没有执行。",
+  "outcome": "passed"
+}

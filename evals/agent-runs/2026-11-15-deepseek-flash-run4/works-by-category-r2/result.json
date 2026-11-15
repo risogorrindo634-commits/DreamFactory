@@ -1,0 +1,70 @@
+{
+  "case": "works-by-category",
+  "run": "works-by-category-r2",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 39.367
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "ccebfb5c94e6",
+      "backend": "deepseek",
+      "ttsBilled": 225
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "ccebfb5c94e6",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 27,
+    "toolUses": 26,
+    "wallSec": 156,
+    "costUsd": 0.0181,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 51811,
+      "output": 13697,
+      "cacheRead": 714112,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 225,
+    "costUsd": 0.0101
+  },
+  "costUsd": 0.0283,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "已通过。结论：`task/film.json` 一次写成，草稿自检全部通过。\n\n- 管线共跑了 2 次：第 1 次 `--no-video` 做文字层检查，14 项全部通过（片长 39.4 秒）；第 2 次 `--draft` 草稿渲染，含画面、响度、停顿、听写核对的 18 项全部通过，语音后端 deepseek。\n- 两次之间没有改动：首轮文字检查即通过，无返工；抽帧图逐帧看过，镜头顺序为标题 → 总数 2,793 → 八类条形图（模型对比 534 居首，游戏 483 件占 17%）→ 三条要点 → 收尾，节奏正常。\n- 简报要求均覆盖：作品总数、数量最多的类型、游戏的数量与占比、仅收 5,000 浏览以上作品的口径提醒；全部数字均为数据引用，来源已标注。\n- 按任务要求停在草稿阶段，未生成最终成片。",
+  "outcome": "passed"
+}

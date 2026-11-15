@@ -1,0 +1,81 @@
+{
+  "case": "long-report",
+  "run": "long-report-r1",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 92.5
+  },
+  "pipelineRuns": 3,
+  "failedRuns": 1,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "555f77d0a5c1",
+      "backend": "deepseek",
+      "ttsBilled": 767
+    },
+    {
+      "round": 2,
+      "passed": false,
+      "failed": [
+        "video-stillness"
+      ],
+      "rendered": true,
+      "filmVersion": "555f77d0a5c1",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "d19c9a3e15f0",
+      "backend": "deepseek",
+      "ttsBilled": 38
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 33,
+    "toolUses": 32,
+    "wallSec": 454,
+    "costUsd": 0.0377,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 81538,
+      "output": 35719,
+      "cacheRead": 1356544,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 805,
+    "costUsd": 0.0362
+  },
+  "costUsd": 0.074,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "草稿渲染自检已全部通过（18 项检查全过，片长 92.5 秒，DeepSeek 语音）。\n\n管线一共跑了 3 次：第一次 `--no-video` 文字层检查就全过；第二次 `--draft` 只在 `video-stillness` 上失败——开场第二句旁白有 24 字，语音念了 6.2 秒，画面和字幕一起静止超过 6 秒上限；第三次把这句话缩到 19 字（\"四个画面，看清产量、类型、走势和成本。\"），重跑 `--draft` 全过，最长静止降到 4.4 秒，数据准确、来源、同步、拥挤、图形、响度、听写等检查均通过。\n\n画面方面，`scenes.js` 里新增的折线图（自定义 `line` 场景）逐点标注了 `data-df-value`，12 个月刻度用 tick 角色，最高点 637 件标在点的左上方、不压线；柱状图高亮模型对比并显示 24% 占比，成本区间用内置对数刻度的 `ranges`。简报四件事各占一个画面，结尾提醒了数据为虚构示例。按任务要求停在草稿通过，未再出成片，也没有需要说明的未满足要求。",
+  "outcome": "passed"
+}

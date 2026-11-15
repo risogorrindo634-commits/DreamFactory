@@ -1,0 +1,55 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "一年的新增学员走势，中间缺了一个月",
+  "source": "来源：{{source.name}} · 截至 {{source.asOf}}",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto" },
+  "scenes": [
+    {
+      "id": "opening",
+      "type": "title",
+      "kicker": "课程平台 · 2026 年",
+      "headline": "一年的新增学员走势",
+      "sub": "每月新增学员数量，单位：人",
+      "narration": ["一年的新增学员走势。"]
+    },
+    {
+      "id": "trend",
+      "type": "line",
+      "title": "每月新增学员",
+      "sub": "2026 年 · 单位：人 · 折线在缺口处断开",
+      "series": { "$": "series.monthly" },
+      "note": { "$": "series.monthly[6月].note" },
+      "unit": "人",
+      "narration": [
+        "先看起点：1 月新增 320 人。",
+        "到 12 月，新增 760 人。",
+        "6 月系统迁移，没有留下数据。",
+        "折线在这里断开，5 月和 7 月不直接相连。"
+      ]
+    },
+    {
+      "id": "takeaways",
+      "type": "bullets",
+      "title": "把缺口放在走势里看",
+      "items": [
+        "除了 6 月，其余月份都在增长。",
+        "1 月 320 人，12 月 760 人。",
+        "缺口前后，走势都向上。"
+      ],
+      "narration": [
+        "除了 6 月，其余月份都在增长。",
+        "从 320 人到 760 人。",
+        "缺口前后，走势都向上。"
+      ]
+    },
+    {
+      "id": "closing",
+      "type": "outro",
+      "headline": "看清增长，也看清缺口",
+      "sub": "示例数据，虚构，仅用于评测",
+      "narration": ["示例数据，虚构，仅用于评测。", "增长要看完整的月份。"]
+    }
+  ]
+}

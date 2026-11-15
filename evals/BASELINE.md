@@ -1,6 +1,6 @@
 # 评测基线
 
-干净用例误报 0/11，缺陷检出 52/52。
+干净用例误报 0/11，缺陷检出 53/53。
 
 运行环境：Node v22.23.4 · 语音后端 deepseek · 草稿画质 · 2026-11-15
 
@@ -20,7 +20,7 @@
 | twenty-seconds | 通过 | 13.6 |  |
 | two-series | 通过 | 32.4 |  |
 | works-by-category | 通过 | 52.8 |  |
-| works-by-category-en | 通过 | 53.3 |  |
+| works-by-category-en | 通过 | 54.0 |  |
 
 ## 缺陷注入
 
@@ -72,6 +72,7 @@
 | voice-says-wrong-number | 字幕写 483，语音念成 438 | data-accuracy、asr | 抓到 |  |
 | voice-says-wrong-number-english | 英文版字幕写 233，语音念成 323 | data-accuracy、asr | 抓到 |  |
 | voice-says-wrong-number-before-unit | 字幕写 52 期，语音念成 57 期 | data-accuracy、asr | 抓到 |  |
+| voice-says-wrong-number-after-letters | 字幕写“API，2 到 45 美元”，语音念成 3 到 45 | data-accuracy、asr | 抓到 |  |
 | machine-without-cjk-font | 渲染的机器上没有中文字体，中文全部显示成方框 | fonts | 抓到 |  |
 | mix-too-loud | 混音出错，旁白整体响了 6 分贝，峰值过载 | audio-levels | 抓到 |  |
 | mix-too-quiet | 混音出错，旁白整体轻了 6 分贝 | audio-levels | 抓到 |  |
@@ -86,7 +87,7 @@
 | 检查 | 缺陷样例 | 抓到 | 备注 |
 | --- | --- | --- | --- |
 | spec | 5 | 5 |  |
-| data-accuracy | 16 | 16 |  |
+| data-accuracy | 17 | 17 |  |
 | citation | 1 | 1 |  |
 | readability | 1 | 1 |  |
 | layout | 3 | 3 |  |
@@ -102,4 +103,4 @@
 | video-stillness | 2 | 2 |  |
 | audio-levels | 2 | 2 |  |
 | audio-gaps | 1 | 1 |  |
-| asr | 4 | 4 |  |
+| asr | 5 | 5 |  |

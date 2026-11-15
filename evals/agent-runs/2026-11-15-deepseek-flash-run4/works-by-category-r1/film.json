@@ -1,0 +1,68 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "作品都在做什么：按类型看这份清单",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "voice": { "backend": "auto" },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "AI 影像作品清单",
+      "headline": "{{facts.total}} 件作品，都在做什么",
+      "sub": "按作品类型看这份公开清单",
+      "narration": ["这份公开清单收录了 {{facts.total}} 件作品。"]
+    },
+    {
+      "id": "types",
+      "type": "bars",
+      "title": "八个类型，谁最多",
+      "sub": "作品数量（件）",
+      "series": { "$": "series.categories" },
+      "highlight": "模型对比",
+      "unit": "件",
+      "narration": [
+        "最多的是模型对比，{{series.categories[模型对比]}} 件。",
+        "游戏排第二，{{series.categories[游戏]}} 件。",
+        "3D 世界与模拟 {{series.categories[3D 世界与模拟]}} 件，排第三。",
+        "讲解与教育 {{series.categories[讲解与教育]}} 件。"
+      ]
+    },
+    {
+      "id": "games",
+      "type": "bignumber",
+      "label": "游戏类型作品",
+      "value": "{{series.categories[游戏]}}",
+      "unit": "件",
+      "note": "占全部作品的 {{share series.categories[游戏]}}",
+      "narration": [
+        "游戏类型有 {{series.categories[游戏]}} 件作品。",
+        "占全部作品的 {{share series.categories[游戏]}}。",
+        "排在模型对比之后，是第二大类。"
+      ]
+    },
+    {
+      "id": "caveat",
+      "type": "bullets",
+      "title": "读这份清单要注意",
+      "items": [
+        "只收浏览量 {{facts.minViews}} 以上的作品",
+        "不代表全部 AI 影像作品"
+      ],
+      "narration": [
+        "清单只收浏览量 {{facts.minViews}} 以上的作品。",
+        "所以它不代表全部作品。"
+      ]
+    },
+    {
+      "id": "close",
+      "type": "outro",
+      "headline": "先看类型，再找机会",
+      "sub": "完整的类型分布见清单",
+      "narration": [
+        "先看类型，再看清结构。",
+        "这是这份清单的类型分布。"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "case": "gap-in-the-data",
+  "run": "gap-in-the-data-r2",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 29.333
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "d9b71b273f0a",
+      "backend": "deepseek",
+      "ttsBilled": 197
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "d9b71b273f0a",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 27,
+    "toolUses": 26,
+    "wallSec": 269,
+    "costUsd": 0.028,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 55462,
+      "output": 28401,
+      "cacheRead": 880896,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 197,
+    "costUsd": 0.0089
+  },
+  "costUsd": 0.0369,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "草稿自检全部通过。\n\n**汇报**\n\n- **是否通过**：通过。草稿渲染（`--draft`）的 18 项检查全部通过，含片长 29.3 秒、图形与数值一致、听写核对、响度与停顿。\n- **跑了几次**：管线共跑 2 次。第 1 次 `--no-video` 文字层检查一次通过；第 2 次 `--draft` 渲染草稿并跑全部检查，也一次通过。\n- **每次改了什么**：没有返工。第一次运行前一次性写了 `task/film.json`（开场、折线图、收尾三场，旁白 8 句）和 `task/scenes.js`（自定义 `line` 场景：11 个带 `data-df-value` 的数据点，折线在 6 月断开，缺口处用虚线标记并写上该行备注“数据缺失”，1 月与 12 月数值标在图上）；第二次运行未作任何修改。\n- **说明**：按本次权限只放行 `--no-video` 与 `--draft`，因此没有执行去掉 `--draft` 的成片渲染，`task/out/film.mp4` 是草稿画质版本。",
+  "outcome": "passed"
+}

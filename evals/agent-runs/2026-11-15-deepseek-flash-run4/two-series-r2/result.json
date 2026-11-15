@@ -1,0 +1,74 @@
+{
+  "case": "two-series",
+  "run": "two-series-r2",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 30.3
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "256b16df85fb",
+      "backend": "deepseek",
+      "ttsBilled": 184
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "256b16df85fb",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 29,
+    "toolUses": 28,
+    "wallSec": 290,
+    "costUsd": 0.0387,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 55283,
+      "output": 46861,
+      "cacheRead": 780288,
+      "cacheWrite": 0
+    },
+    "refusedActions": [
+      "Read: {\"file_path\":\"/tmp/claude-0/-home-user-DreamFactory/58cc25c1-2c66-5589-b40e-41c9c76faeb6/scratchpad/ds-run4/two-series-r"
+    ]
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": [
+      "/tmp/claude-0/-home-user-DreamFactory/58cc25c1-2c66-5589-b40e-41c9c76faeb6/scratchpad/ds-run4/two-series-r2/pipeline/lib/asr.mjs"
+    ]
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 184,
+    "costUsd": 0.0083
+  },
+  "costUsd": 0.047,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "通过。文字层检查和草稿渲染自检全部通过。\n\n- **结果**：`--draft` 自检 18 项全部通过，片长 30.3 秒，语音后端 deepseek；画面、响度（-14.3 LUFS）、停顿、听写核对和静止画面都没有问题。\n- **管线跑了 2 次**：第 1 次 `--no-video` 文字层检查一次通过；第 2 次 `--draft` 加上成片与音频检查后全部通过，中间没有返工。\n- **这一轮做的改动**：新建 `task/film.json`（开场标题、自定义折线图、收尾三个场景）和 `task/scenes.js`（自定义 `line` 场景：两条线同时画出并标出各自曲线名，8 月与 12 月四个数值标在点上，8 月有一条“反超”虚线引导，每个数据点都带 `data-df-value`），第 2 次运行没有改任何内容。\n- 按要求停在草稿通过这一步，未出成片；需要成片时去掉 `--draft` 再跑一次即可。",
+  "outcome": "passed"
+}

@@ -1,0 +1,70 @@
+{
+  "vertical": "data-story",
+  "lang": "en",
+  "title": "What are {{facts.total}} works making?",
+  "source": "Source: {{source.name}} (as of {{source.asOf}})",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto" },
+  "scenes": [
+    {
+      "id": "opening",
+      "type": "title",
+      "kicker": "WORKS BY TYPE",
+      "headline": "What are {{facts.total}} works making?",
+      "sub": "A field guide to AI video, sorted by what each work is",
+      "narration": [
+        "Here is what {{facts.total}} works of AI video are making.",
+        "Each one is sorted by the kind of work it is."
+      ]
+    },
+    {
+      "id": "total",
+      "type": "bignumber",
+      "label": "Works in the catalog",
+      "value": "{{facts.total}}",
+      "unit": "works",
+      "note": "Only works with at least {{facts.minViews}} views are listed.",
+      "narration": [
+        "The catalog holds {{facts.total}} works in total.",
+        "It only lists works with at least {{facts.minViews}} views."
+      ]
+    },
+    {
+      "id": "categories",
+      "type": "bars",
+      "title": "Works by category",
+      "sub": "All {{facts.total}} works, grouped by what they make",
+      "series": { "$": "series.categories" },
+      "highlight": "Games",
+      "unit": "works",
+      "showShare": true,
+      "narration": [
+        "Model comparisons leads, with {{series.categories[Model comparisons]}} works.",
+        "Games come next, at {{series.categories[Games]}}.",
+        "The rest of the list runs down from there."
+      ]
+    },
+    {
+      "id": "games",
+      "type": "bignumber",
+      "label": "Games in the catalog",
+      "value": "{{share series.categories[Games]}}",
+      "unit": "of all works",
+      "note": "{{series.categories[Games]}} of {{facts.total}} works are games.",
+      "narration": [
+        "Games make up {{share series.categories[Games]}} of the whole list.",
+        "That is {{series.categories[Games]}} games among {{facts.total}} works."
+      ]
+    },
+    {
+      "id": "closing",
+      "type": "outro",
+      "headline": "Read the full list by type",
+      "sub": "Every entry cleared {{facts.minViews}} views before it made the cut",
+      "narration": [
+        "Every work here clears {{facts.minViews}} views.",
+        "The full breakdown is one link away."
+      ]
+    }
+  ]
+}

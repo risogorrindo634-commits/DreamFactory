@@ -1,0 +1,100 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "2026 年度盘点：代码生成作品",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "年度盘点 · 2026",
+      "headline": "代码生成作品的这一年",
+      "sub": "某视频社区的年度数据回顾",
+      "narration": [
+        "欢迎收看某视频社区年度盘点。",
+        "这一期只看代码生成作品。",
+        "数据截至 2026 年 12 月 31 日。"
+      ]
+    },
+    {
+      "id": "total",
+      "type": "bignumber",
+      "label": "2026 年全年总量",
+      "value": "{{facts.total}}",
+      "unit": "件",
+      "note": "是 2025 年的 {{times series.yearly[2025 年] series.yearly[2026 年]}} 倍",
+      "narration": [
+        "先看全年总量。",
+        "2026 年一共 {{facts.total}} 件。",
+        "这是 2025 年的 {{times series.yearly[2025 年] series.yearly[2026 年]}} 倍。",
+        "增长节奏在下半年明显加快。"
+      ]
+    },
+    {
+      "id": "types",
+      "type": "bars",
+      "title": "按类型分布",
+      "sub": "六个类型合计 {{facts.total}} 件",
+      "unit": "件",
+      "highlight": "模型对比",
+      "showShare": true,
+      "series": { "$": "series.categories" },
+      "narration": [
+        "按作品类型拆开来看。",
+        "最多的是模型对比，{{series.categories[模型对比]}} 件。",
+        "占到全部的 {{share series.categories[模型对比]}}。",
+        {
+          "text": "游戏和 3D 场景排在后面。",
+          "say": "游戏和三维场景排在后面。"
+        },
+        "六个类型加起来，正好是全年总量。"
+      ]
+    },
+    {
+      "id": "monthly",
+      "type": "line",
+      "title": "逐月走势",
+      "sub": "2026 年逐月作品数（件）",
+      "series": { "$": "series.monthly" },
+      "narration": [
+        "接着看全年的逐月走势。",
+        "作品数几乎每个月都在涨。",
+        "1 月只有 96 件。",
+        "8 月之后，涨势明显变陡。",
+        "12 月升到 {{series.monthly[12月]}} 件，全年最高。",
+        "从两位数一路走到三位数。",
+        "年底两个月的涨幅最猛。"
+      ]
+    },
+    {
+      "id": "cost",
+      "type": "ranges",
+      "title": "三种做法的成本",
+      "sub": "每分钟成片成本，对数刻度",
+      "unit": "美元",
+      "highlight": "代码生成",
+      "series": { "$": "series.cost" },
+      "narration": [
+        "最后比较三种做法的成本。",
+        "按每分钟成片来算。",
+        "代码生成 {{series.cost[代码生成].low}} 到 {{series.cost[代码生成].high}} 美元。",
+        "视频模型稍贵一些。",
+        "外包制作要 {{series.cost[外包制作].low}} 到 {{series.cost[外包制作].high}} 美元。",
+        "注意，刻度是对数的。",
+        "每一格差一个数量级。",
+        "预算有限的团队，可以先考虑代码生成。"
+      ]
+    },
+    {
+      "id": "outro",
+      "type": "outro",
+      "headline": "以上都是虚构的示例数据",
+      "sub": "仅用于演示，不代表真实业务",
+      "narration": [
+        "提醒一下：这是虚构的示例数据。",
+        "仅用于演示，请不要当作真实业务。"
+      ]
+    }
+  ]
+}

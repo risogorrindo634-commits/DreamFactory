@@ -1,0 +1,79 @@
+{
+  "case": "twenty-seconds",
+  "run": "twenty-seconds-r1",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 19.267
+  },
+  "pipelineRuns": 3,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "2d1e828741db",
+      "backend": "deepseek",
+      "ttsBilled": 123
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "2d1e828741db",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "2d1e828741db",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 26,
+    "toolUses": 25,
+    "wallSec": 159,
+    "costUsd": 0.016,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 50198,
+      "output": 11267,
+      "cacheRead": 565760,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 123,
+    "costUsd": 0.0055
+  },
+  "costUsd": 0.0215,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "**通过。** 自检全部通过，成片为 `task/out/film.mp4`，片长 19.3 秒（要求 12–22 秒），语音后端 DeepSeek。\n\n一共跑了 3 次：第 1 次 `--no-video` 文字层检查，新建 `film.json`（开场、总数 2,793、类型柱状图、收尾四场），一次通过；第 2 次 `--draft` 渲染草稿，画面与声音检查也全过，未改任何文件；第 3 次按流程去掉 `--draft` 出成片，仍然全过，没有返工。\n\n内容上只念了总数、最多的类型（模型对比 534 件）和游戏类 483 件；讲解与教育的 233 件通过柱状图呈现在画面上、没有念。所有数字都是引用，来源已标注，未使用 `scenes.js`。",
+  "outcome": "passed"
+}

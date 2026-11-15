@@ -1,0 +1,70 @@
+{
+  "case": "monthly-trend",
+  "run": "monthly-trend-r2",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 38.9
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "61d3735b77c7",
+      "backend": "deepseek",
+      "ttsBilled": 275
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "61d3735b77c7",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 27,
+    "toolUses": 26,
+    "wallSec": 278,
+    "costUsd": 0.0329,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 58272,
+      "output": 36698,
+      "cacheRead": 707328,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 275,
+    "costUsd": 0.0124
+  },
+  "costUsd": 0.0453,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "通过。全片 38.9 秒，语音后端 DeepSeek，18 项检查（含草稿的视频、响度、停顿、听写核对）全部通过，未用满返工轮数。\n\n管线共跑 2 次：第 1 次 `--no-video` 文字层检查即全部通过；第 2 次 `--draft` 渲染草稿并通过全部媒体检查，两次之间没有改动。首版即写了 `task/film.json` 和 `task/scenes.js`：自定义 `line` 场景画 12 个月折线（非柱状），把 1 月 42、9 月 149、10 月 418、全年最高 11 月 531 标在图上，旁白逐句讲这四个数量和 12 月回落，所有数字均用数据引用。开头、收尾与来源行都注明这是虚构示例数据；折线点均带 `data-df-value`，坐标刻度标了 `tick` 角色。\n\n草稿成片在 `task/out/film.mp4`，抽帧图在 `task/out/contact.jpg`。",
+  "outcome": "passed"
+}

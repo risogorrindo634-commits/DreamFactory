@@ -1,0 +1,79 @@
+{
+  "case": "long-report",
+  "run": "long-report-r2",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 85.133
+  },
+  "pipelineRuns": 3,
+  "failedRuns": 0,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "d40d6f33db51",
+      "backend": "deepseek",
+      "ttsBilled": 644
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "5e3d03ff9eb1",
+      "backend": "deepseek",
+      "ttsBilled": 56
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "5e3d03ff9eb1",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 32,
+    "toolUses": 31,
+    "wallSec": 383,
+    "costUsd": 0.0342,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 59094,
+      "output": 36180,
+      "cacheRead": 1204864,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 700,
+    "costUsd": 0.0315
+  },
+  "costUsd": 0.0657,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "草稿渲染的自检全部通过。\n\n- **结果**：`--draft` 这轮 18 项检查全过，包括听写核对；片长 85.1 秒，落在简报要求的 80–95 秒内，语音后端为 deepseek。\n- **管线共跑 3 次**：第 1 次 `--no-video` 全部通过，但片长只有 79.3 秒，低于简报下限；第 2 次在类型场景增加“六个类型加起来”，并在月度场景增加“8 月之后涨势变陡”两行旁白，片长升到 85.1 秒，文字层全部通过；第 3 次 `--draft` 渲染，文字、画面、响度、停顿、听写核对全部通过。\n- **画面**：月度走势用 `task/scenes.js` 中的自定义折线场景实现，全年峰值 637 件直接标在图上；其余四段用内置的总量、柱状、区间和收尾场景。\n- 按要求停在草稿画质，未再渲染成片。",
+  "outcome": "passed"
+}

@@ -1,0 +1,70 @@
+{
+  "case": "top-of-long-list",
+  "run": "top-of-long-list-r1",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 33.733
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "250e486723c5",
+      "backend": "deepseek",
+      "ttsBilled": 251
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "250e486723c5",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 28,
+    "toolUses": 27,
+    "wallSec": 216,
+    "costUsd": 0.0261,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 57375,
+      "output": 24375,
+      "cacheRead": 951424,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 251,
+    "costUsd": 0.0113
+  },
+  "costUsd": 0.0374,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "草稿渲染的全部检查都通过了，成片草稿视频输出到 `task/out/film.mp4`，抽帧图确认了画面构图：6 条横向条按数量从多到少排列，521 高亮，每行都带数值标签。\n\n报告：\n\n- **是否通过**：通过。`--draft` 草稿渲染自检全部 18 项通过（文字层 14 项 + 画面/响度/停顿/听写 4 项），片长 33.7 秒，在 20–60 秒要求内。\n- **管线跑了几次**：2 次。第 1 次 `--no-video` 文字层检查一键通过（33.7 秒、8 句旁白）；第 2 次 `--draft` 完整渲染通过，含 DeepSeek 听写核对。\n- **每次改了什么**：两次之间没有改 `film.json`，第一版就满足要求，因此没有返工。影片共 5 个场景：标题 → 大数字「24 个品类」→ 前 6 名横向条形图（科普动画 521、教程 455、知识讲解 412、产品演示 388、游戏实况 367、编程教学 344，按降序）→ 给创作者的两条结论（要点列表）→ 收尾。所有数字均用 `{{...}}` 或 `{\"$\": ...}` 引用，24 和 521 都在旁白中念到，虚构示例来源在画面来源行与多处文案中注明。",
+  "outcome": "passed"
+}

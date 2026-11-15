@@ -1,0 +1,78 @@
+{
+  "vertical": "data-story",
+  "lang": "en",
+  "title": "What are {{facts.total}} works making?",
+  "source": "Source: {{source.name}} (as of {{source.asOf}})",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "title",
+      "type": "title",
+      "kicker": "AI VIDEO SHOWCASE · BY TYPE",
+      "headline": "What are {{facts.total}} works making?",
+      "sub": "A public list of AI-made videos, sorted by type",
+      "narration": [
+        {
+          "text": "{{facts.total}} works, sorted by type.",
+          "say": "Two thousand seven hundred ninety-three works, sorted by type."
+        }
+      ]
+    },
+    {
+      "id": "total",
+      "type": "bignumber",
+      "label": "works in the list",
+      "value": { "$": "facts.total" },
+      "note": "Every work here has at least {{facts.minViews}} views.",
+      "narration": [
+        {
+          "text": "The list holds {{facts.total}} works.",
+          "say": "The list holds two thousand seven hundred ninety-three works."
+        },
+        "Every work here has at least {{facts.minViews}} views."
+      ]
+    },
+    {
+      "id": "by-type",
+      "type": "bars",
+      "title": "Works by type",
+      "sub": "All categories in the list",
+      "series": { "$": "series.categories" },
+      "highlight": "Games",
+      "showShare": true,
+      "narration": [
+        "Model comparisons lead with {{series.categories[Model comparisons]}} works.",
+        "{{series.categories[Games]}} works are games.",
+        "That is {{share series.categories[Games]}} of the list.",
+        "Explainers and education hold {{series.categories[Explainers & education]}}."
+      ]
+    },
+    {
+      "id": "takeaways",
+      "type": "bullets",
+      "title": "Worth remembering",
+      "items": [
+        "Only works with at least {{facts.minViews}} views make the list.",
+        "Model comparisons are the largest group."
+      ],
+      "narration": [
+        "Only works with at least {{facts.minViews}} views make the list.",
+        "Model comparisons are the largest group."
+      ]
+    },
+    {
+      "id": "outro",
+      "type": "outro",
+      "headline": "Comparisons lead, games follow.",
+      "sub": "Only works with at least {{facts.minViews}} views are counted.",
+      "narration": [
+        {
+          "text": "That is the mix of {{facts.total}} works.",
+          "say": "That is the mix of two thousand seven hundred ninety-three works."
+        },
+        "Comparisons lead, and games follow close behind."
+      ]
+    }
+  ]
+}

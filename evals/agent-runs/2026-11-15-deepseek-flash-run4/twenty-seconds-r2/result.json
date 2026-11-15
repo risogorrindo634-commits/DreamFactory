@@ -1,0 +1,70 @@
+{
+  "case": "twenty-seconds",
+  "run": "twenty-seconds-r2",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 14.533
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "0a6d01bc2497",
+      "backend": "deepseek",
+      "ttsBilled": 52
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "87b3641564e3",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 28,
+    "toolUses": 27,
+    "wallSec": 133,
+    "costUsd": 0.0205,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 54713,
+      "output": 16940,
+      "cacheRead": 725632,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 52,
+    "costUsd": 0.0023
+  },
+  "costUsd": 0.0229,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "**通过。** 草稿渲染自检 18 项全部通过，片长 14.5 秒（要求 12–22 秒），语音用 DeepSeek，听写核对也确认旁白与字幕一致。\n\n管线一共跑了 2 次：第 1 次 `--no-video` 跑文字层，我写了 `task/film.json`——开场标题讲总数 2,793，大数字场景讲最多的「模型对比」534，最后一屏用 8 类条形图讲「游戏」483 并高亮它，「讲解与教育」233 只出现在图上不念；13.7 秒全部通过。第 2 次 `--draft` 前只改了一处：把类型分布场景的 `minDuration` 从 4.2 秒提到 5.0 秒，让整张分布图多停留一会儿、末行读完更从容，重跑后文字层与画面、响度、停顿、听写等媒体检查全部通过。\n\n没有写 `scenes.js`（内置场景够用），也没有改动 `data.json` 或 `expect.json`。按任务要求停在草稿自检通过，未再跑去掉 `--draft` 的成片渲染。",
+  "outcome": "passed"
+}

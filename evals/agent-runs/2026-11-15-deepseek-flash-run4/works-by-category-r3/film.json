@@ -1,0 +1,70 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "{{facts.total}} 件作品都在做什么",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "voice": { "backend": "auto" },
+  "scenes": [
+    {
+      "id": "开场",
+      "type": "title",
+      "kicker": "公开数据清单",
+      "headline": "{{facts.total}} 件作品，都在做什么",
+      "sub": "按类型拆开这份 AI 视频清单",
+      "narration": [
+        "这是一份公开的 AI 视频作品清单。",
+        "清单收录了 {{facts.total}} 件作品。"
+      ]
+    },
+    {
+      "id": "总数",
+      "type": "bignumber",
+      "label": "作品总数",
+      "value": { "$": "facts.total" },
+      "unit": "件",
+      "note": "仅收录浏览量 {{facts.minViews}} 以上的作品",
+      "narration": [
+        "先看作品总数。",
+        "清单只收浏览量 {{facts.minViews}} 以上的作品。",
+        "所以它不代表全部。"
+      ]
+    },
+    {
+      "id": "分类",
+      "type": "bars",
+      "title": "作品数量按类型分布",
+      "sub": "共 {{facts.total}} 件作品",
+      "series": { "$": "series.categories" },
+      "highlight": "模型对比",
+      "unit": "件",
+      "showShare": true,
+      "narration": [
+        "数量最多的是模型对比，{{series.categories[模型对比]}} 件。",
+        "游戏类排第二，{{series.categories[游戏]}} 件。",
+        "其余类别在 {{series.categories[音乐与剪辑制作]}} 到 {{series.categories[动效与界面]}} 件之间。"
+      ]
+    },
+    {
+      "id": "游戏",
+      "type": "bignumber",
+      "label": "游戏类作品",
+      "value": { "$": "series.categories[游戏].value" },
+      "unit": "件",
+      "note": "占全部作品的 {{share series.categories[游戏]}}",
+      "narration": [
+        "游戏类占全部作品的 {{share series.categories[游戏]}}。"
+      ]
+    },
+    {
+      "id": "收尾",
+      "type": "outro",
+      "headline": "这只是清单里的分布",
+      "sub": "仅统计浏览量 {{facts.minViews}} 以上的作品",
+      "narration": [
+        "这份清单不是全部。",
+        "但能看出大家在做哪些类型。",
+        "看榜单时，别忘了这个门槛。"
+      ]
+    }
+  ]
+}

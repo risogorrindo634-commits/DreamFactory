@@ -1,0 +1,50 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "每月新增代码生成作品：一年的走势",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "scenes": [
+    {
+      "id": "title",
+      "type": "title",
+      "kicker": "示例数据 · 虚构",
+      "headline": "一年里，代码生成作品在加速",
+      "sub": "某视频社区 {{facts.year}} 年月度新增作品",
+      "narration": ["一个视频社区，每月新增多少代码生成作品？"]
+    },
+    {
+      "id": "trend",
+      "type": "line",
+      "title": "每月新增代码生成作品",
+      "sub": "{{facts.year}} 年 · 示例数据（虚构）",
+      "series": { "$": "series.monthly" },
+      "callouts": ["1月", "9月", "10月", "11月"],
+      "narration": [
+        "先看全年走势，{{series.monthly[1月].label}}只有 {{series.monthly[1月]}} 个。",
+        "之后缓慢爬升，{{series.monthly[9月].label}}是 {{series.monthly[9月]}} 个。",
+        "{{series.monthly[10月].label}}突然跳到 {{series.monthly[10月]}} 个。",
+        "{{series.monthly[11月].label}}冲到全年最高，{{series.monthly[11月]}} 个。"
+      ]
+    },
+    {
+      "id": "peak",
+      "type": "bignumber",
+      "label": "全年最高：{{series.monthly[11月].label}}",
+      "value": "{{series.monthly[11月]}}",
+      "unit": "个",
+      "note": "是 {{series.monthly[1月].label}}的 {{times series.monthly[1月] series.monthly[11月]}} 倍",
+      "narration": [
+        "全年最高出现在 {{series.monthly[11月].label}}。",
+        "{{series.monthly[11月]}} 个，是 {{series.monthly[1月].label}}的 {{times series.monthly[1月] series.monthly[11月]}} 倍。"
+      ]
+    },
+    {
+      "id": "outro",
+      "type": "outro",
+      "headline": "曲线在最后三个月抬了起来",
+      "sub": "{{series.monthly[1月].label}} {{series.monthly[1月]}} 个，{{series.monthly[11月].label}} {{series.monthly[11月]}} 个",
+      "narration": ["重点不是某个月的高低，而是变化的形状。", "这份数据是虚构的，只看走势。"]
+    }
+  ]
+}

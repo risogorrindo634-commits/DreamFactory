@@ -1,0 +1,65 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "一档播客的两年：期数与单期播放量",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "虚构示例数据 · 品牌方速览",
+      "headline": "一档播客的两年",
+      "sub": "2025 与 2026：更新期数和单期播放量",
+      "narration": [
+        "一档播客的两年数据。"
+      ]
+    },
+    {
+      "id": "episodes",
+      "type": "bars",
+      "title": "更新期数",
+      "sub": "2025 年与 2026 年对比",
+      "series": { "$": "series.episodes" },
+      "highlight": "2026 年",
+      "unit": "期",
+      "narration": [
+        "2025 年更新 {{series.episodes[2025 年]}} 期。",
+        "2026 年增至 {{series.episodes[2026 年]}} 期，是上一年的 {{times series.episodes[2025 年] series.episodes[2026 年]}} 倍。"
+      ]
+    },
+    {
+      "id": "plays",
+      "type": "bars",
+      "title": "单期播放量",
+      "sub": "每期平均播放次数",
+      "series": { "$": "series.playsPerEpisode" },
+      "highlight": "2026 年",
+      "unit": "次",
+      "narration": [
+        "2025 年每期 {{series.playsPerEpisode[2025 年]}} 次。",
+        "2026 年每期 {{series.playsPerEpisode[2026 年]}} 次，是 2025 年的 {{times series.playsPerEpisode[2025 年] series.playsPerEpisode[2026 年]}} 倍。"
+      ]
+    },
+    {
+      "id": "peak",
+      "type": "bignumber",
+      "label": "2026 年单期平均播放",
+      "value": { "$": "series.playsPerEpisode[2026 年].value" },
+      "unit": "次",
+      "note": "较 2025 年增长 {{up series.playsPerEpisode[2025 年] series.playsPerEpisode[2026 年]}}",
+      "narration": [
+        "2026 年单期播放，比 2025 年高出 {{up series.playsPerEpisode[2025 年] series.playsPerEpisode[2026 年]}}。"
+      ]
+    },
+    {
+      "id": "close",
+      "type": "outro",
+      "headline": "期数与单期播放量同步上升",
+      "sub": "行业平均播放量：数据未提供",
+      "narration": [
+        "期数和单期播放量都在上升。",
+        "同类节目的平均播放量，这份数据没有提供。"
+      ]
+    }
+  ]
+}

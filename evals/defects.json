@@ -765,6 +765,25 @@
     ]
   },
   {
+    "id": "voice-says-wrong-number-after-letters",
+    "title": "字幕写“API，2 到 45 美元”，语音念成 3 到 45",
+    "base": "cost-per-minute",
+    "ops": [
+      {
+        "file": "film",
+        "set": "scenes[1].narration[1]",
+        "value": {
+          "text": "调用视频模型 API，{{series.cost[视频模型 API].low}}到{{series.cost[视频模型 API].high}}美元。",
+          "say": "调用视频模型 API，3到45美元。"
+        }
+      }
+    ],
+    "expectFail": [
+      "data-accuracy",
+      "asr"
+    ]
+  },
+  {
     "id": "machine-without-cjk-font",
     "title": "渲染的机器上没有中文字体，中文全部显示成方框",
     "base": "twenty-seconds",

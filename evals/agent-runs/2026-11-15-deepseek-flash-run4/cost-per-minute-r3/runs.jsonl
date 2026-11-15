@@ -1,0 +1,4 @@
+{"at":"2026-11-15T09:59:30.915Z","round":1,"filmVersion":"2001e623e032","passed":true,"failed":[],"draft":false,"rendered":false,"durationSec":47.7,"wallSec":31.6,"backend":"deepseek","ttsBilled":257,"costUsd":null,"intervention":null}
+{"at":"2026-11-15T10:00:20.429Z","round":2,"filmVersion":"2001e623e032","passed":false,"failed":["asr"],"draft":true,"rendered":true,"durationSec":47.7,"wallSec":43.4,"backend":"deepseek","ttsBilled":0,"costUsd":null,"intervention":null}
+{"at":"2026-11-15T10:01:15.964Z","round":3,"filmVersion":"0518ebab3a33","passed":true,"failed":[],"draft":true,"rendered":true,"durationSec":48.1,"wallSec":48.2,"backend":"deepseek","ttsBilled":34,"costUsd":null,"intervention":null}
+{"at":"2026-11-15T10:02:54.466Z","round":4,"filmVersion":"0518ebab3a33","passed":true,"failed":[],"draft":false,"rendered":true,"durationSec":48.1,"wallSec":92,"backend":"deepseek","ttsBilled":0,"costUsd":null,"intervention":null}

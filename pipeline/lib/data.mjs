@@ -89,7 +89,7 @@ export function renderTemplate(str, data, mode, lang = 'zh', derived = null) {
     if (fn) {
       const value = derive(data, fn, rest);
       derived?.add(value);
-      return fn === 'times' ? (mode === 'screen' ? formatNumber(value) : String(value)) : percent(value);
+      return fn === 'times' ? (mode === 'screen' || lang === 'en' ? formatNumber(value) : String(value)) : percent(value);
     }
     const p = inner;
     const v = getScalar(data, p);
@@ -98,7 +98,9 @@ export function renderTemplate(str, data, mode, lang = 'zh', derived = null) {
     }
     if (v === null) throw new Error(`film.json points at "${p}", which is empty in data.json: there is no number to show`);
     if (typeof v !== 'number') return String(v);
-    return mode === 'screen' ? formatNumber(v) : String(v);
+    // An English voice reads "2793" as a year, "twenty-seven ninety-three", and "2,793" as a quantity.
+    // A Chinese voice reads the plain digits as a quantity and stumbles on the comma.
+    return mode === 'screen' || lang === 'en' ? formatNumber(v) : String(v);
   });
 }
 

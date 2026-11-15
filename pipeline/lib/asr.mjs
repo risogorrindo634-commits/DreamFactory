@@ -80,7 +80,8 @@ export function englishNumbers(text) {
     if (value !== undefined && frac !== null && value < 10) frac += value;
     else if (value !== undefined) {
       if (frac !== null) close();
-      current += value;
+      // Two pairs in a row are one number read like a year: "twenty-seven ninety-three" is 2793.
+      current = current >= 10 && current < 100 && value >= 10 && value < 100 ? current * 100 + value : current + value;
       parts++;
     } else if (tok === 'hundred') {
       current = (current || 1) * 100;
@@ -97,7 +98,8 @@ export function englishNumbers(text) {
 
 /** Every number a transcript contains, whether written as digits, Chinese numerals or English words. */
 export function heardNumbers(text) {
-  const out = extractNumbers(text).map((n) => n.value);
+  // A recognizer may write a number right against a word: "API2~45". In a transcript that is still a number.
+  const out = extractNumbers(text.replace(/([A-Za-z])(?=\d)|(\d)(?=[A-Za-z])/g, '$1$2 ')).map((n) => n.value);
   for (const m of text.matchAll(/[零〇一二两三四五六七八九十百千万亿点]+/g)) {
     const v = chineseNumber(m[0].replace(/^点+|点+$/g, ''));
     if (Number.isFinite(v)) out.push(v);

@@ -1,0 +1,69 @@
+{
+  "vertical": "data-story",
+  "lang": "en",
+  "title": "What are 2,793 works making? (English)",
+  "source": "Data source: {{source.name}} (as of {{source.asOf}})",
+  "scenes": [
+    {
+      "id": "open",
+      "type": "title",
+      "kicker": "AI VIDEO, BY TYPE",
+      "headline": "What are {{facts.total}} works making?",
+      "sub": "A tour of one curated list of AI video.",
+      "narration": [
+        {
+          "text": "This list holds {{facts.total}} AI video works.",
+          "say": "This list holds two thousand seven hundred ninety three AI video works."
+        }
+      ]
+    },
+    {
+      "id": "total",
+      "type": "bignumber",
+      "label": "Works in the list",
+      "value": "{{facts.total}}",
+      "note": "Every work here has at least {{facts.minViews}} views.",
+      "narration": ["Every work on the list has at least {{facts.minViews}} views."]
+    },
+    {
+      "id": "types",
+      "type": "bars",
+      "title": "Works by type",
+      "sub": "Eight types, from model comparisons to music and editing.",
+      "series": { "$": "series.categories" },
+      "highlight": "Model comparisons",
+      "unit": "works",
+      "showShare": true,
+      "narration": [
+        "Model comparisons leads the list, with {{series.categories[Model comparisons]}} works.",
+        "Games come second, at {{series.categories[Games]}}.",
+        "Third is 3D worlds and simulations.",
+        "It has {{series.categories[3D worlds & simulations]}} works."
+      ]
+    },
+    {
+      "id": "games",
+      "type": "bignumber",
+      "label": "Games",
+      "value": "{{series.categories[Games]}}",
+      "unit": "works",
+      "note": "{{share series.categories[Games]}} of all works in the list",
+      "narration": [
+        "Games alone account for {{series.categories[Games]}} works.",
+        "That is {{share series.categories[Games]}} of the list."
+      ]
+    },
+    {
+      "id": "close",
+      "type": "outro",
+      "headline": "Comparisons lead. Games follow.",
+      "sub": "{{facts.total}} works with at least {{facts.minViews}} views.",
+      "narration": [
+        {
+          "text": "That is the shape of {{facts.total}} works.",
+          "say": "That is the shape of two thousand seven hundred ninety three works."
+        }
+      ]
+    }
+  ]
+}

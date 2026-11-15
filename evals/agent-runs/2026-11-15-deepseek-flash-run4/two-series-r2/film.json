@@ -1,0 +1,45 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "两条路线，一次反超",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff", "bar": "#f2a65a" },
+  "voice": { "backend": "auto" },
+  "scenes": [
+    {
+      "id": "opening",
+      "type": "title",
+      "kicker": "虚构示例 · 数据短片",
+      "headline": "两条路线，谁在反超？",
+      "sub": "2026 年 1–12 月，每月新增作品数",
+      "narration": ["这是一份虚构的示例数据。"]
+    },
+    {
+      "id": "crossing",
+      "type": "line",
+      "title": "每月新增作品：两条线的交叉",
+      "sub": "2026 年 1–12 月 · 单位：件",
+      "series": { "$": "series" },
+      "names": { "$": "names" },
+      "markMonths": ["8月", "12月"],
+      "narration": [
+        "代码生成起步慢，视频模型一开始领先。",
+        "到了 8 月，代码生成达到 118 件。",
+        "同月视频模型是 111 件。",
+        "到 12 月，代码生成 236 件。",
+        "视频模型 117 件，差距继续拉大。"
+      ]
+    },
+    {
+      "id": "closing",
+      "type": "outro",
+      "kicker": "回看这条曲线",
+      "headline": "8 月的交叉，是路线选择的信号",
+      "sub": "数据为虚构示例，结论请结合实际判断",
+      "narration": [
+        "8 月的交叉，是路线选择的信号。",
+        "数据为虚构示例，结论请自行判断。"
+      ]
+    }
+  ]
+}

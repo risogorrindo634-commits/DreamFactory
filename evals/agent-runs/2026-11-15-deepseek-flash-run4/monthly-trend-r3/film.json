@@ -1,0 +1,54 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "一年里，每个月新增多少作品",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto" },
+  "scenes": [
+    {
+      "id": "opening",
+      "type": "title",
+      "kicker": "虚构示例数据",
+      "headline": "一年里，每个月新增多少作品",
+      "sub": "某视频社区代码生成作品的月度数量 · {{facts.year}} 年",
+      "narration": ["一份虚构的示例数据，看看一年里的月度变化。"]
+    },
+    {
+      "id": "trend",
+      "type": "line",
+      "title": "每月新增作品数",
+      "sub": "{{facts.year}} 年 · 单位：件",
+      "points": { "$": "series.monthly" },
+      "labeled": ["1月", "9月", "10月", "11月"],
+      "narration": [
+        "一月的新增量是 {{series.monthly[1月]}} 件。",
+        "到九月慢慢涨到 {{series.monthly[9月]}} 件。",
+        "十月一下跳到 {{series.monthly[10月]}} 件。",
+        "十一月达到全年最高的 {{series.monthly[11月]}} 件。"
+      ]
+    },
+    {
+      "id": "takeaways",
+      "type": "bullets",
+      "title": "变化集中在后几个月",
+      "items": [
+        "前八个月，每月新增在 {{series.monthly[1月]}} 到 {{series.monthly[8月]}} 件之间",
+        "十月跳到 {{series.monthly[10月]}} 件，十一月 {{series.monthly[11月]}} 件，达到全年最高",
+        "从一月到十一月，是原来的 {{times series.monthly[1月] series.monthly[11月]}} 倍"
+      ],
+      "narration": [
+        "前八个月，每月新增在 {{series.monthly[1月]}} 到 {{series.monthly[8月]}} 件之间。",
+        "十月跳到 {{series.monthly[10月]}} 件，十一月 {{series.monthly[11月]}} 件，是全年最高。",
+        "从一月到十一月，是原来的 {{times series.monthly[1月] series.monthly[11月]}} 倍。"
+      ]
+    },
+    {
+      "id": "closing",
+      "type": "outro",
+      "headline": "增长在十月之后换了节奏",
+      "sub": "仅供演示，不代表任何真实统计",
+      "narration": ["这份数据是虚构示例，不要当成真实统计。"]
+    }
+  ]
+}
