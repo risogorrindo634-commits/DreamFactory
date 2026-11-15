@@ -1,6 +1,6 @@
 # 评测基线
 
-干净用例误报 0/7，缺陷检出 41/41。
+干净用例误报 0/7，缺陷检出 42/42。
 
 运行环境：Node v22.23.4 · 语音后端 deepseek · 草稿画质 · 2026-11-15
 
@@ -34,7 +34,7 @@
 | leftover-template | 数据引用少写一个括号，模板符号原样出现在画面上 | typography | 抓到 |  |
 | no-source | 数据画面没有标注来源 | citation | 抓到 |  |
 | flash-text | 结尾画面一闪而过，来不及读 | readability | 抓到 |  |
-| headline-overflow | 标题太长，撑出画面 | layout | 抓到 | readability |
+| headline-overflow | 标题太长，撑出画面 | layout | 抓到 | readability、crowding |
 | low-contrast | 次要文字颜色太接近背景 | contrast | 抓到 |  |
 | long-subtitle | 一句旁白太长，字幕挤成两行 | subtitles | 抓到 | data-accuracy |
 | empty-scene | 一个场景里什么内容都没有 | empty-frames | 抓到 |  |
@@ -59,6 +59,7 @@
 | chart-label-touches-tick | 数值标签紧贴纵轴刻度，150 和 42 读起来像 15042 | crowding | 抓到 |  |
 | chart-label-covered | 最高点的数值标签被后画的图形整个盖住，画面上看不见 | crowding | 抓到 |  |
 | chart-box-over-tick | 图表里一块底框盖住了半个纵轴刻度 | crowding | 抓到 |  |
+| chart-tick-half-hidden | 一块和背景同色的底板盖住了刻度的后两位，150 读起来像 1 | crowding | 抓到 |  |
 | voice-says-something-else | 字幕是一句话，语音念的是另一句话 | asr | 抓到 |  |
 | voice-says-wrong-number | 字幕写 483，语音念成 438 | data-accuracy、asr | 抓到 |  |
 | voice-says-wrong-number-english | 英文版字幕写 233，语音念成 323 | data-accuracy、asr | 抓到 |  |
@@ -75,7 +76,7 @@
 | citation | 1 | 1 |  |
 | readability | 1 | 1 |  |
 | layout | 2 | 2 |  |
-| crowding | 4 | 4 |  |
+| crowding | 5 | 5 |  |
 | contrast | 1 | 1 |  |
 | subtitles | 1 | 1 |  |
 | sync | 1 | 1 |  |

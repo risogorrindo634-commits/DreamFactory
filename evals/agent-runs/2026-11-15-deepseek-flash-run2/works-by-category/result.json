@@ -1,0 +1,78 @@
+{
+  "case": "works-by-category",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 37.8
+  },
+  "pipelineRuns": 3,
+  "failedRuns": 0,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "02ad223dfb0f",
+      "backend": "deepseek",
+      "ttsBilled": 240
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "3e3b10abbe5a",
+      "backend": "deepseek",
+      "ttsBilled": 92
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "3e3b10abbe5a",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 34,
+    "toolUses": 33,
+    "wallSec": 271,
+    "costUsd": 0.0286,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 54641,
+      "output": 28320,
+      "cacheRead": 1148032,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 332,
+    "costUsd": 0.0149
+  },
+  "costUsd": 0.0436,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "**通过。** `task/film.json` 的草稿渲染自检全部通过（18 项，含画面、响度、停顿、听写核对），片长 37.8 秒，语音后端 DeepSeek，9 句旁白。\n\n管线共跑 3 次：第 1 次文字层就通过，但看抽帧图发现柱状图在近 19 秒里几乎不动；第 2 次重构节奏——把图表旁白压到 3 句，并新增一个「游戏类 483 件、占全部作品的 17%」的大数字场景，文字层复检通过；第 3 次草稿渲染，媒体层检查全部通过。\n\n简报要求的四项都已覆盖：作品总数 2793、数量最多的模型对比 534、游戏类数量 483 与占比 17%、以及「只收浏览量 5000 以上、不代表全部」的口径提醒。全部数字均为数据引用，未写 `scenes.js`（内置场景够用）。按任务要求止于草稿，`out/film.mp4` 是草稿画质（960×540 / 15fps），未跑全画质成片。",
+  "outcome": "passed"
+}

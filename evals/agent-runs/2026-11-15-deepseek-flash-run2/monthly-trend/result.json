@@ -1,0 +1,100 @@
+{
+  "case": "monthly-trend",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": true,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 33.833
+  },
+  "pipelineRuns": 5,
+  "failedRuns": 2,
+  "filmVersions": 3,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": false,
+      "failed": [
+        "crowding"
+      ],
+      "rendered": false,
+      "filmVersion": "102f5b3f73c1",
+      "backend": "deepseek",
+      "ttsBilled": 201
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "3cfb34f2f36c",
+      "backend": "deepseek",
+      "ttsBilled": 67
+    },
+    {
+      "round": 3,
+      "passed": false,
+      "failed": [
+        "video-stillness"
+      ],
+      "rendered": true,
+      "filmVersion": "3cfb34f2f36c",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    },
+    {
+      "round": 4,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "235525718964",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    },
+    {
+      "round": 5,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "235525718964",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 42,
+    "toolUses": 41,
+    "wallSec": 442,
+    "costUsd": 0.0426,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 83761,
+      "output": 42526,
+      "cacheRead": 1521920,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 268,
+    "costUsd": 0.0121
+  },
+  "costUsd": 0.0547,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "**结论：通过。** 成片在 `task/out/film.mp4`，片长 33.8 秒，18 项检查全部通过（含草稿与成片两轮媒体检查）。\n\n管线一共跑了 5 次：\n1. `--no-video` 首次自检：只有「拥挤」一项失败（1 月的 42 标签与纵轴「100」刻度贴在一起），同时片长只有 28.4 秒、偏离简报的 35 秒左右。\n2. `--no-video` 第二轮：把 1 月标签改为锚定在点的右侧，并加了一个 531 的 bignumber 峰值场景、给结尾补一句旁白，片长到 33.8 秒，文字层全部通过。\n3. `--draft` 草稿：画面检查发现折线场景中段静止 6.1 秒，超过 6 秒上限。\n4. `--draft` 第二轮：在最高的 11 月点加了一个随时间缓慢呼吸的光晕（画面仍只由 `t` 决定），最长静止降到 5.3 秒，草稿全部通过。\n5. 去掉 `--draft` 出成片：所有检查通过，最长静止 4.6 秒。\n\n折线图、1 月/9 月/10 月/11 月四个数值的图上标注与旁白、全年最高月（11 月，531）都已满足；来源注明「示例数据（虚构，仅用于评测）」，结尾也提醒这是虚构数据。**唯一未满足的是片长**：33.8 秒，比简报的「35 秒左右」略短，但落在 expect 的 20–60 秒范围内。",
+  "outcome": "passed"
+}

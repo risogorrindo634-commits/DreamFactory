@@ -177,11 +177,10 @@ export const layout = {
   },
 };
 
-// From these shares of a text's box on, something is running through it, or it cannot be seen.
-// Measured on 54 films: built-in scenes read 0; a line grazing a label's corner reads up to 0.016,
-// a line or box edge through a label 0.05 and more; visible glyphs change at least 0.13 of their box.
+// From this share of a text's box on, something is running through it. Measured on the films in
+// evals/: built-in scenes read 0; a line grazing a label's corner reads up to 0.016, a line or the
+// edge of a box through a label 0.05 and more.
 const CROSSED = 0.02;
-const UNSEEN = 0.004;
 // Unrelated texts closer than this share of the smaller font size read as one text.
 const ABUTTING = 0.15;
 
@@ -191,25 +190,33 @@ export const crowding = {
   tier: 'dom',
   run(ctx) {
     const problems = [];
-    // Once a second the sampler looks behind each settled text and at whether its glyphs show at all.
+    // Once a second the sampler looks behind each settled text, and at whether each of its letters and
+    // digits leaves ink. A character without ink is under something, whatever colour that is.
     const seen = new Map();
     for (const s of ctx.sampling.samples) {
       for (const x of s.texts) {
-        if (x.behind == null || x.ink == null) continue;
+        if (x.behind == null) continue;
         const key = `${x.id}|${x.text}`;
-        const rec = seen.get(key) ?? { text: x.text, n: 0, crossed: 0, unseen: 0 };
+        const rec = seen.get(key) ?? { text: x.text, n: 0, crossed: 0, hidden: 0, share: 0 };
         rec.n++;
         if (x.behind >= CROSSED && !rec.crossed++) rec.crossedAt = s.t;
         // Text in a colour too close to its background is the contrast check's business.
-        if (x.ink < UNSEEN && x.contrast >= 1.5 && !rec.unseen++) rec.unseenAt = s.t;
+        if (x.hidden > 0 && x.contrast >= 1.5) {
+          if (!rec.hidden++) rec.hiddenAt = s.t;
+          rec.share = Math.max(rec.share, x.hidden);
+        }
         seen.set(key, rec);
       }
     }
     for (const rec of seen.values()) {
       // One reading can catch a shape in mid-move. Two readings a second apart cannot.
       const lasting = (k) => k >= 2 || (k === 1 && rec.n === 1);
-      if (lasting(rec.unseen) && rec.unseen * 2 >= rec.n) {
-        problems.push(`文字在画面上看不见，被别的图形盖住了：「${clip(rec.text)}」(${fmtT(rec.unseenAt)})`);
+      if (lasting(rec.hidden) && rec.hidden * 2 >= rec.n) {
+        problems.push(
+          rec.share >= 1
+            ? `文字在画面上看不见，被别的图形盖住了：「${clip(rec.text)}」(${fmtT(rec.hiddenAt)})`
+            : `文字有一部分看不见，被别的图形盖住或被裁掉了：「${clip(rec.text)}」(${fmtT(rec.hiddenAt)})`,
+        );
       } else if (lasting(rec.crossed)) {
         problems.push(`文字被线条或图形穿过：「${clip(rec.text)}」(${fmtT(rec.crossedAt)})`);
       }

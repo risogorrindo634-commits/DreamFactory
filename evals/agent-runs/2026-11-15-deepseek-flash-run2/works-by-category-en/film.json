@@ -1,0 +1,83 @@
+{
+  "vertical": "data-story",
+  "lang": "en",
+  "title": "What 2,793 works are making (EN)",
+  "source": "Source: {{source.name}} (as of {{source.asOf}})",
+  "voice": { "backend": "auto" },
+  "scenes": [
+    {
+      "id": "opening",
+      "type": "title",
+      "kicker": "AI VIDEO BY TYPE",
+      "headline": "What are {{facts.total}} works making?",
+      "sub": "The same list, sorted by type",
+      "narration": [
+        {
+          "text": "{{facts.total}} works of AI video.",
+          "say": "Two thousand seven hundred ninety-three works of AI video."
+        },
+        "What are they making?"
+      ]
+    },
+    {
+      "id": "total",
+      "type": "bignumber",
+      "label": "Works in the list",
+      "value": "{{facts.total}}",
+      "unit": "works",
+      "note": "Each with at least {{facts.minViews}} views",
+      "narration": [
+        "Each one has at least {{facts.minViews}} views.",
+        "That is the bar for making the list."
+      ]
+    },
+    {
+      "id": "types",
+      "type": "bars",
+      "title": "Works by type",
+      "sub": "All categories, by number of works",
+      "series": { "$": "series.categories" },
+      "highlight": "Games",
+      "unit": "works",
+      "narration": [
+        "Model comparisons lead, with {{series.categories[Model comparisons]}} works.",
+        "Games come second, at {{series.categories[Games]}}.",
+        "Explainers and education hold {{series.categories[Explainers & education]}}."
+      ]
+    },
+    {
+      "id": "games",
+      "type": "bignumber",
+      "label": "Games",
+      "value": "{{series.categories[Games]}}",
+      "unit": "works",
+      "note": "{{share series.categories[Games]}} of all works",
+      "narration": [
+        "Games are {{share series.categories[Games]}} of the list.",
+        "That is {{series.categories[Games]}} works."
+      ]
+    },
+    {
+      "id": "caveat",
+      "type": "bullets",
+      "title": "One caveat",
+      "items": [
+        "Only works with at least {{facts.minViews}} views are listed",
+        "Below that, a work is not counted"
+      ],
+      "narration": [
+        "Only works with at least {{facts.minViews}} views are listed.",
+        "Below that, a work is not counted."
+      ]
+    },
+    {
+      "id": "close",
+      "type": "outro",
+      "headline": "The field is wide, and still taking shape",
+      "sub": "Model comparisons, games, worlds and more",
+      "narration": [
+        "The field is wide, and still taking shape."
+      ]
+    }
+  ]
+}

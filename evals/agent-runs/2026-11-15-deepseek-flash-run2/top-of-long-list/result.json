@@ -1,0 +1,78 @@
+{
+  "case": "top-of-long-list",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 35.033
+  },
+  "pipelineRuns": 3,
+  "failedRuns": 0,
+  "filmVersions": 2,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "5bd94efb6e45",
+      "backend": "deepseek",
+      "ttsBilled": 214
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "2732de8ff71c",
+      "backend": "deepseek",
+      "ttsBilled": 62
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "2732de8ff71c",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 26,
+    "toolUses": 25,
+    "wallSec": 186,
+    "costUsd": 0.019,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 49769,
+      "output": 16158,
+      "cacheRead": 615680,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 276,
+    "costUsd": 0.0124
+  },
+  "costUsd": 0.0314,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "**通过。** 草稿渲染的自检全部通过，片长 35.0 秒，18 项检查没有失败项，语音后端为 deepseek。\n\n管线一共跑了 3 次：\n1. **第 1 轮 `--no-video`**：先按简报把 `film.json` 写出来，写的是标题 → 六品类条形图 → 第一名大数字 → 收尾；文字层全部通过，片长 28.1 秒，但抽帧图里 bignumber 场景显示成 `[object Object]`，因为 `{\"$\": \"…[科普动画]\"}` 取到的是整行对象，报告不会查出这种问题。\n2. **第 2 轮 `--no-video`**：把该引用改成 `…[科普动画].value`，并补了两句旁白，分别是产品演示、游戏实况和编程教学的排列位置，以及结尾的虚构声明；片长变为 35.0 秒，文字层仍全部通过，抽帧图确认大数字正常显示 521 件。\n3. **第 3 轮 `--draft`**：草稿渲染全部通过，包括画面静止、响度 −14.3 LUFS、无长停顿、听写核对 10 句旁白一致。\n\n简报各项都已满足：只展示数量最多的 6 个品类，按数值从多到少排列，24 个品类总数、第一名科普动画及其 521 件都在画面和旁白里，六个品类的数值都在画面上，并标明是虚构示例数据。按你的权限范围，本次只做到草稿；去 `--draft` 出成品的命令不在放行范围内，因此没有执行。",
+  "outcome": "passed"
+}

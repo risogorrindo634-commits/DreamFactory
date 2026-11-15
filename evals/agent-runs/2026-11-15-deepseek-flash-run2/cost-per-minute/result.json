@@ -1,0 +1,78 @@
+{
+  "case": "cost-per-minute",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 44.633
+  },
+  "pipelineRuns": 3,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "16c8dfbbd267",
+      "backend": "deepseek",
+      "ttsBilled": 346
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "16c8dfbbd267",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "16c8dfbbd267",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 28,
+    "toolUses": 27,
+    "wallSec": 273,
+    "costUsd": 0.02,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 51791,
+      "output": 17132,
+      "cacheRead": 646400,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 346,
+    "costUsd": 0.0156
+  },
+  "costUsd": 0.0356,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "**通过。** 已交付 `task/film.json` 和成片 `out/film.mp4`，片长 44.6 秒，18 项自检全部通过（含草稿渲染与成片渲染）。\n\n管线共跑了 3 次：第一次 `--no-video` 文字层检查即通过，第二次 `--draft` 加了画面、响度、停顿和 DeepSeek 听写核对也全部通过，第三次去掉 `--draft` 出成片，三次之间没有再改 `film.json`。\n\n片子用内置 `ranges` 场景做对数刻度，四条区间带美元单位；讲到代码生成短片的 2–20 美元、工作室上限 15,000 美元，并用大数字场景强调上限、用要点页交代“多为创作者自报或报价指南、只看量级”的口径，数据来源一直在画面底部。",
+  "outcome": "passed"
+}

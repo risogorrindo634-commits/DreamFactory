@@ -617,6 +617,21 @@
     ]
   },
   {
+    "id": "chart-tick-half-hidden",
+    "title": "一块和背景同色的底板盖住了刻度的后两位，150 读起来像 1",
+    "base": "monthly-trend",
+    "ops": [
+      {
+        "file": "scenes",
+        "replace": "label.textContent = fmt(it.value);",
+        "with": "label.textContent = fmt(it.value);\n        if (i === 0) svg('rect', { x: box.left - 46, y: y(top / 4) - 30, width: 70, height: 40, style: 'fill: var(--bg)' }, chart);"
+      }
+    ],
+    "expectFail": [
+      "crowding"
+    ]
+  },
+  {
     "id": "voice-says-something-else",
     "title": "字幕是一句话，语音念的是另一句话",
     "base": "works-by-category",

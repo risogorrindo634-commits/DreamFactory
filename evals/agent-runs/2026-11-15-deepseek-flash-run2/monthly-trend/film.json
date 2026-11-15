@@ -1,0 +1,54 @@
+{
+  "vertical": "data-story",
+  "lang": "zh",
+  "title": "一年里每月新增多少作品",
+  "source": "数据来源：{{source.name}}（截至 {{source.asOf}}）",
+  "theme": { "accent": "#62c6ff" },
+  "voice": { "backend": "auto", "name": "stella" },
+  "scenes": [
+    {
+      "id": "opening",
+      "type": "title",
+      "kicker": "示例数据 · 2026",
+      "headline": "每月新增的代码生成作品",
+      "sub": "某视频社区的一年走势",
+      "narration": ["一年里，这个社区每月新增多少作品？"]
+    },
+    {
+      "id": "trend",
+      "type": "line",
+      "title": "2026 年每月新增作品",
+      "sub": "单位：件 · 折线是每月新增数量",
+      "series": { "$": "series.monthly" },
+      "narration": [
+        "一月，新增 {{series.monthly[1月]}} 件。",
+        "九月，{{series.monthly[9月]}} 件。",
+        "十月，{{series.monthly[10月]}} 件。",
+        "十一月达到 {{series.monthly[11月]}} 件。"
+      ]
+    },
+    {
+      "id": "peak",
+      "type": "bignumber",
+      "label": "11 月新增",
+      "value": "{{series.monthly[11月]}}",
+      "unit": "件",
+      "note": "全年最高的月份",
+      "narration": ["十一月是全年最高。"]
+    },
+    {
+      "id": "shape",
+      "type": "bullets",
+      "title": "走势的形状",
+      "items": ["前四个月变化不大。", "夏天开始往上走。", "秋天两个月连续冲高。"],
+      "narration": ["前四个月变化不大。", "夏天开始往上走。", "秋天两个月连续冲高。"]
+    },
+    {
+      "id": "closing",
+      "type": "outro",
+      "headline": "秋天抬高了全年的水平",
+      "sub": "示例数据为虚构，仅用于评测",
+      "narration": ["这是虚构的示例数据，不要当成真实统计。", "判断是否加速，要看曲线的形状。"]
+    }
+  ]
+}

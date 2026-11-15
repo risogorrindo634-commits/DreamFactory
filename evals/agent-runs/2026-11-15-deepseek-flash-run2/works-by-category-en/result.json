@@ -1,0 +1,91 @@
+{
+  "case": "works-by-category-en",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 44.533
+  },
+  "pipelineRuns": 4,
+  "failedRuns": 2,
+  "filmVersions": 3,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "52a405de0337",
+      "backend": "deepseek",
+      "ttsBilled": 429
+    },
+    {
+      "round": 2,
+      "passed": false,
+      "failed": [
+        "asr"
+      ],
+      "rendered": true,
+      "filmVersion": "52a405de0337",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    },
+    {
+      "round": 3,
+      "passed": false,
+      "failed": [
+        "video-stillness"
+      ],
+      "rendered": true,
+      "filmVersion": "a0d2c1d3a726",
+      "backend": "deepseek",
+      "ttsBilled": 80
+    },
+    {
+      "round": 4,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "103943633daf",
+      "backend": "deepseek",
+      "ttsBilled": 79
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 34,
+    "toolUses": 33,
+    "wallSec": 351,
+    "costUsd": 0.0271,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 55168,
+      "output": 26361,
+      "cacheRead": 1019136,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 588,
+    "costUsd": 0.0265
+  },
+  "costUsd": 0.0536,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "通过。草稿渲染自检全部 18 项通过，成片 44.5 秒、语音后端 DeepSeek、人工介入 0 次。\n\n总共跑了 4 次管线、返工 3 轮：\n1. 第 1 次 `--no-video` 文字层检查直接通过（45.8 秒）。\n2. 第 2 次 `--draft`：ASR 未通过，语音把「2,793」念成了「Twenty 793」；给这句加了 `say`，改写成英文数字读法（意思不变）。\n3. 第 3 次 `--draft`：ASR 通过，但标题场景静止 7.1 秒超出上限；把开场旁白拆成两句，让字幕中途变化，同时把 caveat 从 3 条精简到 2 条控制片长。\n4. 第 4 次 `--draft`：全部通过，并已看抽帧图确认构图与节奏。\n\n简报要求均已覆盖：总数 2,793、最大类型 Model comparisons（534）、Games 的数量与占比（483、17%），以及「只收录至少 5,000 次观看的作品」这一限制；所有数字均来自 `data.json` 引用，未改动数据或检查。",
+  "outcome": "passed"
+}

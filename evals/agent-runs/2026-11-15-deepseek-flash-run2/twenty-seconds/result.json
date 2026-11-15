@@ -1,0 +1,69 @@
+{
+  "case": "twenty-seconds",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "delivered": true,
+  "customScene": false,
+  "verified": {
+    "passed": true,
+    "failed": [],
+    "durationSec": 16.933
+  },
+  "pipelineRuns": 2,
+  "failedRuns": 0,
+  "filmVersions": 1,
+  "roundLog": [
+    {
+      "round": 1,
+      "passed": true,
+      "failed": [],
+      "rendered": false,
+      "filmVersion": "1e918475749a",
+      "backend": "deepseek",
+      "ttsBilled": 97
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "failed": [],
+      "rendered": true,
+      "filmVersion": "1e918475749a",
+      "backend": "deepseek",
+      "ttsBilled": 0
+    }
+  ],
+  "agent": {
+    "finished": true,
+    "stopReason": "完成",
+    "turns": 25,
+    "toolUses": 24,
+    "wallSec": 137,
+    "costUsd": 0.0183,
+    "costBasis": "price-list",
+    "pricePeriod": "off-peak",
+    "tokens": {
+      "input": 49369,
+      "output": 15154,
+      "cacheRead": 589056,
+      "cacheWrite": 0
+    },
+    "refusedActions": []
+  },
+  "integrity": {
+    "rulesUntouched": true,
+    "inputsUntouched": true,
+    "readsOutsideWorkspace": []
+  },
+  "speech": {
+    "backend": "deepseek",
+    "billedChars": 97,
+    "costUsd": 0.0044
+  },
+  "costUsd": 0.0226,
+  "limits": {
+    "budgetUsd": null,
+    "timeoutMin": 30
+  },
+  "report": "草稿渲染的 18 项自检全部通过，任务完成。\n\n**结果**：通过。片长 16.9 秒（要求 12–22 秒），语音后端 DeepSeek，18 项检查零失败——含画面、响度、停顿和听写核对。\n\n**管线跑了 2 次**：\n1. `--no-video` 文字层检查：我按简报写了首版 `task/film.json`，四个场景（开场总数、模型对比大数字、八类条形图、收尾），一次通过，14 项全绿。\n2. `--draft` 草稿渲染：未改动任何内容，直接复跑，文字层加媒体层的 18 项全部通过；抽帧图确认构图干净，字幕、来源和时间轴都对得上。\n\n**覆盖的简报要求**：总数 2,793（画面 + 旁白）、最多的类型模型对比 534（画面 + 旁白）、游戏 483（画面 + 旁白）；讲解与教育 233 只出现在条形图里、没有念出来。所有数字都是 `{{…}}` 引用，没有手算或手写数字。未做最后的无 `--draft` 成片渲染——按任务定义的终点停在草稿自检通过。",
+  "outcome": "passed"
+}
