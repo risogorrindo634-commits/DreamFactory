@@ -139,7 +139,10 @@ const coverage = CHECKS.map((c) => {
   const aimed = planted.filter((d) => d.expectFail.includes(c.id));
   return { id: c.id, title: c.title, aimed: aimed.length, caught: aimed.filter((d) => !d.missed.includes(c.id)).length };
 });
-const skipped = new Set(clean.flatMap((c) => c.checks.filter((k) => k.status === 'skip').map((k) => k.id)));
+// How many clean films each check sat out. A check that has nothing to look at in some films (no score,
+// no custom chart) is not the same as a check that never ran.
+const skipped = new Map();
+for (const c of clean) for (const k of c.checks) if (k.status === 'skip') skipped.set(k.id, (skipped.get(k.id) ?? 0) + 1);
 const unproven = coverage.filter((c) => c.aimed === 0).map((c) => c.id);
 const backend = clean.find((c) => c.backend)?.backend ?? tts ?? 'auto';
 const cell = (s) => String(s).replace(/\|/g, '\\|');
@@ -172,7 +175,8 @@ const md = [
   '| 检查 | 缺陷样例 | 抓到 | 备注 |',
   '| --- | --- | --- | --- |',
   ...coverage.map((c) => {
-    const note = skipped.has(c.id) ? '本次运行跳过' : c.aimed === 0 ? '没有缺陷样例，效果未经验证' : '';
+    const sat = skipped.get(c.id) ?? 0;
+    const note = sat === clean.length ? '本次运行跳过' : sat ? `${clean.length} 个干净用例里有 ${sat} 个用不上这项检查` : c.aimed === 0 ? '没有缺陷样例，效果未经验证' : '';
     return `| ${c.id} | ${c.aimed} | ${c.caught} | ${note} |`;
   }),
   '',
