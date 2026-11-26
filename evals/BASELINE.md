@@ -1,8 +1,8 @@
 # 评测基线
 
-干净用例误报 0/12，缺陷检出 56/56。
+干净用例误报 0/12，缺陷检出 59/59。
 
-运行环境：Node v22.23.4 · 语音后端 deepseek · 草稿画质 · 2026-11-15
+运行环境：Node v22.23.5 · 语音后端 edge · 草稿画质 · 2026-11-26
 
 ## 干净用例
 
@@ -10,18 +10,18 @@
 
 | 用例 | 结果 | 片长（秒） | 误报的检查 |
 | --- | --- | --- | --- |
-| asks-for-missing-number | 通过 | 27.6 |  |
-| cost-per-minute | 通过 | 45.6 |  |
+| asks-for-missing-number | 通过 | 27.2 |  |
+| cost-per-minute | 通过 | 43.8 |  |
 | derived-numbers | 通过 | 30.5 |  |
-| gap-in-the-data | 通过 | 25.8 |  |
-| long-report | 通过 | 84.6 |  |
-| monthly-trend | 通过 | 26.0 |  |
+| gap-in-the-data | 通过 | 26.1 |  |
+| long-report | 通过 | 84.1 |  |
+| monthly-trend | 通过 | 27.4 |  |
 | top-of-long-list | 通过 | 22.0 |  |
-| twenty-seconds | 通过 | 13.6 |  |
-| two-series | 通过 | 32.4 |  |
-| works-by-category | 通过 | 52.8 |  |
-| works-by-category-en | 通过 | 54.0 |  |
-| chatgpt-four-years | 通过 | 54.9 |  |
+| twenty-seconds | 通过 | 14.1 |  |
+| two-series | 通过 | 32.6 |  |
+| works-by-category | 通过 | 52.6 |  |
+| works-by-category-en | 通过 | 48.6 |  |
+| chatgpt-four-years | 通过 | 55.4 |  |
 
 ## 缺陷注入
 
@@ -85,6 +85,9 @@
 | gap-without-note | 折线在缺口处断开了，但没有写为什么断 | spec | 抓到 |  |
 | music-over-voice | 配乐的音量调错了，高了 12 分贝，盖过旁白 | music | 抓到 |  |
 | music-too-quiet | 配乐的音量调得太低，低了 10 分贝，片子里有配乐但听不到 | music | 抓到 |  |
+| sfx-late | 混音时音效整体晚了 0.2 秒，柱子长出来之后才响 | av-sync | 抓到 |  |
+| sfx-cue-early | 折线图的提示点算早了 0.25 秒，点还没出现声音就响了 | av-sync | 抓到 |  |
+| sfx-on-still-element | 提示点挂在了不动的图表标题上，声音响的时候画面上什么也没发生 | av-sync | 抓到 |  |
 
 ## 各项检查的覆盖
 
@@ -104,6 +107,7 @@
 | marks | 5 | 5 |  |
 | determinism | 1 | 1 |  |
 | fonts | 1 | 1 |  |
+| av-sync | 3 | 3 | 12 个干净用例里有 11 个用不上这项检查 |
 | video-stillness | 2 | 2 |  |
 | audio-levels | 2 | 2 |  |
 | audio-gaps | 1 | 1 |  |

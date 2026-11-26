@@ -86,16 +86,22 @@ export function asHeardOnSmallSpeakers(samples) {
   return Int16Array.from(data, (v) => Math.max(-32768, Math.min(32767, Math.round(v))));
 }
 
+// How far under the voice the sound effects sit, in dB, measured the same way over the first 150 ms of
+// each effect against the voice over its spoken lines. A first setting, not yet checked by a listener:
+// loud enough to be heard on a phone, and the music check still listens for every number through the mix.
+export const SFX_UNDER_VOICE = 8;
+
 // How far under the voice the music sits while someone is speaking, in dB, unless the film says
 // otherwise. Measured as small speakers play both: a score that is all bass reads as loud on a
 // meter and cannot be heard on a phone.
 export const MUSIC_UNDER_VOICE = 12;
 
 /**
- * @param {object} music  null for none, or { bpm, under, energy: {sceneId: 0..3}, hits: [sceneId] }
- * Returns the finished mix, and the voice and music on their own for the checks.
+ * @param {object} music    null for none, or { bpm, under, energy: {sceneId: 0..3}, hits: [sceneId] }
+ * @param {Array}  effects  sound effects placed on the picture's cues (sfx.mjs placeEffects), or none
+ * Returns the finished mix, and the voice, music and effects on their own for the checks.
  */
-export async function mixNarration({ timeline, outDir, music = null, faultGainDb, faultMusicGainDb }) {
+export async function mixNarration({ timeline, outDir, music = null, effects = [], faultGainDb, faultMusicGainDb, faultSfxDelaySec }) {
   const total = Math.round(timeline.duration * RATE);
   const mix = new Float32Array(total);
   let clips = 0;
@@ -111,6 +117,7 @@ export async function mixNarration({ timeline, outDir, music = null, faultGainDb
   const file = path.join(outDir, 'audio', 'mix.wav');
   const voiceFile = path.join(outDir, 'audio', 'voice.wav');
   const musicFile = path.join(outDir, 'audio', 'music.wav');
+  const sfxFile = path.join(outDir, 'audio', 'sfx.wav');
   const raw = path.join(outDir, 'audio', 'mix.raw.wav');
   const save = (target, floats) => {
     const out = new Int16Array(total);
@@ -127,6 +134,7 @@ export async function mixNarration({ timeline, outDir, music = null, faultGainDb
     return fixed;
   };
   fs.rmSync(musicFile, { force: true });
+  fs.rmSync(sfxFile, { force: true });
   save(raw, mix);
   if (timeline.backend === 'silent' || clips === 0) {
     fs.renameSync(raw, file);
@@ -140,12 +148,13 @@ export async function mixNarration({ timeline, outDir, music = null, faultGainDb
     return { file, voiced: false };
   }
   const voice = fit(voiceFile);
-  let scored = false;
+  const lines = timeline.scenes.flatMap((sc) => sc.lines.map((l) => [l.start, l.end]));
+  const heardVoice = levelOver(asHeardOnSmallSpeakers(voice), lines);
+  let score = null;
   if (music) {
     // The score ducks while a line is spoken and comes back up between lines and scenes.
     const { renderMusic } = await import('./music.mjs');
-    const score = renderMusic(timeline, music);
-    const lines = timeline.scenes.flatMap((sc) => sc.lines.map((l) => [l.start, l.end]));
+    score = renderMusic(timeline, music);
     const speaking = new Uint8Array(total);
     for (const [from, to] of lines) speaking.fill(1, Math.max(0, Math.round((from - 0.05) * RATE)), Math.min(total, Math.round((to + 0.05) * RATE)));
     let duck = 1;
@@ -157,16 +166,28 @@ export async function mixNarration({ timeline, outDir, music = null, faultGainDb
     // Set its level from the voice: so many dB under it over the spoken stretches, as small speakers play both.
     const asInt = Int16Array.from(score, (v) => Math.round(v * 32767));
     const under = music.under ?? MUSIC_UNDER_VOICE;
-    const heardVoice = levelOver(asHeardOnSmallSpeakers(voice), lines);
     const heardScore = levelOver(asHeardOnSmallSpeakers(asInt), lines);
     const gain = 10 ** ((heardVoice - under - heardScore + (faultMusicGainDb ?? 0)) / 20);
     for (let i = 0; i < total; i++) score[i] *= gain;
     save(musicFile, score);
+  }
+  let sfx = null;
+  if (effects.length) {
+    const { renderEffects } = await import('./sfx.mjs');
+    const delaySec = faultSfxDelaySec ?? 0; // evals only: every effect late by this much
+    sfx = renderEffects(effects, total, { delaySec });
+    const peakOf = sfx.reduce((m, v) => Math.max(m, Math.abs(v)), 0);
+    const asInt = Int16Array.from(sfx, (v) => Math.round((v / peakOf) * 16000));
+    const heardSfx = levelOver(asHeardOnSmallSpeakers(asInt), effects.map((e) => [e.t + delaySec, e.t + delaySec + 0.15]));
+    const gain = (16000 / 32767 / peakOf) * 10 ** ((heardVoice - SFX_UNDER_VOICE - heardSfx) / 20);
+    for (let i = 0; i < total; i++) sfx[i] *= gain;
+    save(sfxFile, sfx);
+  }
+  if (score || sfx) {
     const both = new Float32Array(total);
-    for (let i = 0; i < total; i++) both[i] = voice[i] / 32768 + score[i];
+    for (let i = 0; i < total; i++) both[i] = voice[i] / 32768 + (score ? score[i] : 0) + (sfx ? sfx[i] : 0);
     save(raw, both);
     await normalize(raw, file);
-    scored = true;
   } else {
     fs.copyFileSync(voiceFile, file);
   }
@@ -178,5 +199,5 @@ export async function mixNarration({ timeline, outDir, music = null, faultGainDb
     fs.rmSync(raw, { force: true });
   }
   fit(file);
-  return { file, voiced: true, voiceFile, musicFile: scored ? musicFile : null, gainDb };
+  return { file, voiced: true, voiceFile, musicFile: score ? musicFile : null, sfxFile: sfx ? sfxFile : null, gainDb };
 }

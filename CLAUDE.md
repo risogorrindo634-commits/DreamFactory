@@ -21,6 +21,8 @@ node evals/agent-run.mjs --provider deepseek      # 同上，模型换成 DeepSe
 - `pipeline/`：管线本体。`film.mjs` 是一次运行的全流程，`lib/` 是各个环节，`checks/` 是自检，`tools/asr.py` 是本机语音识别的 Python 小工具。
 - `pipeline/lib/deepseek.mjs`：DeepSeek 语音接口的请求函数和密钥读取，语音合成和听写核对共用。
 - `pipeline/lib/music.mjs`：配乐。由代码合成，不用任何素材；`pipeline/lib/audio.mjs` 把它压在人声下面混进去。
+- `pipeline/lib/sfx.mjs`：音效。页面在搭画面时用 `cue` 标出该有声音的时刻（`window.DF.cues`），管线在这些时刻放音效；`av-sync` 检查逐格截图找画面变化最快的一刻，和音效的起音比。
+- `pipeline/lib/dsp.mjs`：合成声音用的小工具（模态共振、滤波、噪声）。模态合成和音效的配方移植自 The Last Page（github.com/ChetasLua/the-last-page）的音频代码，文件开头注明了出处。
 - `.cache/tts/`：合成过的语音和听写结果的缓存，不入库，删掉只会让下次运行慢一些。
 - `verticals/data-story/`：数据短片的画面。`runtime/df.js` 里每种场景是一个函数。影片目录里的 `scenes.js` 可以为那一支片子增加场景。
 - `films/`：用真实数据做的片子，一支一个目录。除了简报、数据、要求和分镜，还有 `sources.md`（每个数字的出处和核对情况）和 `records/`（运行记录、自检报告、抽帧图）。成片在 `out/` 里，不入库。这些片子也在评测的干净用例里，改了检查它们必须还能通过。
@@ -50,6 +52,7 @@ node evals/agent-run.mjs --provider deepseek      # 同上，模型换成 DeepSe
 - 新增或修改一项检查，必须同时在 `evals/defects.json` 里加一条它应该抓到的缺陷，然后跑评测。没有缺陷样例的检查等于没有验证过。
 - 新增用例要带参考影片，并至少带一条缺陷，说明这个用例里最容易错的是什么。参考影片写完先自己看一遍抽帧图：检查通过不等于画面没问题。
 - 改了管线或画面之后跑 `node evals/run.mjs`。干净用例出现失败是误报，要修检查或修参考影片，不能放宽到看不见为止。
+- 音效的提示点用动画自己的时间去算，不要另写一个时刻。要配重音的动作先停一拍再冲一下，让落点成为变化最快的一刻；`av-sync` 只认画面。
 - 页面上的文字靠 `data-df-role` 标注角色：`subtitle`、`source`、`tick`（刻度）、`animating`（跳动中的数字）。新场景里的刻度和跳动数字必须标注，否则会被当成事实去核对。
 - 文字必须留在最近的 `data-df-box` 容器内，新场景要给会溢出的文字加上这个标记。
 - 代表数据的图形要带 `data-df-value`，`marks` 检查靠它核对图形与数值是否一致。

@@ -100,27 +100,30 @@ const MUSIC_STILL_HEARD = 16;
 
 export const music = {
   id: 'music',
-  title: '配乐：听得到，不盖住旁白，配上音乐后数字还听得清',
+  title: '配乐：听得到，不盖住旁白；配上音乐和音效后数字还听得清',
   tier: 'media',
   async run(ctx) {
-    if (!ctx.audio.musicFile) return { status: 'skip', summary: '这支片子没有配乐', details: [] };
-    const voice = asHeardOnSmallSpeakers(readWav(ctx.audio.voiceFile).samples);
-    const score = asHeardOnSmallSpeakers(readWav(ctx.audio.musicFile).samples);
+    if (!ctx.audio.musicFile && !ctx.audio.sfxFile) return { status: 'skip', summary: '这支片子没有配乐，也没有音效', details: [] };
     const problems = [];
     let closest = Infinity;
-    const spoken = [];
-    for (const sc of ctx.timeline.scenes) {
-      for (const line of sc.lines) {
-        const window = [[line.start, line.end]];
-        spoken.push(window[0]);
-        const margin = levelOver(voice, window) - levelOver(score, window);
-        closest = Math.min(closest, margin);
-        if (margin < VOICE_OVER_MUSIC) problems.push(`配乐盖住了旁白：「${line.display.slice(0, 20)}」这一句人声只比配乐高 ${margin.toFixed(1)} 分贝，至少要 ${VOICE_OVER_MUSIC}`);
+    let overall = null;
+    if (ctx.audio.musicFile) {
+      const voice = asHeardOnSmallSpeakers(readWav(ctx.audio.voiceFile).samples);
+      const score = asHeardOnSmallSpeakers(readWav(ctx.audio.musicFile).samples);
+      const spoken = [];
+      for (const sc of ctx.timeline.scenes) {
+        for (const line of sc.lines) {
+          const window = [[line.start, line.end]];
+          spoken.push(window[0]);
+          const margin = levelOver(voice, window) - levelOver(score, window);
+          closest = Math.min(closest, margin);
+          if (margin < VOICE_OVER_MUSIC) problems.push(`配乐盖住了旁白：「${line.display.slice(0, 20)}」这一句人声只比配乐高 ${margin.toFixed(1)} 分贝，至少要 ${VOICE_OVER_MUSIC}`);
+        }
       }
+      overall = levelOver(voice, spoken) - levelOver(score, spoken);
+      if (overall > MUSIC_STILL_HEARD) problems.push(`配乐太轻，在手机和笔记本上听不到：旁白时它比人声低 ${overall.toFixed(1)} 分贝，最多 ${MUSIC_STILL_HEARD}`);
     }
-    const overall = levelOver(voice, spoken) - levelOver(score, spoken);
-    if (overall > MUSIC_STILL_HEARD) problems.push(`配乐太轻，在手机和笔记本上听不到：旁白时它比人声低 ${overall.toFixed(1)} 分贝，最多 ${MUSIC_STILL_HEARD}`);
-    // Then listen to the finished sound scene by scene: every number in the subtitles has to come through the music.
+    // Then listen to the finished sound scene by scene: every number in the subtitles has to come through the music and effects.
     const who = await pickRecognizer();
     let listened = 0;
     if (who && ctx.timeline.backend !== 'espeak') {
@@ -140,13 +143,18 @@ export const music = {
       spoken.forEach((sc, i) => {
         const said = heardNumbers(heard[i]);
         const lost = sc.lines.flatMap((l) => extractNumbers(l.display)).filter((n) => !said.some((v) => Math.abs(v - n.value) < 1e-9));
-        if (lost.length) problems.push(`配上音乐后听不清：场景 ${sc.id} 里的 ${[...new Set(lost.map((n) => n.raw))].join('、')} 没有听到，整段听到「${heard[i].slice(0, 30)}…」`);
+        if (lost.length) problems.push(`配上${ctx.audio.musicFile ? '音乐' : '音效'}后听不清：场景 ${sc.id} 里的 ${[...new Set(lost.map((n) => n.raw))].join('、')} 没有听到，整段听到「${heard[i].slice(0, 30)}…」`);
       });
       listened = spoken.length;
     }
     return {
       status: problems.length ? 'fail' : 'pass',
-      summary: problems.length ? `${problems.length} 处问题` : `旁白时配乐比人声低 ${overall.toFixed(1)} 分贝，最吃紧的一句低 ${closest.toFixed(1)}${listened ? `；带着配乐听了 ${listened} 个场景，数字都听得到` : ''}`,
+      summary: problems.length
+        ? `${problems.length} 处问题`
+        : [
+            overall != null ? `旁白时配乐比人声低 ${overall.toFixed(1)} 分贝，最吃紧的一句低 ${closest.toFixed(1)}` : '没有配乐',
+            listened ? `带着${ctx.audio.musicFile ? '配乐' : ''}${ctx.audio.musicFile && ctx.audio.sfxFile ? '和' : ''}${ctx.audio.sfxFile ? '音效' : ''}听了 ${listened} 个场景，数字都听得到` : null,
+          ].filter(Boolean).join('；'),
       details: problems.slice(0, 12),
     };
   },

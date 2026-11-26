@@ -6,7 +6,8 @@ import { resolveFilm } from './lib/data.mjs';
 import { pickBackend } from './lib/tts.mjs';
 import { buildTimeline } from './lib/timeline.mjs';
 import { mixNarration } from './lib/audio.mjs';
-import { openStage, sampleFilm } from './lib/stage.mjs';
+import { measureCues, openStage, readCues, sampleFilm } from './lib/stage.mjs';
+import { placeEffects } from './lib/sfx.mjs';
 import { renderVideo } from './lib/render.mjs';
 import { runChecks } from './checks/index.mjs';
 
@@ -21,7 +22,8 @@ const VERTICALS = {
  *                          scenes (source of custom scene code; null = none; default: scenes.js in filmDir),
  *                          faults (evals only: break one stage on purpose, to show that the check guarding it
  *                          notices; noCjkFonts = start the browser without Chinese fonts, mixGainDb = shift
- *                          the finished mix by that many dB, musicGainDb = shift the score by that many dB)
+ *                          the finished mix by that many dB, musicGainDb = shift the score by that many dB,
+ *                          sfxDelaySec = place every sound effect that many seconds after its cue)
  */
 export async function runFilm(filmDir, opts = {}) {
   const started = Date.now();
@@ -57,22 +59,32 @@ export async function runFilm(filmDir, opts = {}) {
         hits: resolved.scenes.filter((sc) => sc.hit).map((sc) => sc.id),
       }
     : null;
-  const audio = await mixNarration({ timeline, outDir, music, faultGainDb: opts.faults?.mixGainDb, faultMusicGainDb: opts.faults?.musicGainDb });
-
-  // Picture: read the text back from the live page, then render if asked.
+  // Picture first: the page declares its cues, and a film with "sfx": {} gets a sound on each of them.
+  // Then the mix, then read the text back from the live page, then render if asked.
   const contactFile = path.join(outDir, 'contact.jpg');
   const stage = await openStage({ outDir, vertical, draft, noCjkFonts: opts.faults?.noCjkFonts });
+  let audio;
   let sampling;
+  let effects = [];
+  let cueTimes = [];
   let video = null;
   try {
+    if (film.sfx) effects = placeEffects(await readCues(stage));
+    audio = await mixNarration({
+      timeline, outDir, music, effects,
+      faultGainDb: opts.faults?.mixGainDb, faultMusicGainDb: opts.faults?.musicGainDb, faultSfxDelaySec: opts.faults?.sfxDelaySec,
+    });
     sampling = await sampleFilm(stage, timeline, { contactFile });
+    if (effects.length) cueTimes = await measureCues(stage, effects);
     if (opts.video !== false) video = await renderVideo(stage, timeline, { outDir, draft, audioFile: audio.voiced ? audio.file : null });
   } finally {
     await stage.close();
   }
 
+  if (effects.length) writeJson(path.join(outDir, 'build', 'effects.json'), { effects, cueTimes });
+
   const ctx = {
-    film, resolved, data, expect, timeline, sampling, audio, video, vertical,
+    film, resolved, data, expect, timeline, sampling, audio, video, vertical, effects, cueTimes,
     render: video && { width: video.width, height: video.height, fps: video.fps },
     media: video ? await probe(video.file) : null,
   };

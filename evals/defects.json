@@ -951,5 +951,50 @@
     "expectFail": [
       "music"
     ]
+  },
+  {
+    "id": "sfx-late",
+    "title": "混音时音效整体晚了 0.2 秒，柱子长出来之后才响",
+    "base": "long-report",
+    "ops": [
+      {
+        "file": "faults",
+        "set": "sfxDelaySec",
+        "value": 0.2
+      }
+    ],
+    "expectFail": [
+      "av-sync"
+    ]
+  },
+  {
+    "id": "sfx-cue-early",
+    "title": "折线图的提示点算早了 0.25 秒，点还没出现声音就响了",
+    "base": "long-report",
+    "ops": [
+      {
+        "file": "scenes",
+        "replace": "cue(p.reach, 'pop', p.dot);",
+        "with": "cue(Math.max(0, p.reach - 0.25), 'pop', p.dot);"
+      }
+    ],
+    "expectFail": [
+      "av-sync"
+    ]
+  },
+  {
+    "id": "sfx-on-still-element",
+    "title": "提示点挂在了不动的图表标题上，声音响的时候画面上什么也没发生",
+    "base": "long-report",
+    "ops": [
+      {
+        "file": "scenes",
+        "replace": "cue(p.reach, 'pop', p.dot);",
+        "with": "cue(p.reach, 'pop', root.querySelector('.chart-title'));"
+      }
+    ],
+    "expectFail": [
+      "av-sync"
+    ]
   }
 ]

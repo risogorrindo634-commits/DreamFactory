@@ -1,5 +1,6 @@
 import * as dom from './dom.mjs';
 import * as media from './media.mjs';
+import * as sound from './sound.mjs';
 
 export const CHECKS = [
   dom.spec,
@@ -16,6 +17,7 @@ export const CHECKS = [
   dom.marks,
   dom.determinism,
   dom.fonts,
+  sound.avSync,
   media.videoStillness,
   media.audioLevels,
   media.audioGaps,

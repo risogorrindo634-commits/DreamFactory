@@ -2,7 +2,7 @@
 // A builder creates its DOM once and returns update(t), which sets every style from t alone.
 export default {
   line(scene, root, kit) {
-    const { svg, ease, clamp, fmt, chartHead } = kit;
+    const { svg, ease, unease, clamp, fmt, chartHead, cue } = kit;
     chartHead(scene, root);
     const items = scene.series;
     const labelled = new Set(scene.labels || []);
@@ -50,12 +50,21 @@ export default {
       return { dot, label, at: x(i) };
     });
 
+    // The reveal edge sweeps right, fast and then slower. Each point pops in as the edge reaches it,
+    // whatever the edge's speed by then, and sounds on that frame.
+    const sweep = box.right - box.left + 40;
+    const edgeAt = (t) => box.left - 20 + ease((t - 0.5) / 1.8) * sweep;
+    for (const p of points) {
+      p.reach = 0.5 + 1.8 * unease((p.at - (box.left - 20)) / sweep);
+      cue(p.reach, 'pop', p.dot);
+    }
+
     return (t) => {
       axis.style.opacity = String(ease((t - 0.2) / 0.5));
-      const edge = box.left - 20 + ease((t - 0.5) / 1.8) * (box.right - box.left + 40);
+      const edge = edgeAt(t);
       clip.setAttribute('width', String(Math.max(0, edge)));
       for (const p of points) {
-        const shown = clamp((edge - p.at) / 24);
+        const shown = clamp((t - p.reach) / 0.05);
         p.dot.style.opacity = String(shown);
         if (p.label) p.label.style.opacity = String(shown);
       }

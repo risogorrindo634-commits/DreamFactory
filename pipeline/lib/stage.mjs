@@ -62,10 +62,12 @@ export async function openStage({ outDir, vertical, draft = false, noCjkFonts = 
     throw new Error(`the film page did not become ready${errors.length ? `: ${errors.join('; ')}` : ''}`);
   }
   await page.addStyleTag({ content: NO_TEXT_CSS });
+  const duration = await page.evaluate(() => window.DF.duration);
   return {
     page,
     scale,
     errors,
+    duration,
     seek: (t) => page.evaluate((x) => window.DF.seek(x), t),
     close: async () => {
       await browser.close();
@@ -286,6 +288,95 @@ async function pixelDifference({ a, b }) {
     if (d > 32) strong++;
   }
   return strong / (A.width * A.height);
+}
+
+/**
+ * Runs in the page, on a run of screenshots of one region taken at even steps of time: how much the
+ * region changes from each shot to the next. mad is the mean absolute difference over the region's
+ * pixels and channels (0-255); moved counts pixels whose largest channel difference passes 16.
+ */
+async function changeRun({ shots }) {
+  const load = async (png) => {
+    const bmp = await createImageBitmap(await (await fetch(`data:image/png;base64,${png}`)).blob());
+    const g = new OffscreenCanvas(bmp.width, bmp.height).getContext('2d', { willReadFrequently: true });
+    g.drawImage(bmp, 0, 0);
+    return g.getImageData(0, 0, bmp.width, bmp.height).data;
+  };
+  const frames = [];
+  for (const s of shots) frames.push(await load(s));
+  const out = [];
+  for (let k = 1; k < frames.length; k++) {
+    const a = frames[k - 1];
+    const b = frames[k];
+    let sum = 0;
+    let moved = 0;
+    for (let i = 0; i < a.length; i += 4) {
+      const d0 = Math.abs(a[i] - b[i]);
+      const d1 = Math.abs(a[i + 1] - b[i + 1]);
+      const d2 = Math.abs(a[i + 2] - b[i + 2]);
+      sum += d0 + d1 + d2;
+      if (Math.max(d0, d1, d2) > 16) moved++;
+    }
+    out.push({ mad: sum / ((a.length / 4) * 3), moved });
+  }
+  return out;
+}
+
+/** The cues the page declared: [{index, t, kind, scene}]. */
+export const readCues = (stage) => stage.page.evaluate(() => window.DF.cues ?? []);
+
+// How far either side of a cue to look for the movement it belongs to, and how finely.
+export const CUE_WINDOW = 0.4;
+const CUE_STEP = 1 / 60;
+
+/**
+ * For each placed effect, find when its element on screen changes fastest: screenshots of the element's
+ * region every 1/60 s across the cue window, then the step with the largest change. That moment is
+ * where the sound belongs: the launch of a move, or its impact. Returns
+ * [{cue, t, visual, change}] with change in CSS pixels that visibly moved during that step.
+ */
+export async function measureCues(stage, effects) {
+  const out = [];
+  for (const e of effects) {
+    const rectAt = async (t) => {
+      await stage.seek(Math.max(0, t));
+      return stage.page.evaluate((i) => {
+        const r = window.__dfCueEls[i].getBoundingClientRect();
+        return { x: r.left, y: r.top, w: r.width, h: r.height };
+      }, e.cue);
+    };
+    // The element may still be moving into place at the cue: take its region then and once it has settled.
+    const boxes = [await rectAt(e.t), await rectAt(e.t + CUE_WINDOW)].filter((b) => b.w > 0 && b.h > 0);
+    if (!boxes.length) {
+      out.push({ cue: e.cue, t: e.t, visual: null, change: 0 });
+      continue;
+    }
+    const pad = 12;
+    const x0 = Math.max(0, Math.min(...boxes.map((b) => b.x)) - pad);
+    const y0 = Math.max(0, Math.min(...boxes.map((b) => b.y)) - pad);
+    const x1 = Math.min(1920, Math.max(...boxes.map((b) => b.x + b.w)) + pad);
+    const y1 = Math.min(1080, Math.max(...boxes.map((b) => b.y + b.h)) + pad);
+    const clip = { x: x0, y: y0, width: Math.max(1, x1 - x0), height: Math.max(1, y1 - y0) };
+    const steps = Math.round((2 * CUE_WINDOW) / CUE_STEP);
+    const times = Array.from({ length: steps + 1 }, (_, k) => e.t - CUE_WINDOW + k * CUE_STEP);
+    const shots = [];
+    for (const t of times) {
+      await stage.seek(Math.min(Math.max(0, t), stage.duration - 0.001));
+      shots.push((await stage.page.screenshot({ type: 'png', clip })).toString('base64'));
+    }
+    const run = await stage.page.evaluate(changeRun, { shots });
+    let best = 0;
+    run.forEach((r, k) => {
+      if (r.mad > run[best].mad) best = k;
+    });
+    out.push({
+      cue: e.cue,
+      t: e.t,
+      visual: Math.round(((times[best] + times[best + 1]) / 2) * 1000) / 1000,
+      change: Math.round(run[best].moved / stage.scale ** 2),
+    });
+  }
+  return out;
 }
 
 /** Runs in the page: are CJK glyphs really drawn, or is the font falling back to empty boxes? */
