@@ -94,9 +94,10 @@ task/ 里有 brief.md（简报）、data.json（数据）、expect.json（要求
 这次运行的权限如下。超出范围的操作会被直接拒绝，不会有人来批准：
 - 读文件：只能读工作目录里的文件，用读取工具。
 - 写文件：只能用写入、编辑工具新建和修改 task/film.json，以及确有需要时的 task/scenes.js。
-- 运行命令：只放行两种。一种是 ls。另一种是 node pipeline/cli.mjs run task，后面可以加 --no-video 或 --draft。
+- 运行命令：只放行三种。一种是 ls。一种是 node pipeline/cli.mjs run task，后面可以加 --no-video 或 --draft。
+  还有一种是 node pipeline/cli.mjs frames task <起始秒> <结束秒>，把一段连续帧拼成 task/out/frames.jpg，用来看动作。
   命令后面不要接分号、管道、重定向或别的命令，否则整条会被拒绝。
-- 某一条命令被拒绝，只说明那一条不在放行范围内。上面两种命令仍然可以用。
+- 某一条命令被拒绝，只说明那一条不在放行范围内。上面三种命令仍然可以用。
 - 管线输出的开头就是结论，不需要另外看退出码。
 
 按 DIRECTOR.md 的规定最多返工 3 轮；仍不通过就停下，说明卡在哪里。
@@ -106,7 +107,7 @@ task/ 里有 brief.md（简报）、data.json（数据）、expect.json（要求
 // What the director is allowed to touch: write only inside task/, run only the pipeline on the task.
 // Reading needs no rule inside the working directory and is refused outside it; the one exception
 // is the command line's own cache of long tool output. Everything else is refused without a prompt.
-const TOOLS = ['Edit(task/**)', 'Bash(node pipeline/cli.mjs run task:*)', 'Bash(ls:*)', `Read(${configDir ? `/${configDir}` : '~/.claude'}/projects/**)`];
+const TOOLS = ['Edit(task/**)', 'Bash(node pipeline/cli.mjs run task:*)', 'Bash(node pipeline/cli.mjs frames task:*)', 'Bash(ls:*)', `Read(${configDir ? `/${configDir}` : '~/.claude'}/projects/**)`];
 
 // What the command line and the pipeline under it need from this machine: paths, locale, proxy and
 // certificate settings, and the pipeline's own switches.

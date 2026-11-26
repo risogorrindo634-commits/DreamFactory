@@ -45,6 +45,69 @@ export const videoStillness = {
   },
 };
 
+// A flash: the picture jumps to something else and, within a few frames, snaps back to where it was.
+// Frames k..k+L-1 (L up to 3, 0.1 s at 30 fps) count as a flash when the jump in and the jump out are both
+// at least FLASH_MIN (mean grey-level change over a 160x90 copy of the frame: about a 40x40-pixel patch
+// turning over in a 1080p frame, thirty times the encoder's noise on a still frame) and the frames either
+// side of them differ by under FLASH_BACK of that. A cut stays changed (A-B-B), and the big-number kick
+// eases back, so neither is a flash. Measured on the twelve reference films with the subtitle band left
+// out, no stretch of up to three frames comes back closer than 0.41 of its jumps (a count-up whose digits
+// change every frame); the planted flash (evals/defects.json, axis-flashes-off) comes back to 0.02.
+const FLASH_MIN = 0.15;
+const FLASH_BACK = 0.15;
+
+export const flicker = {
+  id: 'flicker',
+  title: '闪烁：没有一闪而过、又跳回原样的画面',
+  tier: 'media',
+  async run(ctx) {
+    const W = 160;
+    const H = 90;
+    const P = W * H;
+    const { stdout: px } = await run('ffmpeg', ['-v', 'error', '-i', ctx.video.file, '-vf', `scale=${W}:${H}:flags=area,format=gray`, '-f', 'rawvideo', '-'], { binary: true });
+    const n = Math.floor(px.length / P);
+    // Leave out the subtitle band. Between two lines the subtitle is off for a few frames, by design,
+    // and two lines of about the same length blur to the same grey at this size: that would read as a flash.
+    const subs = ctx.sampling.samples.flatMap((s) => s.texts.filter((x) => x.role === 'subtitle'));
+    const skip = new Uint8Array(H);
+    if (subs.length) {
+      const top = Math.floor(((Math.min(...subs.map((x) => x.y)) - 12) / 1080) * H);
+      const bottom = Math.ceil(((Math.max(...subs.map((x) => x.y + x.h)) + 12) / 1080) * H);
+      skip.fill(1, Math.max(0, top), Math.min(H, bottom));
+    }
+    const rows = [];
+    for (let y = 0; y < H; y++) if (!skip[y]) rows.push(y);
+    const diff = (a, b) => {
+      let s = 0;
+      for (const y of rows) for (let x = 0; x < W; x++) s += Math.abs(px[a * P + y * W + x] - px[b * P + y * W + x]);
+      return s / (rows.length * W);
+    };
+    const step = Array.from({ length: Math.max(0, n - 1) }, (_, k) => diff(k, k + 1));
+    const fps = ctx.video.fps;
+    const problems = [];
+    let k = 1;
+    while (k < n - 1) {
+      let found = 0;
+      for (let L = 1; L <= 3 && k + L < n; L++) {
+        const jump = Math.min(step[k - 1], step[k + L - 1]);
+        if (jump >= FLASH_MIN && diff(k - 1, k + L) <= FLASH_BACK * jump) {
+          found = L;
+          break;
+        }
+      }
+      if (found) {
+        problems.push(`${fmtT(k / fps)} 起有 ${found} 帧（${((found / fps) * 1000).toFixed(0)} 毫秒）画面闪了一下又跳回原样`);
+        k += found + 1;
+      } else k++;
+    }
+    return {
+      status: problems.length ? 'fail' : 'pass',
+      summary: problems.length ? `${problems.length} 处问题` : `${n} 帧里没有一闪而过的画面`,
+      details: problems.slice(0, 12),
+    };
+  },
+};
+
 export const audioLevels = {
   id: 'audio-levels',
   title: '响度：整体响度和峰值在范围内',

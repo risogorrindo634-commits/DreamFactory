@@ -8,6 +8,7 @@
 node pipeline/cli.mjs run <影片目录> --no-video   # 只做文字层检查，十几秒
 node pipeline/cli.mjs run <影片目录> --draft      # 草稿画质，带视频和声音检查
 node pipeline/cli.mjs run <影片目录>              # 成片
+node pipeline/cli.mjs frames <影片目录> 10 11     # 一段连续帧拼成 out/frames.jpg，看动作
 node evals/run.mjs                                # 跑评测集，约十分钟
 node evals/run.mjs --only <用例或缺陷的 id>
 node evals/agent-run.mjs                          # 让模型无人值守做完每个用例，要花模型费用
@@ -20,7 +21,8 @@ node evals/agent-run.mjs --provider deepseek      # 同上，模型换成 DeepSe
 
 - `pipeline/`：管线本体。`film.mjs` 是一次运行的全流程，`lib/` 是各个环节，`checks/` 是自检，`tools/asr.py` 是本机语音识别的 Python 小工具。
 - `pipeline/lib/deepseek.mjs`：DeepSeek 语音接口的请求函数和密钥读取，语音合成和听写核对共用。
-- `pipeline/lib/music.mjs`：配乐。由代码合成，不用任何素材；`pipeline/lib/audio.mjs` 把它压在人声下面混进去。
+- `pipeline/lib/music.mjs`：配乐。按时间轴作曲：开场钢琴轻奏主题，最高点完整奏回，重音场景前停一口气，结尾一个钢琴音。不用任何素材；`pipeline/lib/audio.mjs` 把它压在人声下面混进去，哪句旁白底下配乐冒得太高就单独压那一句。
+- `pipeline/lib/instruments.mjs`：配乐用的模拟乐器（毡锤钢琴、竖琴、弓擦颤音琴、定音鼓、大鼓），移植自 The Last Page 的 `audio/inst.py`。
 - `pipeline/lib/sfx.mjs`：音效。页面在搭画面时用 `cue` 标出该有声音的时刻（`window.DF.cues`），管线在这些时刻放音效；`av-sync` 检查逐格截图找画面变化最快的一刻，和音效的起音比。
 - `pipeline/lib/dsp.mjs`：合成声音用的小工具（模态共振、滤波、噪声）。模态合成和音效的配方移植自 The Last Page（github.com/ChetasLua/the-last-page）的音频代码，文件开头注明了出处。
 - `.cache/tts/`：合成过的语音和听写结果的缓存，不入库，删掉只会让下次运行慢一些。

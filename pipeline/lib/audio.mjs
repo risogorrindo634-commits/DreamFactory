@@ -167,8 +167,31 @@ export async function mixNarration({ timeline, outDir, music = null, effects = [
     const asInt = Int16Array.from(score, (v) => Math.round(v * 32767));
     const under = music.under ?? MUSIC_UNDER_VOICE;
     const heardScore = levelOver(asHeardOnSmallSpeakers(asInt), lines);
-    const gain = 10 ** ((heardVoice - under - heardScore + (faultMusicGainDb ?? 0)) / 20);
+    const gain = 10 ** ((heardVoice - under - heardScore) / 20);
     for (let i = 0; i < total; i++) score[i] *= gain;
+    // Fader rides: the score is set by its average, but a phrase can swell under one line. Wherever a line
+    // stands less than (under - 2) dB over the music, ride the music down for that line, as a mixer would.
+    {
+      const voiceHeard = asHeardOnSmallSpeakers(voice);
+      const scoreHeard = asHeardOnSmallSpeakers(Int16Array.from(score, (v) => Math.max(-32768, Math.min(32767, Math.round(v * 32767)))));
+      const ride = new Float64Array(total).fill(1);
+      const ramp = 0.15 * RATE;
+      for (const [from, to] of lines) {
+        const margin = levelOver(voiceHeard, [[from, to]]) - levelOver(scoreHeard, [[from, to]]);
+        const short = under - 2 - margin;
+        if (!(short > 0)) continue;
+        const g = 10 ** (-short / 20);
+        const a = Math.round((from - 0.1) * RATE);
+        const b = Math.round((to + 0.1) * RATE);
+        for (let i = Math.max(0, a - ramp); i < Math.min(total, b + ramp); i++) {
+          const edge = i < a ? (a - i) / ramp : i > b ? (i - b) / ramp : 0;
+          ride[i] = Math.min(ride[i], 1 - (1 - g) * (1 - edge));
+        }
+      }
+      for (let i = 0; i < total; i++) score[i] *= ride[i];
+    }
+    // Evals only: the finished score knocked off its level, to show that the music check notices.
+    if (faultMusicGainDb) for (let i = 0; i < total; i++) score[i] *= 10 ** (faultMusicGainDb / 20);
     save(musicFile, score);
   }
   let sfx = null;

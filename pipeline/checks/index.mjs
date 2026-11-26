@@ -19,6 +19,7 @@ export const CHECKS = [
   dom.fonts,
   sound.avSync,
   media.videoStillness,
+  media.flicker,
   media.audioLevels,
   media.audioGaps,
   media.music,

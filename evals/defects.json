@@ -996,5 +996,20 @@
     "expectFail": [
       "av-sync"
     ]
+  },
+  {
+    "id": "axis-flashes-off",
+    "title": "折线图的坐标轴在第 3 秒附近消失了一两帧，画面闪了一下",
+    "base": "monthly-trend",
+    "ops": [
+      {
+        "file": "scenes",
+        "replace": "axis.style.opacity = String(ease((t - 0.2) / 0.5));",
+        "with": "axis.style.opacity = String(Math.abs(t - 3) < 0.05 ? 0 : ease((t - 0.2) / 0.5));"
+      }
+    ],
+    "expectFail": [
+      "flicker"
+    ]
   }
 ]
